@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap');
+
+* {
+  font-family: 'Rubik', sans-serif;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+  }
+  
+
+.side-bar {
+    position: sticky !important;
+    height: 100vh;
+    top: 0;
+  }
+  
+  .sidebar-item {
+    transition-property: var(--chakra-transition-property-common);
+    transition-duration: var(--chakra-transition-duration-normal);
+  }
+  
+  .sidebar-item:hover {
+    color: #1D80F5;
+  }
+  
+  .sidebar-item.active {
+    color: #1D80F5;
+  }
+  
