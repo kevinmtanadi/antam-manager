@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { Field, Formik } from "formik";
 import * as Yup from "yup";
+import InputField from "../../components/InputField";
 
 interface Props {
   onLogin: () => void;
@@ -38,14 +39,12 @@ const Login = ({ onLogin }: Props) => {
             {(formik) => (
               <form onSubmit={formik.handleSubmit}>
                 <VStack>
-                  <Field
-                    as={Input}
+                  <InputField
                     type="text"
                     name="username"
                     placeholder="Username"
                   />
-                  <Field
-                    as={Input}
+                  <InputField
                     type="password"
                     name="password"
                     placeholder="Password"

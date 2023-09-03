@@ -11,7 +11,8 @@ function App() {
 
   return (
     <>
-      {loggedIn ? <Dashboard /> : <Login onLogin={() => setLoggedIn(true)} />}
+      <Dashboard />
+      {/* {loggedIn ? <Dashboard /> : <Login onLogin={() => setLoggedIn(true)} />} */}
     </>
   );
 }
