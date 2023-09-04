@@ -15,6 +15,7 @@ import {
 import React, { useState } from "react";
 import ProductDetail from "../../components/Product/ProductDetail";
 import { AiFillDownCircle, AiFillUpCircle } from "react-icons/ai";
+import { ToMoney } from "../../services/helper";
 
 const products = [
   {
@@ -33,7 +34,7 @@ const products = [
         product_stock_id: "2",
         buy_price: 20,
         buy_at: "2023-08-31 18:45:02",
-        note: null,
+        note: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tenetur eos vel animi cupiditate magnam doloribus deleniti illum, nobis labore numquam! Optio fuga, ratione nesciunt quod voluptate pariatur dolorum quia eligendi quae nostrum assumenda numquam sed quibusdam praesentium, rem id repellat. Maxime, voluptates! Recusandae quis minus quibusdam totam ullam libero fugiat!",
       },
       {
         product_stock_id: "11",
@@ -243,7 +244,7 @@ const Product = () => {
             <Table>
               <Thead>
                 <Tr>
-                  <Th>Kode Produk</Th>
+                  <Th width={"150px"}>Kode Produk</Th>
                   <Th>Nama Produk</Th>
                   <Th>Stok</Th>
                   <Th>Harga Avg</Th>
@@ -259,8 +260,8 @@ const Product = () => {
                     >
                       <Td>{item.product_id}</Td>
                       <Td>{item.product_name}</Td>
-                      <Td>{item.stock}</Td>
-                      <Td>{item.avg_price}</Td>
+                      <Td>{item.stock != 0 ? item.stock : "-"}</Td>
+                      <Td>{item.avg_price ? ToMoney(item.avg_price) : "-"}</Td>
                       <Td>
                         {expandedRowId !== item.product_id ? (
                           <Icon color={"gray.500"} as={AiFillDownCircle} />
@@ -272,7 +273,7 @@ const Product = () => {
                     <Tr paddingY={0}>
                       <Td colSpan={5} padding={0} border={0} maxWidth={"500px"}>
                         <Collapse in={expandedRowId === item.product_id}>
-                          <ProductDetail products={item.items}></ProductDetail>
+                          <ProductDetail products={item.items} noteWidth="500px"></ProductDetail>
                         </Collapse>
                       </Td>
                     </Tr>

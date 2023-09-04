@@ -9,11 +9,14 @@ import {
   Text,
   Th,
   Icon,
+  HStack,
 } from "@chakra-ui/react";
 import { BsCartPlus } from "react-icons/bs";
+import { ToMoney, shortenString } from "../../services/helper";
 
 interface Props {
   products: ProductDetail[];
+  noteWidth: string;
 }
 
 export interface ProductDetail {
@@ -23,7 +26,7 @@ export interface ProductDetail {
   note: string | null;
 }
 
-const ProductDetail = ({ products }: Props) => {
+const ProductDetail = ({ products, noteWidth }: Props) => {
   return (
     <>
       <TableContainer>
@@ -33,7 +36,7 @@ const ProductDetail = ({ products }: Props) => {
               <Th>Kode Item</Th>
               <Th>Harga Beli</Th>
               <Th>Tanggal Pembelian</Th>
-              <Th>Catatan</Th>
+              <Th width={noteWidth}>Catatan</Th>
               <Th></Th>
             </Tr>
           </Thead>
@@ -47,7 +50,7 @@ const ProductDetail = ({ products }: Props) => {
                 </Td>
                 <Td>
                   <Box>
-                    <Text fontWeight={"normal"}>{item.buy_price}</Text>
+                    <Text fontWeight={"normal"}>{item.buy_price ? ToMoney(item.buy_price) : "-"}</Text>
                   </Box>
                 </Td>
                 <Td>
@@ -55,10 +58,11 @@ const ProductDetail = ({ products }: Props) => {
                     <Text fontWeight={"normal"}>{item.buy_at}</Text>
                   </Box>
                 </Td>
-                <Td>
-                  <Box>
-                    <Text>{item.note}</Text>
-                  </Box>
+                <Td width={noteWidth}>
+                  <HStack justifyContent={'space-between'}>
+                    <Text>{item.note ? shortenString(item.note, 50) : "-"}</Text>
+                    <Icon as={BsCartPlus} className="cursor-pointer" />
+                  </HStack>
                 </Td>
                 <Td>
                   <Icon as={BsCartPlus} className="cursor-pointer" />

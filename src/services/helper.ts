@@ -9,3 +9,8 @@ export const ToMoney = (value: number): string => {
 
       return moneyString.replace("IDR", "Rp");
 }
+
+export const shortenString = (text: string, length: number): string => {
+  if (text.length > length) return text.slice(0, length) + '...';
+  return text;
+}
