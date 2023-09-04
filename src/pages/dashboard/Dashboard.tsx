@@ -32,7 +32,7 @@ const sidebarItems: SidebarNav[] = [
   {
     pageName: "transaction",
     icon: PiScroll,
-    label: "Daftar Transaksi",
+    label: "Histori Transaksi",
     targetPage: <TransactionHistory />,
   },
   {
