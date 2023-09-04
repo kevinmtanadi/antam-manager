@@ -1,8 +1,11 @@
 import {
+  Box,
+  Button,
   Card,
   CardBody,
   Collapse,
   Grid,
+  HStack,
   Icon,
   Table,
   TableContainer,
@@ -11,11 +14,13 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import ProductDetail from "../../components/Product/ProductDetail";
 import { AiFillDownCircle, AiFillUpCircle } from "react-icons/ai";
 import { ToMoney } from "../../services/helper";
+import AddProductModal from "../../components/Product/AddProductModal";
 
 const products = [
   {
@@ -236,54 +241,61 @@ const Product = () => {
     }
   };
 
+  const {isOpen, onOpen, onClose} = useDisclosure()
+
   return (
     <>
-      <Card>
-        <CardBody>
-          <TableContainer>
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th width={"150px"}>Kode Produk</Th>
-                  <Th>Nama Produk</Th>
-                  <Th>Stok</Th>
-                  <Th>Harga Avg</Th>
-                  <Th></Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {products.map((item) => (
-                  <React.Fragment key={item.product_id}>
-                    <Tr
-                      onClick={() => toggleRow(item.product_id)}
-                      className="cursor-pointer"
-                    >
-                      <Td>{item.product_id}</Td>
-                      <Td>{item.product_name}</Td>
-                      <Td>{item.stock != 0 ? item.stock : "-"}</Td>
-                      <Td>{item.avg_price ? ToMoney(item.avg_price) : "-"}</Td>
-                      <Td>
-                        {expandedRowId !== item.product_id ? (
-                          <Icon color={"gray.500"} as={AiFillDownCircle} />
-                        ) : (
-                          <Icon color={"gray.500"} as={AiFillUpCircle} />
-                        )}
-                      </Td>
-                    </Tr>
-                    <Tr paddingY={0}>
-                      <Td colSpan={5} padding={0} border={0} maxWidth={"500px"}>
-                        <Collapse in={expandedRowId === item.product_id}>
-                          <ProductDetail products={item.items} noteWidth="500px"></ProductDetail>
-                        </Collapse>
-                      </Td>
-                    </Tr>
-                  </React.Fragment>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-        </CardBody>
-      </Card>
+    <HStack marginBottom={3} width={'100%'} justifyContent={'space-between'}>
+      <span></span>
+      <Button onClick={() => onOpen()} colorScheme="whatsapp">Tambahkan Produk Baru</Button>
+    </HStack>
+    <Card>
+      <CardBody>
+        <TableContainer>
+          <Table>
+            <Thead>
+              <Tr>
+                <Th width={"150px"}>Kode Produk</Th>
+                <Th>Nama Produk</Th>
+                <Th>Stok</Th>
+                <Th>Harga Avg</Th>
+                <Th></Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {products.map((item) => (
+                <React.Fragment key={item.product_id}>
+                  <Tr
+                    onClick={() => toggleRow(item.product_id)}
+                    className="cursor-pointer"
+                  >
+                    <Td>{item.product_id}</Td>
+                    <Td>{item.product_name}</Td>
+                    <Td>{item.stock != 0 ? item.stock : "-"}</Td>
+                    <Td>{item.avg_price ? ToMoney(item.avg_price) : "-"}</Td>
+                    <Td>
+                      {expandedRowId !== item.product_id ? (
+                        <Icon color={"gray.500"} as={AiFillDownCircle} />
+                      ) : (
+                        <Icon color={"gray.500"} as={AiFillUpCircle} />
+                      )}
+                    </Td>
+                  </Tr>
+                  <Tr paddingY={0}>
+                    <Td colSpan={5} padding={0} border={0} maxWidth={"500px"}>
+                      <Collapse in={expandedRowId === item.product_id}>
+                        <ProductDetail products={item.items} noteWidth="500px"></ProductDetail>
+                      </Collapse>
+                    </Td>
+                  </Tr>
+                </React.Fragment>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </CardBody>
+    </Card>
+    <AddProductModal isOpen={isOpen} onClose={onClose}></AddProductModal>
     </>
   );
 };

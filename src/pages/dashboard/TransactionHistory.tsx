@@ -30,6 +30,18 @@ const transactions = [
         product_name: "Antam 1gr",
         buy_price: 1000000,
       },
+      {
+        transaction_purchase_id: "9",
+        product_id: "AT1",
+        product_name: "Antam 1gr",
+        buy_price: 1000000,
+      },
+      {
+        transaction_purchase_id: "9",
+        product_id: "AT1",
+        product_name: "Antam 1gr",
+        buy_price: 1000000,
+      }
     ],
     sales: [],
   },

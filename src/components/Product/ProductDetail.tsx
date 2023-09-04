@@ -11,7 +11,7 @@ import {
   Icon,
   HStack,
 } from "@chakra-ui/react";
-import { BsCartPlus } from "react-icons/bs";
+import { BsCartPlus, BsPencilSquare } from "react-icons/bs";
 import { ToMoney, shortenString } from "../../services/helper";
 
 interface Props {
@@ -61,11 +61,11 @@ const ProductDetail = ({ products, noteWidth }: Props) => {
                 <Td width={noteWidth}>
                   <HStack justifyContent={'space-between'}>
                     <Text>{item.note ? shortenString(item.note, 50) : "-"}</Text>
-                    <Icon as={BsCartPlus} className="cursor-pointer" />
+                    <Icon as={BsPencilSquare} color={"blue.500"} className="cursor-pointer" />
                   </HStack>
                 </Td>
                 <Td>
-                  <Icon as={BsCartPlus} className="cursor-pointer" />
+                  <Icon as={BsCartPlus} color={"blue.500"} className="cursor-pointer" />
                 </Td>
               </Tr>
             ))}

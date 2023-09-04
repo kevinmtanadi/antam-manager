@@ -52,8 +52,8 @@ const TransactionDetail = ({ purchase, sales }: Props) => {
             <Tr>
               <Td bg={"red.100"} width={"50%"}>
                 {sales && sales?.length > 0 ? (
-                  sales.map((item) => (
-                    <Card marginBottom={sales.length > 1 ? "20px" : "0px"}>
+                  sales.map((item, idx) => (
+                    <Card marginBottom={idx != sales.length - 1 ? "15px" : "0px"}>
                       <CardBody bg={"red.200"}>
                         <HStack justifyContent={"space-between"}>
                           <VStack>
@@ -96,8 +96,8 @@ const TransactionDetail = ({ purchase, sales }: Props) => {
               </Td>
               <Td bg={"green.100"} width={"50%"}>
                 {purchase && purchase?.length > 0 ? (
-                  purchase?.map((item) => (
-                    <Card bg={"green.200"}>
+                  purchase?.map((item, idx) => (
+                    <Card marginBottom={idx != purchase.length - 1 ? "15px" : "0px"} bg={"green.200"}>
                       <CardBody>
                         <HStack justifyContent={"space-around"}>
                           <VStack>
