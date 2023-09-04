@@ -1,19 +1,18 @@
 import {
   Card,
   CardBody,
-  TableContainer,
+  Collapse,
+  Icon,
   Table,
-  Thead,
-  Tr,
-  Th,
+  TableContainer,
   Tbody,
   Td,
-  Icon,
-  Collapse,
+  Th,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { AiFillDownCircle, AiFillUpCircle } from "react-icons/ai";
-import ProductDetail from "../../components/Product/ProductDetail";
 import TransactionDetail from "../../components/Transaction/TransactionDetail";
 import { ToMoney } from "../../services/helper";
 

@@ -1,6 +1,5 @@
-import { Box, Card, CardBody, Stat, StatLabel, StatNumber } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
-import { goldApiContext } from "../../App";
+import { Card, CardBody, Stat, StatLabel, StatNumber } from "@chakra-ui/react";
+import { useState } from "react";
 import { ToMoney, convertGoldPriceToIdr } from "../../services/helper";
 
 interface goldResponse {

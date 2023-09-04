@@ -1,6 +1,9 @@
 import {
   Box,
-  Icon,
+  Card,
+  CardBody,
+  Center,
+  HStack,
   Table,
   TableContainer,
   Tbody,
@@ -8,12 +11,7 @@ import {
   Th,
   Thead,
   Tr,
-  Text,
-  HStack,
-  VStack,
-  Card,
-  CardBody,
-  Center,
+  VStack
 } from "@chakra-ui/react";
 import { ToMoney } from "../../services/helper";
 

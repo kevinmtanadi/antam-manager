@@ -1,6 +1,5 @@
-import { Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react'
+import { Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react'
 import { Formik } from 'formik'
-import React from 'react'
 import * as Yup from 'yup'
 import InputField from '../InputField'
 
