@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   Card,
@@ -212,7 +213,7 @@ const products = [
   {
     product_id: "5",
     product_name: "Dummy Product 5",
-    stock: 2,
+    stock: 6,
     avg_price: 19,
     items: [
       {
@@ -271,7 +272,11 @@ const Product = () => {
                   >
                     <Td>{item.product_id}</Td>
                     <Td>{item.product_name}</Td>
-                    <Td>{item.stock != 0 ? item.stock : "-"}</Td>
+                    <Td>
+                      <Badge colorScheme={item.stock > 10 ? "green" : item.stock > 5 ? "yellow" : "red"}>
+                        {item.stock != 0 ? item.stock : "-"}
+                      </Badge>
+                    </Td>
                     <Td>{item.avg_price ? ToMoney(item.avg_price) : "-"}</Td>
                     <Td>
                       {expandedRowId !== item.product_id ? (

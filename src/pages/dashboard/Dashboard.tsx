@@ -10,18 +10,18 @@ import {
 import { PiScroll } from "react-icons/pi";
 import { CgNotes } from "react-icons/cg";
 import { SidebarNav } from "../../components/Sidebar";
-import Test from "./Test";
 import Product from "./Product";
 import Transaction from "./Transaction";
 import TransactionHistory from "./TransactionHistory";
 import Report from "./Report";
+import Stats from "./Stats";
 
 const sidebarItems: SidebarNav[] = [
   {
     pageName: "dashboard",
     icon: AiOutlineDashboard,
     label: "Dashboard",
-    targetPage: <Test />,
+    targetPage: <Stats />,
   },
   {
     pageName: "product",

@@ -57,7 +57,7 @@ const TransactionDetail = ({ purchase, sales }: Props) => {
                       <CardBody bg={"red.200"}>
                         <HStack justifyContent={"space-between"}>
                           <VStack>
-                            <Box fontWeight={"bold"}>Kode Antam</Box>
+                            <Box fontWeight={"bold"}>Kode Emas</Box>
                             <Box>{item.product_id}</Box>
                           </VStack>
                           <VStack>
@@ -67,24 +67,30 @@ const TransactionDetail = ({ purchase, sales }: Props) => {
                             <Box>{item.product_name}</Box>
                           </VStack>
                           <VStack>
-                            <Box fontWeight={"bold"} textAlign={"start"}>
-                              Harga Beli
-                            </Box>
-                            <Box>{ToMoney(item.buy_price)}</Box>
-                          </VStack>
-                          <VStack>
-                            <Box fontWeight={"bold"} textAlign={"start"}>
-                              Harga Jual
-                            </Box>
-                            <Box>{ToMoney(item.sale_price)}</Box>
-                          </VStack>
-                          <VStack>
-                            <Box fontWeight={"bold"} textAlign={"start"}>
-                              Profit
-                            </Box>
-                            <Box>
-                              {ToMoney(item.sale_price - item.buy_price)}
-                            </Box>
+                            <Card bgColor={"red.300"}>
+                              <CardBody>
+                                <HStack  width={"100%"} justifyContent={'space-between'}>
+                                  <Box fontWeight={"bold"} textAlign={"start"}>
+                                    Harga Beli
+                                  </Box>
+                                  <Box>{ToMoney(item.buy_price)}</Box>
+                                </HStack>
+                                <HStack  width={"100%"} justifyContent={'space-between'}>
+                                  <Box fontWeight={"bold"} textAlign={"start"}>
+                                    Harga Jual
+                                  </Box>
+                                  <Box>{ToMoney(item.sale_price)}</Box>
+                                </HStack>
+                                <HStack  width={"100%"} justifyContent={'space-between'}>
+                                  <Box fontWeight={"bold"} textAlign={"start"}>
+                                    Profit
+                                  </Box>
+                                  <Box>
+                                    {ToMoney(item.sale_price - item.buy_price)}
+                                  </Box>
+                                </HStack>
+                              </CardBody>
+                            </Card>
                           </VStack>
                         </HStack>
                       </CardBody>
@@ -101,7 +107,7 @@ const TransactionDetail = ({ purchase, sales }: Props) => {
                       <CardBody>
                         <HStack justifyContent={"space-around"}>
                           <VStack>
-                            <Box fontWeight={"bold"}>Kode Antam</Box>
+                            <Box fontWeight={"bold"}>Kode Emas</Box>
                             <Box>{item.product_id}</Box>
                           </VStack>
                           <VStack>
