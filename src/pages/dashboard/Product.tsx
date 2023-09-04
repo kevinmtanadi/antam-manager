@@ -1,11 +1,9 @@
 import {
   Badge,
-  Box,
   Button,
   Card,
   CardBody,
   Collapse,
-  Grid,
   HStack,
   Icon,
   Table,
@@ -15,13 +13,13 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import ProductDetail from "../../components/Product/ProductDetail";
 import { AiFillDownCircle, AiFillUpCircle } from "react-icons/ai";
-import { ToMoney } from "../../services/helper";
 import AddProductModal from "../../components/Product/AddProductModal";
+import ProductDetail from "../../components/Product/ProductDetail";
+import { ToMoney } from "../../services/helper";
 
 const products = [
   {
