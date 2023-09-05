@@ -4,7 +4,10 @@
 
 * {
   font-family: 'Rubik', sans-serif;
+  font-size: 0.925rem;
 }
+
+
 
 .cursor-pointer {
     cursor: pointer;

@@ -1,23 +1,34 @@
 import {
+  Badge,
   Box,
   Card,
   CardBody,
-  Center,
   HStack,
+  Icon,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalOverlay,
   Table,
   TableContainer,
   Tbody,
   Td,
-  Th,
+  Tfoot,
   Thead,
   Tr,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
-import { ToMoney } from "../../services/helper";
+import { ToMoney, convertDateFormat } from "../../services/helper";
+import { RiCloseCircleLine } from "react-icons/ri";
 
 interface Props {
   purchase?: TransactionPurchase[];
   sales?: TransactionSales[];
+  date: string;
+  totalPurchase: number;
+  totalSales: number;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export interface TransactionPurchase {
@@ -35,100 +46,151 @@ export interface TransactionSales {
   sale_price: number;
 }
 
-const TransactionDetail = ({ purchase, sales }: Props) => {
+const TransactionDetail = ({
+  purchase,
+  sales,
+  totalPurchase,
+  totalSales,
+  isOpen,
+  onClose,
+  date,
+}: Props) => {
   return (
-    <>
-      <TableContainer>
-        <Table>
-          <Thead>
-            <Tr>
-              <Th bg={"red.200"}>PENJUALAN</Th>
-              <Th bg={"green.200"}>PEMBELIAN</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            <Tr>
-              <Td bg={"red.100"} width={"50%"}>
-                {sales && sales?.length > 0 ? (
-                  sales.map((item, idx) => (
-                    <Card marginBottom={idx != sales.length - 1 ? "15px" : "0px"}>
-                      <CardBody bg={"red.200"}>
-                        <HStack justifyContent={"space-between"}>
-                          <VStack>
-                            <Box fontWeight={"bold"}>Kode Emas</Box>
-                            <Box>{item.product_id}</Box>
-                          </VStack>
-                          <VStack>
-                            <Box fontWeight={"bold"} textAlign={"start"}>
-                              Nama Produk
-                            </Box>
-                            <Box>{item.product_name}</Box>
-                          </VStack>
-                          <VStack>
-                            <Card bgColor={"red.300"}>
-                              <CardBody>
-                                <HStack  width={"100%"} justifyContent={'space-between'}>
-                                  <Box fontWeight={"bold"} textAlign={"start"}>
-                                    Harga Beli
-                                  </Box>
-                                  <Box>{ToMoney(item.buy_price)}</Box>
-                                </HStack>
-                                <HStack  width={"100%"} justifyContent={'space-between'}>
-                                  <Box fontWeight={"bold"} textAlign={"start"}>
-                                    Harga Jual
-                                  </Box>
-                                  <Box>{ToMoney(item.sale_price)}</Box>
-                                </HStack>
-                                <HStack  width={"100%"} justifyContent={'space-between'}>
-                                  <Box fontWeight={"bold"} textAlign={"start"}>
-                                    Profit
-                                  </Box>
-                                  <Box>
-                                    {ToMoney(item.sale_price - item.buy_price)}
-                                  </Box>
-                                </HStack>
-                              </CardBody>
-                            </Card>
-                          </VStack>
-                        </HStack>
-                      </CardBody>
-                    </Card>
-                  ))
-                ) : (
-                  <Center>Tidak ada data penjualan</Center>
-                )}
-              </Td>
-              <Td bg={"green.100"} width={"50%"}>
-                {purchase && purchase?.length > 0 ? (
-                  purchase?.map((item, idx) => (
-                    <Card marginBottom={idx != purchase.length - 1 ? "15px" : "0px"} bg={"green.200"}>
-                      <CardBody>
-                        <HStack justifyContent={"space-around"}>
-                          <VStack>
-                            <Box fontWeight={"bold"}>Kode Emas</Box>
-                            <Box>{item.product_id}</Box>
-                          </VStack>
-                          <VStack>
-                            <Box fontWeight={"bold"}>Nama Produk</Box>
-                            <Box>{item.product_name}</Box>
-                          </VStack>
-                          <VStack>
-                            <Box fontWeight={"bold"}>Harga Beli</Box>
-                            <Box>{ToMoney(item.buy_price)}</Box>
-                          </VStack>
-                        </HStack>
-                      </CardBody>
-                    </Card>
-                  ))
-                ) : (
-                  <Center>Tidak ada data pembelian</Center>
-                )}
-              </Td>
-            </Tr>
-          </Tbody>
-        </Table>
-      </TableContainer>
-    </>
+    <Modal size={"2xl"} isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalBody>
+          <VStack marginTop={2} marginBottom={5}>
+            <HStack
+              marginBottom={"25px"}
+              width={"100%"}
+              justifyContent={"space-between"}
+            >
+              <span></span>
+              <Box
+                position={"absolute"}
+                top={"10px"}
+                left={"50%"}
+                translateX={"-50%"}
+                transform={"translate(-50%, 0%)"}
+                fontWeight={"semibold"}
+                fontSize={"1.35rem"}
+              >
+                Detail Transaksi
+              </Box>
+              <Icon
+                position={"absolute"}
+                right={"20px"}
+                top={"10px"}
+                fontSize={"1.85rem"}
+                color={"rgba(0,0,0,0.6)"}
+                className="cursor-pointer"
+                as={RiCloseCircleLine}
+                onClick={onClose}
+              />
+            </HStack>
+            <HStack
+              marginBottom={"10px"}
+              width={"100%"}
+              justifyContent={"space-between"}
+            >
+              <Box></Box>
+              <Box>{convertDateFormat(date)}</Box>
+            </HStack>
+            <VStack spacing={5} width={"100%"}>
+              {purchase && purchase.length > 0 && (
+                <Card width={"100%"}>
+                  <CardBody>
+                    <Box
+                      marginBottom={"10px"}
+                      fontWeight={"semibold"}
+                      fontSize={"1.05rem"}
+                    >
+                      Pembelian
+                    </Box>
+                    <TableContainer>
+                      <Table size={"sm"}>
+                        <Thead>
+                          <Tr>
+                            <Td fontWeight={"semibold"}>Kode Produk</Td>
+                            <Td fontWeight={"semibold"}>Nama Produk</Td>
+                            <Td fontWeight={"semibold"}>Harga Beli</Td>
+                          </Tr>
+                        </Thead>
+                        <Tbody>
+                          {purchase?.map((item) => (
+                            <Tr key={item.transaction_purchase_id}>
+                              <Td>{item.product_id}</Td>
+                              <Td>{item.product_name}</Td>
+                              <Td>{ToMoney(item.buy_price)}</Td>
+                            </Tr>
+                          ))}
+                        </Tbody>
+                        <Tfoot>
+                          <Tr>
+                            <Td fontWeight={"semibold"} colSpan={2}>
+                              TOTAL PEMBELIAN
+                            </Td>
+                            <Td fontWeight={"semibold"}>
+                              {ToMoney(totalPurchase)}
+                            </Td>
+                          </Tr>
+                        </Tfoot>
+                      </Table>
+                    </TableContainer>
+                  </CardBody>
+                </Card>
+              )}
+              {sales && sales.length > 0 && (
+                <Card width={"100%"}>
+                  <CardBody>
+                    <Box
+                      marginBottom={"10px"}
+                      fontWeight={"semibold"}
+                      fontSize={"1.05rem"}
+                    >
+                      Penjualan
+                    </Box>
+                    <TableContainer>
+                      <Table size={"sm"}>
+                        <Thead>
+                          <Tr>
+                            <Td fontWeight={"semibold"}>Kode Produk</Td>
+                            <Td fontWeight={"semibold"}>Nama Produk</Td>
+                            <Td fontWeight={"semibold"}>Harga Beli</Td>
+                            <Td fontWeight={"semibold"}>Harga Jual</Td>
+                          </Tr>
+                        </Thead>
+                        <Tbody>
+                          {sales?.map((item) => (
+                            <Tr key={item.transaction_sale_id}>
+                              <Td>{item.product_id}</Td>
+                              <Td>{item.product_name}</Td>
+                              <Td>{ToMoney(item.buy_price)}</Td>
+                              <Td>{ToMoney(item.sale_price)}</Td>
+                            </Tr>
+                          ))}
+                        </Tbody>
+                        <Tfoot>
+                          <Tr>
+                            <Td fontWeight={"semibold"} colSpan={3}>
+                              TOTAL PENJUALAN
+                            </Td>
+                            <Td fontWeight={"semibold"}>
+                              {ToMoney(totalSales)}
+                            </Td>
+                          </Tr>
+                        </Tfoot>
+                      </Table>
+                    </TableContainer>
+                  </CardBody>
+                </Card>
+              )}
+            </VStack>
+          </VStack>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };
 

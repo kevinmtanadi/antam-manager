@@ -72,7 +72,7 @@ const Dashboard = () => {
           />
         </GridItem>
         <GridItem area={"content"}>
-          <Box margin={10}>{showPage?.targetPage}</Box>
+          <Box margin={7}>{showPage?.targetPage}</Box>
         </GridItem>
       </Grid>
     </>

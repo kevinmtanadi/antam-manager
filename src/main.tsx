@@ -5,6 +5,7 @@ import "./index.css";
 import { AuthProvider } from "react-auth-kit";
 import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
+import theme from "./theme.ts";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -15,7 +16,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       cookieSecure={window.location.protocol === "https:"}
     >
       <BrowserRouter>
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
           <App />
         </ChakraProvider>
       </BrowserRouter>

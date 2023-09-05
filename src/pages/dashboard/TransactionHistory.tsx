@@ -1,8 +1,14 @@
 import {
+  Badge,
+  Box,
+  Button,
   Card,
   CardBody,
   Collapse,
+  Divider,
+  HStack,
   Icon,
+  SimpleGrid,
   Table,
   TableContainer,
   Tbody,
@@ -10,11 +16,13 @@ import {
   Th,
   Thead,
   Tr,
+  VStack,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { AiFillDownCircle, AiFillUpCircle } from "react-icons/ai";
 import TransactionDetail from "../../components/Transaction/TransactionDetail";
-import { ToMoney } from "../../services/helper";
+import { ToMoney, convertDateFormat } from "../../services/helper";
 
 const transactions = [
   {
@@ -40,7 +48,7 @@ const transactions = [
         product_id: "AT1",
         product_name: "Antam 1gr",
         buy_price: 1000000,
-      }
+      },
     ],
     sales: [],
   },
@@ -88,7 +96,20 @@ const transactions = [
     created_at: "2023-09-01 18:27:53",
     total_sale: 1050000,
     total_buy: null,
-    purchase: [],
+    purchase: [
+      {
+        transaction_purchase_id: "9",
+        product_id: "AT1",
+        product_name: "Antam 1gr",
+        buy_price: 1000000,
+      },
+      {
+        transaction_purchase_id: "9",
+        product_id: "AT1",
+        product_name: "Antam 1gr",
+        buy_price: 1000000,
+      },
+    ],
     sales: [
       {
         transaction_sale_id: "3",
@@ -109,75 +130,88 @@ const transactions = [
 ];
 
 const TransactionHistory = () => {
-  const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
-  const toggleRow = (rowId: string) => {
-    if (expandedRowId === rowId) {
-      setExpandedRowId(null);
-    } else {
-      setExpandedRowId(rowId);
-    }
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [chosenTransaction, setChosenTransaction] = useState<any>(null);
+
+  const openModal = (item: any) => {
+    setChosenTransaction(item);
+    onOpen();
   };
 
   return (
     <>
-      <Card>
-        <CardBody>
-          <TableContainer>
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th>Tanggal Transaksi</Th>
-                  <Th>Penjualan</Th>
-                  <Th>Pembelian</Th>
-                  <Th></Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {transactions.map((item) => {
-                  return (
-                    <React.Fragment key={item.transaction_id}>
-                      <Tr
-                        onClick={() => toggleRow(item.transaction_id)}
-                        className="cursor-pointer"
-                      >
-                        <Td>{item.created_at}</Td>
-                        <Td>
-                          {item.total_sale ? ToMoney(item.total_sale) : "-"}
-                        </Td>
-                        <Td>
-                          {item.total_buy ? ToMoney(item.total_buy) : "-"}
-                        </Td>
-                        <Td>
-                          {expandedRowId !== item.transaction_id ? (
-                            <Icon color={"gray.500"} as={AiFillDownCircle} />
-                          ) : (
-                            <Icon color={"gray.500"} as={AiFillUpCircle} />
-                          )}
-                        </Td>
-                      </Tr>
-                      <Tr paddingY={0}>
-                        <Td
-                          colSpan={4}
-                          padding={0}
-                          border={0}
-                          maxWidth={"500px"}
-                        >
-                          <Collapse in={expandedRowId === item.transaction_id}>
-                            <TransactionDetail
-                              purchase={item.purchase}
-                              sales={item.sales}
-                            ></TransactionDetail>
-                          </Collapse>
-                        </Td>
-                      </Tr>
-                    </React.Fragment>
-                  );
-                })}
-              </Tbody>
-            </Table>
-          </TableContainer>
-        </CardBody>
-      </Card>
+      <VStack>
+        {transactions.map((item, idx) => (
+          <HStack width={"100%"} alignItems={"start"} spacing={5}>
+            <Card
+              height={"270px"}
+              marginBottom={idx != transactions.length - 1 ? "10px" : "0px"}
+              width={"80%"}
+              minWidth={"300px"}
+              maxWidth={"1000px"}
+            >
+              <CardBody>
+                <HStack justifyContent={"space-between"}>
+                  <Badge colorScheme="whatsapp">{item.transaction_id}</Badge>
+                  <Box>{convertDateFormat(item.created_at)}</Box>
+                </HStack>
+                <Divider marginY={5} borderColor={"rgba(0,0,0,0.3)"} />
+                <SimpleGrid columns={2} spacingX={0} spacingY={5}>
+                  <VStack spacing={0} alignItems={"start"}>
+                    <Box>Total Pembelian</Box>
+                    <Box fontWeight={"bold"}>
+                      {item.total_buy ? ToMoney(item.total_buy) : "-"}
+                    </Box>
+                  </VStack>
+                  <VStack spacing={0} alignItems={"start"}>
+                    <Box>Total Penjualan</Box>
+                    <Box fontWeight={"bold"}>
+                      {item.total_sale ? ToMoney(item.total_sale) : "-"}
+                    </Box>
+                  </VStack>
+                  <VStack spacing={0} alignItems={"start"}>
+                    <Box>Item Dibeli</Box>
+                    <Box fontWeight={"bold"}>
+                      {item.purchase.length != 0 ? item.purchase.length : "-"}
+                    </Box>
+                  </VStack>
+                  <VStack spacing={0} alignItems={"start"}>
+                    <Box>Item Terjual</Box>
+                    <Box fontWeight={"bold"}>
+                      {item.sales.length != 0 ? item.sales.length : "-"}
+                    </Box>
+                  </VStack>
+                </SimpleGrid>
+                <Divider marginY={5} borderColor={"rgba(0,0,0,0.3)"} />
+                <Button
+                  borderRadius={"2px"}
+                  colorScheme="telegram"
+                  fontWeight={"normal"}
+                  fontSize={"0.925rem"}
+                  onClick={() => openModal(item)}
+                >
+                  Lihat Detail
+                </Button>
+              </CardBody>
+            </Card>
+            <Card height={"270px"} width={"235px"}>
+              <CardBody>
+                <Box>Catatan</Box>
+              </CardBody>
+            </Card>
+          </HStack>
+        ))}
+      </VStack>
+      <TransactionDetail
+        onClose={onClose}
+        isOpen={isOpen}
+        purchase={chosenTransaction ? chosenTransaction.purchase : null}
+        sales={chosenTransaction ? chosenTransaction.sales : null}
+        date={chosenTransaction ? chosenTransaction.created_at : null}
+        totalPurchase={chosenTransaction ? chosenTransaction.total_buy : null}
+        totalSales={chosenTransaction ? chosenTransaction.total_sale : null}
+      />
     </>
   );
 };
