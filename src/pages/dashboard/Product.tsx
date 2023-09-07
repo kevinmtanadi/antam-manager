@@ -4,12 +4,17 @@ import {
   Button,
   Card,
   CardBody,
+  CardHeader,
   Collapse,
+  Divider,
+  Grid,
+  GridItem,
   HStack,
   Icon,
   Input,
   InputGroup,
   InputLeftElement,
+  SimpleGrid,
   Table,
   TableContainer,
   Tbody,
@@ -17,6 +22,7 @@ import {
   Th,
   Thead,
   Tr,
+  VStack,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
@@ -45,14 +51,6 @@ interface Item {
 }
 
 const products = [
-  {
-    product_id: "",
-    product_name: "",
-    weight: 0,
-    stock: 0,
-    avg_price: 0,
-    items: [],
-  },
   {
     product_id: "AT1",
     product_name: "Antam 1gr",
@@ -121,15 +119,6 @@ const products = [
 ];
 
 const Product = () => {
-  const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
-  const toggleRow = (rowId: string) => {
-    if (expandedRowId === rowId) {
-      setExpandedRowId(null);
-    } else {
-      setExpandedRowId(rowId);
-    }
-  };
-
   const [shownProduct, setShownProduct] = useState<Product[]>(products);
 
   const searchRef = useRef<HTMLInputElement>(null);
@@ -153,9 +142,16 @@ const Product = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [chosenProduct, setChosenProduct] = useState<Product>(products[0]);
+
+  const openModal = (item: Product) => {
+    setChosenProduct(item);
+    onOpen();
+  };
+
   return (
     <>
-      <HStack marginBottom={3} width={"100%"} justifyContent={"space-between"}>
+      <HStack marginBottom={5} width={"100%"} justifyContent={"space-between"}>
         <Box>
           <form
             onChange={() => {
@@ -175,7 +171,7 @@ const Product = () => {
           Tambahkan Produk Baru
         </Button>
       </HStack>
-      <Card>
+      {/* <Card>
         <CardBody>
           <TableContainer>
             <Table>
@@ -241,8 +237,72 @@ const Product = () => {
             </Table>
           </TableContainer>
         </CardBody>
-      </Card>
-      <AddProductModal isOpen={isOpen} onClose={onClose}></AddProductModal>
+      </Card> */}
+      <Grid
+        gap={5}
+        templateColumns={{
+          base: "repeat(1, 1fr)",
+          md: "repeat(2, 1fr)",
+          xl: "repeat(3, 1fr)",
+        }}
+      >
+        {shownProduct.map((item) => (
+          <GridItem key={item.product_id}>
+            <Card>
+              <CardBody>
+                <HStack>
+                  <Box
+                    color={"blue.500"}
+                    fontWeight={"semibold"}
+                    fontSize={"1rem"}
+                  >
+                    {item.product_id}
+                  </Box>
+                  <Box>{item.product_name}</Box>
+                </HStack>
+                <Divider marginY={3} />
+                <SimpleGrid columns={2}>
+                  <VStack spacing={0} alignItems={"start"}>
+                    <Box>Jumlah Item</Box>
+                    <Box fontWeight={"semibold"}>
+                      {item.stock > 0 ? item.stock : "-"}
+                    </Box>
+                  </VStack>
+                  <VStack spacing={0} alignItems={"start"}>
+                    <Box>Harga Avg</Box>
+                    <Box fontWeight={"semibold"}>
+                      {item.avg_price ? ToMoney(item.avg_price) : "-"}
+                    </Box>
+                  </VStack>
+                  <VStack spacing={0} alignItems={"start"}>
+                    <Box>Berat</Box>
+                    <Box fontWeight={"semibold"}>
+                      {item.weight ? item.weight + " g" : "-"}
+                    </Box>
+                  </VStack>
+                </SimpleGrid>
+                <Divider marginY={3} />
+
+                <Button
+                  borderRadius={"2px"}
+                  colorScheme="telegram"
+                  fontWeight={"normal"}
+                  fontSize={"0.925rem"}
+                  onClick={() => openModal(item)}
+                >
+                  Lihat Detail
+                </Button>
+              </CardBody>
+            </Card>
+          </GridItem>
+        ))}
+      </Grid>
+      <ProductDetail
+        isOpen={isOpen}
+        onClose={onClose}
+        product={chosenProduct}
+      />
+      {/* <AddProductModal isOpen={isOpen} onClose={onClose}></AddProductModal> */}
     </>
   );
 };

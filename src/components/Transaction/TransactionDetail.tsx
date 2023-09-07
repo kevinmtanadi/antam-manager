@@ -3,6 +3,7 @@ import {
   Box,
   Card,
   CardBody,
+  Divider,
   HStack,
   Icon,
   Modal,
@@ -99,92 +100,94 @@ const TransactionDetail = ({
             </HStack>
             <VStack spacing={5} width={"100%"}>
               {purchase && purchase.length > 0 && (
-                <Card width={"100%"}>
-                  <CardBody>
-                    <Box
-                      marginBottom={"10px"}
-                      fontWeight={"semibold"}
-                      fontSize={"1.05rem"}
-                    >
-                      Pembelian
-                    </Box>
-                    <TableContainer>
-                      <Table size={"sm"}>
-                        <Thead>
-                          <Tr>
-                            <Td fontWeight={"semibold"}>Kode Produk</Td>
-                            <Td fontWeight={"semibold"}>Nama Produk</Td>
-                            <Td fontWeight={"semibold"}>Harga Beli</Td>
+                <Box width={"100%"}>
+                  <Divider marginBottom={3} />
+                  <Box
+                    marginBottom={"10px"}
+                    fontWeight={"semibold"}
+                    fontSize={"1.05rem"}
+                    paddingLeft={4}
+                    color={"blue.500"}
+                  >
+                    Pembelian
+                  </Box>
+                  <TableContainer>
+                    <Table variant={"unstyled"} size={"sm"}>
+                      <Thead>
+                        <Tr>
+                          <Td fontWeight={"semibold"}>Kode Produk</Td>
+                          <Td fontWeight={"semibold"}>Nama Produk</Td>
+                          <Td fontWeight={"semibold"}>Harga Beli</Td>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {purchase?.map((item) => (
+                          <Tr key={item.transaction_purchase_id}>
+                            <Td>{item.product_id}</Td>
+                            <Td>{item.product_name}</Td>
+                            <Td>{ToMoney(item.buy_price)}</Td>
                           </Tr>
-                        </Thead>
-                        <Tbody>
-                          {purchase?.map((item) => (
-                            <Tr key={item.transaction_purchase_id}>
-                              <Td>{item.product_id}</Td>
-                              <Td>{item.product_name}</Td>
-                              <Td>{ToMoney(item.buy_price)}</Td>
-                            </Tr>
-                          ))}
-                        </Tbody>
-                        <Tfoot>
-                          <Tr>
-                            <Td fontWeight={"semibold"} colSpan={2}>
-                              TOTAL PEMBELIAN
-                            </Td>
-                            <Td fontWeight={"semibold"}>
-                              {ToMoney(totalPurchase)}
-                            </Td>
-                          </Tr>
-                        </Tfoot>
-                      </Table>
-                    </TableContainer>
-                  </CardBody>
-                </Card>
+                        ))}
+                      </Tbody>
+                      <Tfoot>
+                        <Tr>
+                          <Td fontWeight={"semibold"} colSpan={2}>
+                            TOTAL PEMBELIAN
+                          </Td>
+                          <Td fontWeight={"semibold"}>
+                            {totalPurchase != 0 ? ToMoney(totalPurchase) : "-"}
+                          </Td>
+                        </Tr>
+                      </Tfoot>
+                    </Table>
+                  </TableContainer>
+                </Box>
               )}
               {sales && sales.length > 0 && (
-                <Card width={"100%"}>
-                  <CardBody>
-                    <Box
-                      marginBottom={"10px"}
-                      fontWeight={"semibold"}
-                      fontSize={"1.05rem"}
-                    >
-                      Penjualan
-                    </Box>
-                    <TableContainer>
-                      <Table size={"sm"}>
-                        <Thead>
-                          <Tr>
-                            <Td fontWeight={"semibold"}>Kode Produk</Td>
-                            <Td fontWeight={"semibold"}>Nama Produk</Td>
-                            <Td fontWeight={"semibold"}>Harga Beli</Td>
-                            <Td fontWeight={"semibold"}>Harga Jual</Td>
+                <Box width={"100%"}>
+                  <Divider marginBottom={3} />
+                  <Box
+                    marginBottom={"10px"}
+                    fontWeight={"semibold"}
+                    fontSize={"1.05rem"}
+                    paddingLeft={4}
+                    color={"blue.500"}
+                  >
+                    Penjualan
+                  </Box>
+                  <TableContainer>
+                    <Table variant={"unstyled"} size={"sm"}>
+                      <Thead>
+                        <Tr>
+                          <Td fontWeight={"semibold"}>Kode Produk</Td>
+                          <Td fontWeight={"semibold"}>Nama Produk</Td>
+                          <Td fontWeight={"semibold"}>Harga Beli</Td>
+                          <Td fontWeight={"semibold"}>Harga Jual</Td>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {sales?.map((item) => (
+                          <Tr key={item.transaction_sale_id}>
+                            <Td>{item.product_id}</Td>
+                            <Td>{item.product_name}</Td>
+                            <Td>{ToMoney(item.buy_price)}</Td>
+                            <Td>{ToMoney(item.sale_price)}</Td>
                           </Tr>
-                        </Thead>
-                        <Tbody>
-                          {sales?.map((item) => (
-                            <Tr key={item.transaction_sale_id}>
-                              <Td>{item.product_id}</Td>
-                              <Td>{item.product_name}</Td>
-                              <Td>{ToMoney(item.buy_price)}</Td>
-                              <Td>{ToMoney(item.sale_price)}</Td>
-                            </Tr>
-                          ))}
-                        </Tbody>
-                        <Tfoot>
-                          <Tr>
-                            <Td fontWeight={"semibold"} colSpan={3}>
-                              TOTAL PENJUALAN
-                            </Td>
-                            <Td fontWeight={"semibold"}>
-                              {ToMoney(totalSales)}
-                            </Td>
-                          </Tr>
-                        </Tfoot>
-                      </Table>
-                    </TableContainer>
-                  </CardBody>
-                </Card>
+                        ))}
+                      </Tbody>
+                      <Tfoot>
+                        <Tr>
+                          <Td fontWeight={"semibold"} colSpan={3}>
+                            TOTAL PENJUALAN
+                          </Td>
+                          <Td fontWeight={"semibold"}>
+                            {totalSales != 0 ? ToMoney(totalSales) : "-"}
+                          </Td>
+                        </Tr>
+                      </Tfoot>
+                    </Table>
+                  </TableContainer>
+                </Box>
               )}
             </VStack>
           </VStack>

@@ -95,7 +95,7 @@ const transactions = [
     transaction_id: "57",
     created_at: "2023-09-01 18:27:53",
     total_sale: 1050000,
-    total_buy: null,
+    total_buy: 2000000,
     purchase: [
       {
         transaction_purchase_id: "9",
@@ -154,7 +154,9 @@ const TransactionHistory = () => {
               <CardBody>
                 <HStack justifyContent={"space-between"}>
                   <Badge colorScheme="whatsapp">{item.transaction_id}</Badge>
-                  <Box>{convertDateFormat(item.created_at)}</Box>
+                  <Box fontWeight={"semibold"}>
+                    {convertDateFormat(item.created_at)}
+                  </Box>
                 </HStack>
                 <Divider marginY={5} borderColor={"rgba(0,0,0,0.3)"} />
                 <SimpleGrid columns={2} spacingX={0} spacingY={5}>

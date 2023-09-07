@@ -10,13 +10,19 @@ import {
   Th,
   Icon,
   HStack,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalOverlay,
 } from "@chakra-ui/react";
 import { BsCartPlus, BsPencilSquare } from "react-icons/bs";
 import { ToMoney, shortenString } from "../../services/helper";
+import Product from "../../pages/dashboard/Product";
 
 interface Props {
-  products: ProductDetail[];
-  noteWidth: string;
+  product: Product;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export interface ProductDetail {
@@ -26,53 +32,14 @@ export interface ProductDetail {
   note: string | null;
 }
 
-const ProductDetail = ({ products, noteWidth }: Props) => {
+const ProductDetail = ({ product, isOpen, onClose }: Props) => {
   return (
-    <>
-      <TableContainer>
-        <Table width={"100%"} bgColor={"gray.100"}>
-          <Thead>
-            <Tr>
-              <Th>Kode Item</Th>
-              <Th>Harga Beli</Th>
-              <Th>Tanggal Pembelian</Th>
-              <Th width={noteWidth}>Catatan</Th>
-              <Th></Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {products.map((item) => (
-              <Tr key={item.product_stock_id}>
-                <Td>
-                  <Box>
-                    <Text fontWeight={"normal"}>{item.product_stock_id}</Text>
-                  </Box>
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight={"normal"}>{item.buy_price ? ToMoney(item.buy_price) : "-"}</Text>
-                  </Box>
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight={"normal"}>{item.buy_at}</Text>
-                  </Box>
-                </Td>
-                <Td width={noteWidth}>
-                  <HStack justifyContent={'space-between'}>
-                    <Text>{item.note ? shortenString(item.note, 50) : "-"}</Text>
-                    <Icon as={BsPencilSquare} color={"blue.500"} className="cursor-pointer" />
-                  </HStack>
-                </Td>
-                <Td>
-                  <Icon as={BsCartPlus} color={"blue.500"} className="cursor-pointer" />
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
-    </>
+    <Modal size={"2xl"} isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalBody>{product.product_name}</ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };
 
