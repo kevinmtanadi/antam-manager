@@ -1,38 +1,27 @@
 import {
-  Badge,
   Box,
   Button,
   Card,
   CardBody,
-  CardHeader,
-  Collapse,
   Divider,
   Grid,
   GridItem,
   HStack,
-  Icon,
   Input,
   InputGroup,
   InputLeftElement,
   SimpleGrid,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
-import { AiFillDownCircle, AiFillUpCircle } from "react-icons/ai";
+import { useEffect, useRef, useState } from "react";
+import { BsSearch } from "react-icons/bs";
 import AddProductModal from "../../components/Product/AddProductModal";
 import ProductDetail from "../../components/Product/ProductDetail";
 import { ToMoney } from "../../services/helper";
-import { BsSearch } from "react-icons/bs";
+import { useCart } from "../../context/CartContext";
 
-interface Product {
+export interface Product {
   product_id: string;
   product_name: string;
   weight: number;
@@ -41,7 +30,7 @@ interface Product {
   items: Item[];
 }
 
-interface Item {
+export interface Item {
   product_stock_id: string;
   product_id: string | null;
   product_name: string | null;
@@ -50,7 +39,7 @@ interface Item {
   note: string;
 }
 
-const products = [
+const productList = [
   {
     product_id: "AT1",
     product_name: "Antam 1gr",
@@ -119,12 +108,14 @@ const products = [
 ];
 
 const Product = () => {
-  const [shownProduct, setShownProduct] = useState<Product[]>(products);
+  const [shownProduct, setShownProduct] = useState<Product[]>(productList);
+
+  const [product, setProduct] = useState<Product[]>(productList);
 
   const searchRef = useRef<HTMLInputElement>(null);
   const setRef = () => {
     if (searchRef.current) {
-      const filteredProduct = products.filter((item) => {
+      const filteredProduct = product.filter((item) => {
         const query = searchRef.current ? searchRef.current.value : "";
         const queryRegex = new RegExp(query.replace(/\*/g, ".*"), "i");
 
@@ -138,16 +129,51 @@ const Product = () => {
     }
   };
 
-  useEffect(() => {}, []);
-
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isCreateOpen,
+    onOpen: onCreateOpen,
+    onClose: onCreateClose,
+  } = useDisclosure();
 
-  const [chosenProduct, setChosenProduct] = useState<Product>(products[0]);
+  const [chosenProduct, setChosenProduct] = useState<Product>(product[0]);
+  const resetProductDetail = () => {
+    const currentChosenProduct = product.filter(
+      (item) => item.product_id === chosenProduct.product_id
+    )[0];
+    setChosenProduct(currentChosenProduct);
+  };
 
   const openModal = (item: Product) => {
     setChosenProduct(item);
     onOpen();
   };
+
+  const { addItemToCart } = useCart();
+
+  const onAddCart = (prod: Item, product_id: string) => {
+    addItemToCart(prod);
+
+    const updatedProducts = product.map((item) => {
+      if (item.product_id === product_id) {
+        const updatedItem = item.items.filter((item) => item !== prod);
+
+        return {
+          ...item,
+          items: updatedItem,
+        };
+      }
+
+      return item;
+    });
+
+    setProduct(updatedProducts);
+  };
+
+  useEffect(() => {
+    setRef();
+    resetProductDetail();
+  }, [product]);
 
   return (
     <>
@@ -167,77 +193,11 @@ const Product = () => {
             </InputGroup>
           </form>
         </Box>
-        <Button onClick={() => onOpen()} colorScheme="whatsapp">
+        <Button onClick={() => onCreateOpen()} colorScheme="whatsapp">
           Tambahkan Produk Baru
         </Button>
       </HStack>
-      {/* <Card>
-        <CardBody>
-          <TableContainer>
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th width={"150px"}>Kode Produk</Th>
-                  <Th>Nama Produk</Th>
-                  <Th>Stok</Th>
-                  <Th>Harga Avg</Th>
-                  <Th>Harga/gr</Th>
-                  <Th></Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {shownProduct.map((item) => (
-                  <React.Fragment key={item.product_id}>
-                    <Tr
-                      onClick={() => toggleRow(item.product_id)}
-                      className="cursor-pointer"
-                    >
-                      <Td>{item.product_id}</Td>
-                      <Td>{item.product_name}</Td>
-                      <Td>
-                        <Badge
-                          colorScheme={
-                            item.stock > 10
-                              ? "green"
-                              : item.stock > 5
-                              ? "yellow"
-                              : "red"
-                          }
-                        >
-                          {item.stock != 0 ? item.stock : "-"}
-                        </Badge>
-                      </Td>
-                      <Td>{item.avg_price ? ToMoney(item.avg_price) : "-"}</Td>
-                      <Td>
-                        {item.avg_price
-                          ? ToMoney(item.avg_price / item.weight)
-                          : "-"}
-                      </Td>
-                      <Td>
-                        {expandedRowId !== item.product_id ? (
-                          <Icon color={"gray.500"} as={AiFillDownCircle} />
-                        ) : (
-                          <Icon color={"gray.500"} as={AiFillUpCircle} />
-                        )}
-                      </Td>
-                    </Tr>
-                    <Tr paddingY={0}>
-                      <Td colSpan={5} padding={0} border={0} maxWidth={"500px"}>
-                        <Collapse in={expandedRowId === item.product_id}>
-                          <ProductDetail
-                            products={item.items}
-                            noteWidth="500px"
-                          ></ProductDetail>
-                        </Collapse>
-                      </Td>
-                    </Tr>
-                  </React.Fragment>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-        </CardBody>
-      </Card> */}
+
       <Grid
         gap={5}
         templateColumns={{
@@ -301,8 +261,9 @@ const Product = () => {
         isOpen={isOpen}
         onClose={onClose}
         product={chosenProduct}
+        onAddCart={(item, product_id) => onAddCart(item, product_id)}
       />
-      {/* <AddProductModal isOpen={isOpen} onClose={onClose}></AddProductModal> */}
+      <AddProductModal isOpen={isCreateOpen} onClose={onCreateClose} />
     </>
   );
 };

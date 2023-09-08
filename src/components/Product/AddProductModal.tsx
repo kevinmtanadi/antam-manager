@@ -27,10 +27,13 @@ const AddProductModal = ({ isOpen, onClose }: Props) => {
         <ModalCloseButton />
         <ModalBody>
           <Formik
-            initialValues={{ product_code: "", product_name: "" }}
+            initialValues={{ product_code: "", product_name: "", weight: "" }}
             validationSchema={Yup.object({
               product_code: Yup.string().required("Kode produk wajib diisi"),
               product_name: Yup.string().required("Nama produk wajib diisi"),
+              weight: Yup.number()
+                .typeError("Berat harus berupa angka")
+                .required("Berat harus diisi"),
             })}
             onSubmit={(values) => {
               console.log(values);
@@ -48,6 +51,11 @@ const AddProductModal = ({ isOpen, onClose }: Props) => {
                     type="text"
                     name="product_name"
                     placeholder="Nama produk"
+                  />
+                  <InputField
+                    type="text"
+                    name="weight"
+                    placeholder="Berat (gram)"
                   />
                 </VStack>
                 <HStack justifyContent={"end"} marginTop={5} marginBottom={4}>

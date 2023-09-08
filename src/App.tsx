@@ -6,11 +6,11 @@ import api from "./services/api";
 
 export const mainApiContext = createContext(
   api.create("http://localhost:8080")
-)
+);
 
 export const goldApiContext = createContext(
   api.create("https://www.goldapi.io/api")
-)
+);
 
 function App() {
   // const auth = useIsAuthenticated();

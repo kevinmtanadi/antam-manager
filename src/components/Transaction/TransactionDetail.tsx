@@ -117,7 +117,9 @@ const TransactionDetail = ({
                         <Tr>
                           <Td fontWeight={"semibold"}>Kode Produk</Td>
                           <Td fontWeight={"semibold"}>Nama Produk</Td>
-                          <Td fontWeight={"semibold"}>Harga Beli</Td>
+                          <Td textAlign={"right"} fontWeight={"semibold"}>
+                            Harga Beli
+                          </Td>
                         </Tr>
                       </Thead>
                       <Tbody>
@@ -125,7 +127,9 @@ const TransactionDetail = ({
                           <Tr key={item.transaction_purchase_id}>
                             <Td>{item.product_id}</Td>
                             <Td>{item.product_name}</Td>
-                            <Td>{ToMoney(item.buy_price)}</Td>
+                            <Td textAlign={"right"}>
+                              {ToMoney(item.buy_price)}
+                            </Td>
                           </Tr>
                         ))}
                       </Tbody>
@@ -134,7 +138,7 @@ const TransactionDetail = ({
                           <Td fontWeight={"semibold"} colSpan={2}>
                             TOTAL PEMBELIAN
                           </Td>
-                          <Td fontWeight={"semibold"}>
+                          <Td textAlign={"right"} fontWeight={"semibold"}>
                             {totalPurchase != 0 ? ToMoney(totalPurchase) : "-"}
                           </Td>
                         </Tr>

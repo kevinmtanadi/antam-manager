@@ -1,20 +1,20 @@
 import { Box, Grid, GridItem } from "@chakra-ui/react";
-import Navbar from "../../components/Navbar";
-import Sidebar from "../../components/Sidebar";
 import { useState } from "react";
 import {
-  AiOutlineShoppingCart,
   AiOutlineCreditCard,
   AiOutlineDashboard,
+  AiOutlineShoppingCart,
 } from "react-icons/ai";
-import { PiScroll } from "react-icons/pi";
 import { CgNotes } from "react-icons/cg";
-import { SidebarNav } from "../../components/Sidebar";
+import { PiScroll } from "react-icons/pi";
+import Navbar from "../../components/Navbar";
+import Sidebar, { SidebarNav } from "../../components/Sidebar";
+import { CartProvider } from "../../context/CartContext";
 import Product from "./Product";
-import Transaction from "./Transaction";
-import TransactionHistory from "./TransactionHistory";
 import Report from "./Report";
 import Stats from "./Stats";
+import Transaction from "./Transaction";
+import TransactionHistory from "./TransactionHistory";
 
 const sidebarItems: SidebarNav[] = [
   {
@@ -72,7 +72,9 @@ const Dashboard = () => {
           />
         </GridItem>
         <GridItem area={"content"}>
-          <Box margin={7}>{showPage?.targetPage}</Box>
+          <CartProvider>
+            <Box margin={7}>{showPage?.targetPage}</Box>
+          </CartProvider>
         </GridItem>
       </Grid>
     </>
