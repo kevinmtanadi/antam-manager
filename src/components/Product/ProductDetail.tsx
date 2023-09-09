@@ -17,27 +17,27 @@ import {
   Tr,
   VStack,
 } from "@chakra-ui/react";
-import { Item, Product } from "../../pages/dashboard/Product";
-import { BsCartPlus } from "react-icons/bs";
+import { BsCartDash, BsCartPlus } from "react-icons/bs";
 import { ToMoney, convertDateFormat } from "../../services/helper";
-import { useCart } from "../../context/CartContext";
-import { useEffect } from "react";
+import { ProductData, ProductStockData } from "../../services/dto";
 
 interface Props {
-  product: Product;
+  product: ProductData | null;
   isOpen: boolean;
   onClose: () => void;
-  onAddCart: (item: Item, product_id: string) => void;
+  onAddCart: (item: ProductStockData) => void;
+  onRemoveCart: (item: ProductStockData) => void;
 }
 
-export interface ProductDetail {
-  product_stock_id: string;
-  buy_price: number;
-  buy_at: string;
-  note: string | null;
-}
+const ProductDetail = ({
+  product,
+  isOpen,
+  onClose,
+  onAddCart,
+  onRemoveCart,
+}: Props) => {
+  if (!product) return <></>;
 
-const ProductDetail = ({ product, isOpen, onClose, onAddCart }: Props) => {
   return (
     <Modal size={"3xl"} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -96,20 +96,37 @@ const ProductDetail = ({ product, isOpen, onClose, onAddCart }: Props) => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {product.items.map((item) => (
-                    <Tr key={item.product_stock_id}>
-                      <Td>{ToMoney(item.buy_price)}</Td>
-                      <Td>{convertDateFormat(item.buy_at)}</Td>
-                      <Td>{item.note}</Td>
-                      <Td>
-                        <Icon
-                          onClick={() => onAddCart(item, product.product_id)}
-                          className="cursor-pointer"
-                          as={BsCartPlus}
-                        />
-                      </Td>
-                    </Tr>
-                  ))}
+                  {product.items.map((item) =>
+                    item.status == "available" ? (
+                      <Tr key={item.product_stock_id}>
+                        <Td>{ToMoney(item.buy_price)}</Td>
+                        <Td>{convertDateFormat(item.buy_at)}</Td>
+                        <Td>{item.note}</Td>
+                        <Td>
+                          <Icon
+                            color={"blue.300"}
+                            onClick={() => onAddCart(item)}
+                            className="cursor-pointer"
+                            as={BsCartPlus}
+                          />
+                        </Td>
+                      </Tr>
+                    ) : (
+                      <Tr color={"gray.300"} key={item.product_stock_id}>
+                        <Td>{ToMoney(item.buy_price)}</Td>
+                        <Td>{convertDateFormat(item.buy_at)}</Td>
+                        <Td>{item.note}</Td>
+                        <Td>
+                          <Icon
+                            color={"red.300"}
+                            onClick={() => onRemoveCart(item)}
+                            className="cursor-pointer"
+                            as={BsCartDash}
+                          />
+                        </Td>
+                      </Tr>
+                    )
+                  )}
                 </Tbody>
               </Table>
             </TableContainer>

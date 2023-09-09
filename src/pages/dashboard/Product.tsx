@@ -14,107 +14,57 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import AddProductModal from "../../components/Product/AddProductModal";
 import ProductDetail from "../../components/Product/ProductDetail";
 import { ToMoney } from "../../services/helper";
 import { useCart } from "../../context/CartContext";
-
-export interface Product {
-  product_id: string;
-  product_name: string;
-  weight: number;
-  stock: number;
-  avg_price: number;
-  items: Item[];
-}
-
-export interface Item {
-  product_stock_id: string;
-  product_id: string | null;
-  product_name: string | null;
-  buy_price: number;
-  buy_at: string;
-  note: string;
-}
-
-const productList = [
-  {
-    product_id: "AT1",
-    product_name: "Antam 1gr",
-    weight: 1,
-    stock: 2,
-    avg_price: 1038000,
-    items: [
-      {
-        product_stock_id: "2",
-        product_id: null,
-        product_name: null,
-        buy_price: 1076000,
-        buy_at: "2023-09-01 16:46:24",
-        note: "test",
-      },
-      {
-        product_stock_id: "4",
-        product_id: null,
-        product_name: null,
-        buy_price: 1000000,
-        buy_at: "2023-09-01 18:21:24",
-        note: "",
-      },
-    ],
-  },
-  {
-    product_id: "AT10",
-    product_name: "Antam 10gr",
-    weight: 10,
-    stock: 0,
-    avg_price: 0,
-    items: [],
-  },
-  {
-    product_id: "AT100",
-    product_name: "Antam 100gr",
-    weight: 100,
-    stock: 0,
-    avg_price: 0,
-    items: [],
-  },
-  {
-    product_id: "AT5",
-    product_name: "Antam 5gr",
-    weight: 5,
-    stock: 0,
-    avg_price: 0,
-    items: [],
-  },
-  {
-    product_id: "AT50",
-    product_name: "Antam 50gr",
-    weight: 50,
-    stock: 0,
-    avg_price: 0,
-    items: [],
-  },
-  {
-    product_id: "UBS1",
-    product_name: "UBS 1gr",
-    weight: 1,
-    stock: 0,
-    avg_price: 0,
-    items: [],
-  },
-];
+import { ApiContext } from "../../App";
+import {
+  GetProductDataParams,
+  ProductData,
+  ProductStockData,
+} from "../../services/dto";
 
 const Product = () => {
-  const [shownProduct, setShownProduct] = useState<Product[]>(productList);
+  const api = useContext(ApiContext);
 
-  const [product, setProduct] = useState<Product[]>(productList);
+  const [params, setParams] = useState<GetProductDataParams>({
+    limit: 10,
+    offset: 0,
+  });
+
+  const [call, setCall] = useState(0);
+
+  const {
+    data: productList,
+    message,
+    error,
+    status,
+    isLoading,
+  } = api.getProductData(params, [params, call]);
+
+  useEffect(() => {
+    setShownProduct(productList);
+    setProduct(productList);
+  }, [productList]);
+
+  const [shownProduct, setShownProduct] = useState<ProductData[] | null>(
+    productList
+  );
+
+  useEffect(() => {
+    console.log(shownProduct);
+  }, [shownProduct]);
+
+  const [product, setProduct] = useState<ProductData[] | null>(productList);
 
   const searchRef = useRef<HTMLInputElement>(null);
   const setRef = () => {
     if (searchRef.current) {
+      if (!product) return;
+
       const filteredProduct = product.filter((item) => {
         const query = searchRef.current ? searchRef.current.value : "";
         const queryRegex = new RegExp(query.replace(/\*/g, ".*"), "i");
@@ -136,38 +86,32 @@ const Product = () => {
     onClose: onCreateClose,
   } = useDisclosure();
 
-  const [chosenProduct, setChosenProduct] = useState<Product>(product[0]);
+  const [chosenProduct, setChosenProduct] = useState<ProductData | null>(null);
   const resetProductDetail = () => {
+    if (!product || !chosenProduct) return;
     const currentChosenProduct = product.filter(
       (item) => item.product_id === chosenProduct.product_id
     )[0];
     setChosenProduct(currentChosenProduct);
   };
 
-  const openModal = (item: Product) => {
+  const openModal = (item: ProductData) => {
     setChosenProduct(item);
     onOpen();
   };
 
-  const { addItemToCart } = useCart();
-
-  const onAddCart = (prod: Item, product_id: string) => {
-    addItemToCart(prod);
-
-    const updatedProducts = product.map((item) => {
-      if (item.product_id === product_id) {
-        const updatedItem = item.items.filter((item) => item !== prod);
-
-        return {
-          ...item,
-          items: updatedItem,
-        };
-      }
-
-      return item;
+  const onAddCart = (prod: ProductStockData) => {
+    api.insertCartData(prod.product_stock_id)?.then((res) => {
+      console.log(res);
+      setCall(call + 1);
     });
+  };
 
-    setProduct(updatedProducts);
+  const onRemoveCart = (prod: ProductStockData) => {
+    api.deleteCartData(prod.product_stock_id)?.then((res) => {
+      console.log(res);
+      setCall(call + 1);
+    });
   };
 
   useEffect(() => {
@@ -206,62 +150,64 @@ const Product = () => {
           xl: "repeat(3, 1fr)",
         }}
       >
-        {shownProduct.map((item) => (
-          <GridItem key={item.product_id}>
-            <Card>
-              <CardBody>
-                <HStack>
-                  <Box
-                    color={"blue.500"}
-                    fontWeight={"semibold"}
-                    fontSize={"1rem"}
-                  >
-                    {item.product_id}
-                  </Box>
-                  <Box>{item.product_name}</Box>
-                </HStack>
-                <Divider marginY={3} />
-                <SimpleGrid columns={2}>
-                  <VStack spacing={0} alignItems={"start"}>
-                    <Box>Jumlah Item</Box>
-                    <Box fontWeight={"semibold"}>
-                      {item.stock > 0 ? item.stock : "-"}
+        {shownProduct &&
+          shownProduct.map((item) => (
+            <GridItem key={item.product_id}>
+              <Card>
+                <CardBody>
+                  <HStack>
+                    <Box
+                      color={"blue.500"}
+                      fontWeight={"semibold"}
+                      fontSize={"1rem"}
+                    >
+                      {item.product_id}
                     </Box>
-                  </VStack>
-                  <VStack spacing={0} alignItems={"start"}>
-                    <Box>Harga Avg</Box>
-                    <Box fontWeight={"semibold"}>
-                      {item.avg_price ? ToMoney(item.avg_price) : "-"}
-                    </Box>
-                  </VStack>
-                  <VStack spacing={0} alignItems={"start"}>
-                    <Box>Berat</Box>
-                    <Box fontWeight={"semibold"}>
-                      {item.weight ? item.weight + " g" : "-"}
-                    </Box>
-                  </VStack>
-                </SimpleGrid>
-                <Divider marginY={3} />
+                    <Box>{item.product_name}</Box>
+                  </HStack>
+                  <Divider marginY={3} />
+                  <SimpleGrid columns={2}>
+                    <VStack spacing={0} alignItems={"start"}>
+                      <Box>Jumlah Item</Box>
+                      <Box fontWeight={"semibold"}>
+                        {item.stock > 0 ? item.stock : "-"}
+                      </Box>
+                    </VStack>
+                    <VStack spacing={0} alignItems={"start"}>
+                      <Box>Harga Avg</Box>
+                      <Box fontWeight={"semibold"}>
+                        {item.avg_price ? ToMoney(item.avg_price) : "-"}
+                      </Box>
+                    </VStack>
+                    <VStack spacing={0} alignItems={"start"}>
+                      <Box>Berat</Box>
+                      <Box fontWeight={"semibold"}>
+                        {item.weight ? item.weight + " g" : "-"}
+                      </Box>
+                    </VStack>
+                  </SimpleGrid>
+                  <Divider marginY={3} />
 
-                <Button
-                  borderRadius={"2px"}
-                  colorScheme="telegram"
-                  fontWeight={"normal"}
-                  fontSize={"0.925rem"}
-                  onClick={() => openModal(item)}
-                >
-                  Lihat Detail
-                </Button>
-              </CardBody>
-            </Card>
-          </GridItem>
-        ))}
+                  <Button
+                    borderRadius={"2px"}
+                    colorScheme="telegram"
+                    fontWeight={"normal"}
+                    fontSize={"0.925rem"}
+                    onClick={() => openModal(item)}
+                  >
+                    Lihat Detail
+                  </Button>
+                </CardBody>
+              </Card>
+            </GridItem>
+          ))}
       </Grid>
       <ProductDetail
         isOpen={isOpen}
         onClose={onClose}
         product={chosenProduct}
-        onAddCart={(item, product_id) => onAddCart(item, product_id)}
+        onAddCart={(item: ProductStockData) => onAddCart(item)}
+        onRemoveCart={(item: ProductStockData) => onRemoveCart(item)}
       />
       <AddProductModal isOpen={isCreateOpen} onClose={onCreateClose} />
     </>

@@ -4,25 +4,17 @@ import {
   Button,
   Card,
   CardBody,
-  Collapse,
   Divider,
   HStack,
-  Icon,
   SimpleGrid,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { AiFillDownCircle, AiFillUpCircle } from "react-icons/ai";
+import { useContext, useState } from "react";
 import TransactionDetail from "../../components/Transaction/TransactionDetail";
 import { ToMoney, convertDateFormat } from "../../services/helper";
+import { GetTransactionDataParams } from "../../services/dto";
+import { ApiContext } from "../../App";
 
 const transactions = [
   {
@@ -130,7 +122,22 @@ const transactions = [
 ];
 
 const TransactionHistory = () => {
+  const api = useContext(ApiContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [params, setParams] = useState<GetTransactionDataParams>({
+    limit: 10,
+    offset: 0,
+    start_date: "2023-09-01",
+    end_date: "2023-09-30",
+  });
+  const {
+    data: transactionList,
+    message,
+    error,
+    status,
+    isLoading,
+  } = api.getTransactionData(params);
 
   const [chosenTransaction, setChosenTransaction] = useState<any>(null);
 
@@ -142,68 +149,69 @@ const TransactionHistory = () => {
   return (
     <>
       <VStack>
-        {transactions.map((item, idx) => (
-          <HStack width={"100%"} alignItems={"start"} spacing={5}>
-            <Card
-              height={"270px"}
-              marginBottom={idx != transactions.length - 1 ? "10px" : "0px"}
-              width={"80%"}
-              minWidth={"300px"}
-              maxWidth={"1000px"}
-            >
-              <CardBody>
-                <HStack justifyContent={"space-between"}>
-                  <Badge colorScheme="whatsapp">{item.transaction_id}</Badge>
-                  <Box fontWeight={"semibold"}>
-                    {convertDateFormat(item.created_at)}
-                  </Box>
-                </HStack>
-                <Divider marginY={5} borderColor={"rgba(0,0,0,0.3)"} />
-                <SimpleGrid columns={2} spacingX={0} spacingY={5}>
-                  <VStack spacing={0} alignItems={"start"}>
-                    <Box>Total Pembelian</Box>
-                    <Box fontWeight={"bold"}>
-                      {item.total_buy ? ToMoney(item.total_buy) : "-"}
+        {transactionList &&
+          transactionList.map((item, idx) => (
+            <HStack width={"100%"} alignItems={"start"} spacing={5}>
+              <Card
+                height={"270px"}
+                marginBottom={idx != transactions.length - 1 ? "10px" : "0px"}
+                width={"80%"}
+                minWidth={"300px"}
+                maxWidth={"1000px"}
+              >
+                <CardBody>
+                  <HStack justifyContent={"space-between"}>
+                    <Badge colorScheme="whatsapp">{item.transaction_id}</Badge>
+                    <Box fontWeight={"semibold"}>
+                      {convertDateFormat(item.created_at)}
                     </Box>
-                  </VStack>
-                  <VStack spacing={0} alignItems={"start"}>
-                    <Box>Total Penjualan</Box>
-                    <Box fontWeight={"bold"}>
-                      {item.total_sale ? ToMoney(item.total_sale) : "-"}
-                    </Box>
-                  </VStack>
-                  <VStack spacing={0} alignItems={"start"}>
-                    <Box>Item Dibeli</Box>
-                    <Box fontWeight={"bold"}>
-                      {item.purchase.length != 0 ? item.purchase.length : "-"}
-                    </Box>
-                  </VStack>
-                  <VStack spacing={0} alignItems={"start"}>
-                    <Box>Item Terjual</Box>
-                    <Box fontWeight={"bold"}>
-                      {item.sales.length != 0 ? item.sales.length : "-"}
-                    </Box>
-                  </VStack>
-                </SimpleGrid>
-                <Divider marginY={5} borderColor={"rgba(0,0,0,0.3)"} />
-                <Button
-                  borderRadius={"2px"}
-                  colorScheme="telegram"
-                  fontWeight={"normal"}
-                  fontSize={"0.925rem"}
-                  onClick={() => openModal(item)}
-                >
-                  Lihat Detail
-                </Button>
-              </CardBody>
-            </Card>
-            <Card height={"270px"} width={"235px"}>
-              <CardBody>
-                <Box>Catatan</Box>
-              </CardBody>
-            </Card>
-          </HStack>
-        ))}
+                  </HStack>
+                  <Divider marginY={5} borderColor={"rgba(0,0,0,0.3)"} />
+                  <SimpleGrid columns={2} spacingX={0} spacingY={5}>
+                    <VStack spacing={0} alignItems={"start"}>
+                      <Box>Total Pembelian</Box>
+                      <Box fontWeight={"bold"}>
+                        {item.total_buy ? ToMoney(item.total_buy) : "-"}
+                      </Box>
+                    </VStack>
+                    <VStack spacing={0} alignItems={"start"}>
+                      <Box>Total Penjualan</Box>
+                      <Box fontWeight={"bold"}>
+                        {item.total_sale ? ToMoney(item.total_sale) : "-"}
+                      </Box>
+                    </VStack>
+                    <VStack spacing={0} alignItems={"start"}>
+                      <Box>Item Dibeli</Box>
+                      <Box fontWeight={"bold"}>
+                        {item.purchase.length != 0 ? item.purchase.length : "-"}
+                      </Box>
+                    </VStack>
+                    <VStack spacing={0} alignItems={"start"}>
+                      <Box>Item Terjual</Box>
+                      <Box fontWeight={"bold"}>
+                        {item.sales.length != 0 ? item.sales.length : "-"}
+                      </Box>
+                    </VStack>
+                  </SimpleGrid>
+                  <Divider marginY={5} borderColor={"rgba(0,0,0,0.3)"} />
+                  <Button
+                    borderRadius={"2px"}
+                    colorScheme="telegram"
+                    fontWeight={"normal"}
+                    fontSize={"0.925rem"}
+                    onClick={() => openModal(item)}
+                  >
+                    Lihat Detail
+                  </Button>
+                </CardBody>
+              </Card>
+              <Card height={"270px"} width={"235px"}>
+                <CardBody>
+                  <Box>Catatan</Box>
+                </CardBody>
+              </Card>
+            </HStack>
+          ))}
       </VStack>
       <TransactionDetail
         onClose={onClose}

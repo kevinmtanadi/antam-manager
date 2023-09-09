@@ -4,13 +4,7 @@ import { createContext, useState } from "react";
 import Dashboard from "./pages/dashboard/Dashboard";
 import api from "./services/api";
 
-export const mainApiContext = createContext(
-  api.create("http://localhost:8080")
-);
-
-export const goldApiContext = createContext(
-  api.create("https://www.goldapi.io/api")
-);
+export const ApiContext = createContext(api.create("http://localhost:8080"));
 
 function App() {
   // const auth = useIsAuthenticated();
@@ -19,7 +13,9 @@ function App() {
 
   return (
     <>
-      <Dashboard />
+      <ApiContext.Provider value={api.create("http://localhost:8080")}>
+        <Dashboard />
+      </ApiContext.Provider>
       {/* {loggedIn ? <Dashboard /> : <Login onLogin={() => setLoggedIn(true)} />} */}
     </>
   );
