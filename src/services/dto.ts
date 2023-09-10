@@ -72,4 +72,5 @@ export interface GetCartData {
     cart_item_id: string;
     product_stock_id: string;
     product_name: string;
+    buy_price: number;
 }

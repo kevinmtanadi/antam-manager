@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, CanceledError } from "axios";
 import { useEffect, useState } from "react";
-import { GetCartData, GetProductDataParams, GetTransactionDataParams, InsertProductData, InsertTransactionData, ProductData, TransactionData } from "./dto";
+import { GetCartData, GetProductDataParams, GetTransactionDataParams, InsertProductData, InsertTransactionData, ProductData, ProductStockData, TransactionData } from "./dto";
 
 interface FetchResponse<T> {
     data: T[];
@@ -223,6 +223,50 @@ const create = (url: string) => {
         
         return response;
     }
+    
+    const searchProductStock = (product_id: string) => {
+        if (product_id === "" || product_id === null || product_id === undefined) return;
+
+        const response = Get<ProductStockData>("/product/search", true, 
+            {
+                params: {
+                    product_id: product_id,
+                }
+            })
+            
+        return response;
+    }
+    
+    const getProductOption = (deps?: any) => {
+        const [data, setData] = useState<ProductData[] | null>(null)
+        const [error, setError] = useState("");
+        const [message, setMessage] = useState("");
+        const [isLoading, setIsLoading] = useState(true);
+        const [status, setStatus] = useState(0)
+        
+        useEffect(() => {
+            Get<ProductData>("/product/option", true)
+            .then(
+                (response) => {
+                    const data = response.data
+                    setData(data.data);
+                    setMessage(data.message);
+                    setStatus(data.status);
+                    setIsLoading(false);
+                }
+            )
+            .catch((err) => {
+                if (err instanceof CanceledError) return;
+                setError(err)
+                setIsLoading(false)
+                
+            })
+        }, deps? [...deps]: []);
+        
+        return { data, error, message, status, isLoading }
+    }
+        
+    
 
     return {
         getTransactionData,
@@ -232,6 +276,8 @@ const create = (url: string) => {
         getCartData,
         insertCartData,
         deleteCartData,
+        searchProductStock,
+        getProductOption,
     }
 }
 
