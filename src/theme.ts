@@ -12,6 +12,7 @@ const baseStyle = definePartsStyle({
 })
 export const cardTheme = defineMultiStyleConfig({ baseStyle })
 
+
 const theme = extendTheme({
     components: {
         Card: cardTheme,

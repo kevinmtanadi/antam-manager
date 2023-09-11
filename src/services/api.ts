@@ -109,6 +109,19 @@ const create = (url: string) => {
 
         return response
     }
+
+    const register = (username: string, password: string) => {
+        if (username === "" || password === "") return;
+
+        const params = {
+            username: username,
+            password: password,
+        }
+
+        const response = Post("/register", true, {params: params});
+
+        return response
+    }
     
     const getTransactionData = (params: GetTransactionDataParams, deps?: any[]) => {
         const [data, setData] = useState<TransactionData[] | null>(null)
@@ -283,6 +296,7 @@ const create = (url: string) => {
 
     return {
         authenticateUser,
+        register,
         getTransactionData,
         createNewTransaction,
         getProductData,

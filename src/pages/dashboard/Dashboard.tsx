@@ -4,6 +4,7 @@ import {
   AiOutlineCreditCard,
   AiOutlineDashboard,
   AiOutlineShoppingCart,
+  AiOutlineUserAdd
 } from "react-icons/ai";
 import { CgNotes } from "react-icons/cg";
 import { PiScroll } from "react-icons/pi";
@@ -15,6 +16,7 @@ import Report from "./Report";
 import Stats from "./Stats";
 import Transaction from "./Transaction";
 import TransactionHistory from "./TransactionHistory";
+import CreateAccount from "../auth/CreateAccount";
 
 const sidebarItems: SidebarNav[] = [
   {
@@ -47,6 +49,12 @@ const sidebarItems: SidebarNav[] = [
     label: "Laporan Keuangan",
     targetPage: <Report />,
   },
+  {
+    pageName: "create_account",
+    icon: AiOutlineUserAdd,
+    label: "Buat Akun Baru",
+    targetPage: <CreateAccount />,
+  }
 ];
 
 const Dashboard = () => {
