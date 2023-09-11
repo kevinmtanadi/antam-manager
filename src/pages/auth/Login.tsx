@@ -35,6 +35,7 @@ const Login = () => {
             tokenType: "Bearer",
             authState: {username: username},
           })
+          break;
         case 404:
           toast({
             title: "Akun tidak ditemukan",
@@ -42,6 +43,7 @@ const Login = () => {
             duration: 6000,
             isClosable: true,
           })
+          break;
       }
     })
   }
