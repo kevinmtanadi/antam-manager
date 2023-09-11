@@ -16,16 +16,15 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
+import { ApiContext } from "../../App";
 import AddProductModal from "../../components/Product/AddProductModal";
 import ProductDetail from "../../components/Product/ProductDetail";
-import { ToMoney } from "../../services/helper";
-import { useCart } from "../../context/CartContext";
-import { ApiContext } from "../../App";
 import {
   GetProductDataParams,
   ProductData,
   ProductStockData,
 } from "../../services/dto";
+import { ToMoney } from "../../services/helper";
 
 const Product = () => {
   const api = useContext(ApiContext);

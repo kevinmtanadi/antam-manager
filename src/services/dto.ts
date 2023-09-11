@@ -15,7 +15,7 @@ export interface TransactionData {
 }
 
 export interface TransactionPurchaseData {
-    transaction_purchase_id: string;
+    transaction_purchase_id?: string;
     transaction_id?: string;
     product_id: string;
     product_name?: string;
@@ -24,9 +24,9 @@ export interface TransactionPurchaseData {
 }
 
 export interface TransactionSaleData {
-   transaction_sale_id: string;
+   transaction_sale_id?: string;
    transaction_id?: string;
-   product_id: string;
+   product_id?: string;
    product_stock_id: string;
    product_name?: string;
    buy_price: number;

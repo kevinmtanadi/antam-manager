@@ -3,18 +3,48 @@ import {
   Card,
   CardBody,
   Container,
-  Input,
   VStack,
+  useToast
 } from "@chakra-ui/react";
-import { Field, Formik } from "formik";
+import { Formik } from "formik";
+import { useContext } from "react";
+import { useSignIn } from "react-auth-kit";
 import * as Yup from "yup";
+import { ApiContext } from "../../App";
 import InputField from "../../components/InputField";
 
-interface Props {
-  onLogin: () => void;
-}
+const Login = () => {
 
-const Login = ({ onLogin }: Props) => {
+  const api = useContext(ApiContext);
+
+  const toast = useToast();
+  const signIn = useSignIn();
+
+  const login = (username: string, password: string) => {
+    api.authenticateUser(username, password)?.then((resp) => {
+      const data = resp.data;
+      const status = data.status;
+      const message = data.message;
+
+      switch (status) {
+        case 200:
+          const token = message.split(":")[1];
+          signIn({
+            token: token,
+            expiresIn: 60 * 60 * 24 * 7,
+            tokenType: "Bearer",
+            authState: {username: username},
+          })
+        case 404:
+          toast({
+            title: "Akun tidak ditemukan",
+            status: "error",
+            duration: 6000,
+            isClosable: true,
+          })
+      }
+    })
+  }
   return (
     <Container
       width={"100wh"}
@@ -32,7 +62,7 @@ const Login = ({ onLogin }: Props) => {
               password: Yup.string().required("Password is required"),
             })}
             onSubmit={(values) => {
-              onLogin();
+              login(values.username, values.password);
               console.log(values);
             }}
           >

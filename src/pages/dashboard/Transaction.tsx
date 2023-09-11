@@ -12,12 +12,12 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
+import { BsPencilSquare } from "react-icons/bs";
 import { ApiContext } from "../../App";
 import AddPurchase from "../../components/Transaction/AddPurchase";
-import { ToMoney } from "../../services/helper";
 import AddSale from "../../components/Transaction/AddSale";
-import { BsPencilSquare } from "react-icons/bs";
+import { ToMoney } from "../../services/helper";
 
 interface PurchaseItem {
   product_id: string;
@@ -28,10 +28,7 @@ interface PurchaseItem {
 
 const Transaction = () => {
   const api = useContext(ApiContext);
-  const { data } = api.getCartData();
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  const { data: salesItems } = api.getCartData();
 
   const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[] | null>(
     null
@@ -73,7 +70,7 @@ const Transaction = () => {
           <CardBody>
             <TableContainer>
               <Table size={"sm"}>
-                {data?.map((item, idx) => (
+                {salesItems?.map((item, idx) => (
                   <Tr key={idx}>
                     <Td>{item.product_stock_id}</Td>
                     <Td>{item.product_name}</Td>

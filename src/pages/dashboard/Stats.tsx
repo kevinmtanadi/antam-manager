@@ -2,10 +2,6 @@ import { Card, CardBody, Stat, StatLabel, StatNumber } from "@chakra-ui/react";
 import { useState } from "react";
 import { ToMoney, convertGoldPriceToIdr } from "../../services/helper";
 
-interface goldResponse {
-  price: number;
-}
-
 const Stats = () => {
   const [data, setData] = useState<any>();
 

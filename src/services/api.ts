@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, CanceledError } from "axios";
 import { useEffect, useState } from "react";
 import { GetCartData, GetProductDataParams, GetTransactionDataParams, InsertProductData, InsertTransactionData, ProductData, ProductStockData, TransactionData } from "./dto";
+import Login from "../pages/auth/Login";
 
 interface FetchResponse<T> {
     data: T[];
@@ -93,6 +94,18 @@ const create = (url: string) => {
                 withCredentials: needAuthorization,
             }
         )
+
+        return response
+    }
+    
+    const authenticateUser = (username: string, password: string) => {
+        if (username === "" || password === "") return;
+
+        const params = {
+            username: username,
+            password: password,
+        }
+        const response = Post("/login", false, {params: params});
 
         return response
     }
@@ -269,6 +282,7 @@ const create = (url: string) => {
     
 
     return {
+        authenticateUser,
         getTransactionData,
         createNewTransaction,
         getProductData,

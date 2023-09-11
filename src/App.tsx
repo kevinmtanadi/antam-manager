@@ -3,18 +3,21 @@ import "./App.css";
 import { createContext, useState } from "react";
 import Dashboard from "./pages/dashboard/Dashboard";
 import api from "./services/api";
+import { useIsAuthenticated } from "react-auth-kit";
+import Login from "./pages/auth/Login";
 
 export const ApiContext = createContext(api.create("http://localhost:8080"));
 
 function App() {
-  // const auth = useIsAuthenticated();
 
-  const [loggedIn, setLoggedIn] = useState(false);
+  const auth = useIsAuthenticated();
+  console.log(auth())
 
   return (
     <>
       <ApiContext.Provider value={api.create("http://localhost:8080")}>
-        <Dashboard />
+        {auth() ? <Dashboard /> : <Login />}
+        
       </ApiContext.Provider>
       {/* {loggedIn ? <Dashboard /> : <Login onLogin={() => setLoggedIn(true)} />} */}
     </>
