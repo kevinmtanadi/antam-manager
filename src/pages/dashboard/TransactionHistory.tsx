@@ -151,7 +151,12 @@ const TransactionHistory = () => {
       <VStack>
         {transactionList &&
           transactionList.map((item, idx) => (
-            <HStack width={"100%"} alignItems={"start"} spacing={5}>
+            <HStack
+              key={item.transaction_id}
+              width={"100%"}
+              alignItems={"start"}
+              spacing={5}
+            >
               <Card
                 height={"270px"}
                 marginBottom={idx != transactions.length - 1 ? "10px" : "0px"}

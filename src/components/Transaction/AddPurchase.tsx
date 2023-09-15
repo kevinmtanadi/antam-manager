@@ -11,8 +11,9 @@ import {
   Select,
   VStack,
 } from "@chakra-ui/react";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ApiContext } from "../../App";
+import NumberInput from "../NumberInput";
 
 interface Props {
   isOpen: boolean;
@@ -30,24 +31,38 @@ const AddPurchase = ({ isOpen, onClose, onSubmit }: Props) => {
   const { data, status, isLoading } = api.getProductOption();
 
   const chosen_product_ref = useRef<HTMLSelectElement>(null);
-  const buy_price_ref = useRef<HTMLInputElement>(null);
+  const [price, setPrice] = useState(0);
+
+  useEffect(() => {
+    setPrice(0);
+  }, [isOpen]);
+  useEffect(() => {
+    const handleEnterPress = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        document.getElementById("submit-btn")?.click();
+      }
+    };
+
+    document.addEventListener("keydown", handleEnterPress);
+
+    return () => {
+      document.removeEventListener("keydown", handleEnterPress);
+    };
+  }, []);
+
+  const onPriceChange = (value: number) => {
+    setPrice(value);
+  };
 
   const addToPurchaseList = () => {
-    const buy_price = buy_price_ref.current?.value;
     const chosen_product_id = chosen_product_ref.current?.value;
-    if (chosen_product_id && buy_price) {
-      console.log(buy_price);
-
+    if (chosen_product_id && price) {
       const chosen_product = data?.find(
         (item) => item.product_id === chosen_product_id
       );
       console.log(chosen_product);
       if (!chosen_product) return;
-      onSubmit(
-        chosen_product?.product_id,
-        chosen_product?.product_name,
-        parseInt(buy_price)
-      );
+      onSubmit(chosen_product?.product_id, chosen_product?.product_name, price);
       onClose();
     }
   };
@@ -61,12 +76,17 @@ const AddPurchase = ({ isOpen, onClose, onSubmit }: Props) => {
         <ModalBody>
           <VStack alignItems={"start"}>
             <Select ref={chosen_product_ref}>
-              {data?.map((item) => (
-                <option value={item.product_id}>{item.product_name}</option>
+              {data?.map((item, idx) => (
+                <option value={item.product_id} key={idx}>
+                  {item.product_name}
+                </option>
               ))}
             </Select>
             <label htmlFor="buy_price">Harga Beli</label>
-            <Input id="buy_price" ref={buy_price_ref}></Input>
+            <NumberInput
+              value={price}
+              onChangeValue={(value) => onPriceChange(value)}
+            />
           </VStack>
 
           <HStack justifyContent={"end"} marginTop={5} marginBottom={4}>
@@ -74,6 +94,7 @@ const AddPurchase = ({ isOpen, onClose, onSubmit }: Props) => {
               Batal
             </Button>
             <Button
+              id="submit-btn"
               onClick={() => addToPurchaseList()}
               type="submit"
               colorScheme="whatsapp"

@@ -4,13 +4,12 @@ import {
   AiOutlineCreditCard,
   AiOutlineDashboard,
   AiOutlineShoppingCart,
-  AiOutlineUserAdd
+  AiOutlineUserAdd,
 } from "react-icons/ai";
 import { CgNotes } from "react-icons/cg";
 import { PiScroll } from "react-icons/pi";
 import Navbar from "../../components/Navbar";
 import Sidebar, { SidebarNav } from "../../components/Sidebar";
-import { CartProvider } from "../../context/CartContext";
 import Product from "./Product";
 import Report from "./Report";
 import Stats from "./Stats";
@@ -54,7 +53,7 @@ const sidebarItems: SidebarNav[] = [
     icon: AiOutlineUserAdd,
     label: "Buat Akun Baru",
     targetPage: <CreateAccount />,
-  }
+  },
 ];
 
 const Dashboard = () => {
@@ -80,9 +79,7 @@ const Dashboard = () => {
           />
         </GridItem>
         <GridItem area={"content"}>
-          <CartProvider>
-            <Box margin={7}>{showPage?.targetPage}</Box>
-          </CartProvider>
+          <Box margin={7}>{showPage?.targetPage}</Box>
         </GridItem>
       </Grid>
     </>

@@ -13,6 +13,7 @@ import {
   SimpleGrid,
   VStack,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
@@ -21,10 +22,12 @@ import AddProductModal from "../../components/Product/AddProductModal";
 import ProductDetail from "../../components/Product/ProductDetail";
 import {
   GetProductDataParams,
+  InsertProductData,
   ProductData,
   ProductStockData,
 } from "../../services/dto";
 import { ToMoney } from "../../services/helper";
+import { CanceledError } from "axios";
 
 const Product = () => {
   const api = useContext(ApiContext);
@@ -35,6 +38,8 @@ const Product = () => {
   });
 
   const [call, setCall] = useState(0);
+
+  const toast = useToast();
 
   const {
     data: productList,
@@ -52,10 +57,6 @@ const Product = () => {
   const [shownProduct, setShownProduct] = useState<ProductData[] | null>(
     productList
   );
-
-  useEffect(() => {
-    console.log(shownProduct);
-  }, [shownProduct]);
 
   const [product, setProduct] = useState<ProductData[] | null>(productList);
 
@@ -100,17 +101,63 @@ const Product = () => {
   };
 
   const onAddCart = (prod: ProductStockData) => {
-    api.insertCartData(prod.product_stock_id)?.then((res) => {
-      console.log(res);
-      setCall(call + 1);
-    });
+    api
+      .insertCartData(prod.product_stock_id)
+      ?.then(() => {
+        setCall(call + 1);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        toast({
+          title: "Gagal menambahkan produk ke keranjang",
+          status: "error",
+          description: err,
+          duration: 5000,
+          isClosable: true,
+        });
+      });
   };
 
   const onRemoveCart = (prod: ProductStockData) => {
-    api.deleteCartData(prod.product_stock_id)?.then((res) => {
-      console.log(res);
-      setCall(call + 1);
-    });
+    api
+      .deleteCartData(prod.product_stock_id)
+      ?.then(() => {
+        setCall(call + 1);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        toast({
+          title: "Gagal menghapus produk dari keranjang",
+          status: "error",
+          description: err,
+          duration: 5000,
+          isClosable: true,
+        });
+      });
+  };
+
+  const onCreateProduct = (product: InsertProductData) => {
+    api
+      .createNewProduct(product)
+      ?.then((res) => {
+        toast({
+          title: "Berhasil menambahkan produk baru",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        setCall(call + 1);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        toast({
+          title: "Gagal menambahkan produk baru",
+          status: "error",
+          description: err,
+          duration: 5000,
+          isClosable: true,
+        });
+      });
   };
 
   useEffect(() => {
@@ -208,7 +255,11 @@ const Product = () => {
         onAddCart={(item: ProductStockData) => onAddCart(item)}
         onRemoveCart={(item: ProductStockData) => onRemoveCart(item)}
       />
-      <AddProductModal isOpen={isCreateOpen} onClose={onCreateClose} />
+      <AddProductModal
+        onSubmit={(product) => onCreateProduct(product)}
+        isOpen={isCreateOpen}
+        onClose={onCreateClose}
+      />
     </>
   );
 };

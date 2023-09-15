@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <AuthProvider
       authType="cookie"
       authName="_auth"
-      cookieDomain="window.location.hostname"
+      cookieDomain={window.location.hostname}
       cookieSecure={window.location.protocol === "https:"}
     >
       <BrowserRouter>

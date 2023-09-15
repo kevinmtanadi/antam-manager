@@ -19,9 +19,10 @@ import { ProductStockData } from "../../services/dto";
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit: (product_stock_id: string) => void;
 }
 
-const AddSale = ({ isOpen, onClose }: Props) => {
+const AddSale = ({ isOpen, onClose, onSubmit }: Props) => {
   const api = useContext(ApiContext);
   const [hasFound, setHasFound] = useState(false);
   useEffect(() => {
@@ -35,7 +36,7 @@ const AddSale = ({ isOpen, onClose }: Props) => {
 
   const p_id_ref = useRef<HTMLInputElement>(null);
   const ps_id_ref = useRef<HTMLSelectElement>(null);
-  const buy_price_ref = useRef<HTMLInputElement>(null);
+  const sale_price_ref = useRef<HTMLInputElement>(null);
 
   const toast = useToast();
 
@@ -63,11 +64,9 @@ const AddSale = ({ isOpen, onClose }: Props) => {
 
   const addToSaleList = () => {
     const product_stock_id = ps_id_ref.current?.value;
-    const buy_price = buy_price_ref.current?.value;
-    if (product_stock_id && buy_price) {
-      console.log(productId);
-      console.log(product_stock_id);
-      console.log(buy_price);
+    const sale_price = sale_price_ref.current?.value;
+    if (product_stock_id && sale_price) {
+      onSubmit(product_stock_id);
       onClose();
     }
   };
@@ -107,7 +106,7 @@ const AddSale = ({ isOpen, onClose }: Props) => {
                   </option>
                 ))}
               </Select>
-              <Input ref={buy_price_ref}></Input>
+              <Input ref={sale_price_ref}></Input>
             </VStack>
           )}
           <HStack justifyContent={"end"} marginTop={5} marginBottom={4}>

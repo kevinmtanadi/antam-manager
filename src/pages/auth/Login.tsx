@@ -31,6 +31,7 @@ const Login = () => {
         switch (status) {
           case 200:
             const token = message.split(":")[1];
+            console.log(token);
             signIn({
               token: token,
               expiresIn: 60 * 60 * 24 * 7,
@@ -40,7 +41,7 @@ const Login = () => {
             break;
           case 404:
             toast({
-              title: "Akun tidak ditemukan",
+              title: "Username atau password salah",
               status: "error",
               duration: 6000,
               isClosable: true,

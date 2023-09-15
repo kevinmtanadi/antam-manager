@@ -46,9 +46,6 @@ const create = (url: string) => {
             body ? body : "",
             {
                 signal: controller.signal,
-                params: {
-                    store_id: body ? body.store_id : "",
-                },
                 ...requestConfig,
                 headers,
                 withCredentials: needAuthorization,
@@ -68,9 +65,6 @@ const create = (url: string) => {
             body ? body : "",
             {
                 signal: controller.signal,
-                params: {
-                    store_id: body ? body.store_id : "",
-                },
                 ...requestConfig,
                 headers,
                 withCredentials: needAuthorization,
@@ -155,7 +149,7 @@ const create = (url: string) => {
     const createNewTransaction = (data: InsertTransactionData) => {
         if (data === null || data === undefined) return;
         
-        const response = Post("/transaction", true, {data: data});
+        const response = Post("/transaction", true, {}, data);
         return response;
     }
     
@@ -191,7 +185,7 @@ const create = (url: string) => {
     const createNewProduct = (data: InsertProductData) => {
         if (data === null || data === undefined) return;
         
-        const response = Post("/product", true, {data: data});
+        const response = Post("/product", true, {}, data);
         return response;
     }
     

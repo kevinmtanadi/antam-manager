@@ -12,13 +12,17 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 import InputField from "../InputField";
+import { useContext } from "react";
+import { ApiContext } from "../../App";
+import { InsertProductData } from "../../services/dto";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit: (product: InsertProductData) => void;
 }
 
-const AddProductModal = ({ isOpen, onClose }: Props) => {
+const AddProductModal = ({ isOpen, onClose, onSubmit }: Props) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -36,7 +40,12 @@ const AddProductModal = ({ isOpen, onClose }: Props) => {
                 .required("Berat harus diisi"),
             })}
             onSubmit={(values) => {
-              console.log(values);
+              onSubmit({
+                product_id: values.product_code,
+                product_name: values.product_name,
+                weight: parseInt(values.weight),
+              });
+              onClose();
             }}
           >
             {(formik) => (
