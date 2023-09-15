@@ -15,6 +15,7 @@ import {
 import { useContext, useEffect, useRef, useState } from "react";
 import { ApiContext } from "../../App";
 import { ProductStockData } from "../../services/dto";
+import NumberInput from "../NumberInput";
 
 interface Props {
   isOpen: boolean;
@@ -36,7 +37,6 @@ const AddSale = ({ isOpen, onClose, onSubmit }: Props) => {
 
   const p_id_ref = useRef<HTMLInputElement>(null);
   const ps_id_ref = useRef<HTMLSelectElement>(null);
-  const sale_price_ref = useRef<HTMLInputElement>(null);
 
   const toast = useToast();
 
@@ -64,8 +64,7 @@ const AddSale = ({ isOpen, onClose, onSubmit }: Props) => {
 
   const addToSaleList = () => {
     const product_stock_id = ps_id_ref.current?.value;
-    const sale_price = sale_price_ref.current?.value;
-    if (product_stock_id && sale_price) {
+    if (product_stock_id) {
       onSubmit(product_stock_id);
       onClose();
     }
@@ -106,7 +105,6 @@ const AddSale = ({ isOpen, onClose, onSubmit }: Props) => {
                   </option>
                 ))}
               </Select>
-              <Input ref={sale_price_ref}></Input>
             </VStack>
           )}
           <HStack justifyContent={"end"} marginTop={5} marginBottom={4}>

@@ -142,6 +142,8 @@ const Transaction = () => {
               isClosable: true,
             });
         }
+        setCall(call + 1);
+        setPurchaseItems([]);
       })
       .catch((err) => {
         if (err instanceof CancelledError) return;
