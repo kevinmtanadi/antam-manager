@@ -89,9 +89,9 @@ const ProductDetail = ({
               <Table size={"md"}>
                 <Thead>
                   <Tr>
+                    <Th>Nomor Serial</Th>
                     <Th>Harga Beli</Th>
                     <Th>Tanggal Pembelian</Th>
-                    <Th>Catatan</Th>
                     <Th></Th>
                   </Tr>
                 </Thead>
@@ -99,9 +99,9 @@ const ProductDetail = ({
                   {product.items.map((item) =>
                     item.status == "available" ? (
                       <Tr key={item.product_stock_id}>
+                        <Td>{item.product_stock_id}</Td>
                         <Td>{ToMoney(item.buy_price)}</Td>
                         <Td>{convertDateFormat(item.buy_at)}</Td>
-                        <Td>{item.note}</Td>
                         <Td>
                           <Icon
                             color={"blue.300"}

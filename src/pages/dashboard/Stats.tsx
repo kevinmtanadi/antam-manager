@@ -1,6 +1,5 @@
-import { Card, CardBody, Stat, StatLabel, StatNumber } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
-import { ToMoney, convertGoldPriceToIdr } from "../../services/helper";
+import { Card, CardBody } from "@chakra-ui/react";
+import { useState } from "react";
 import NumberInput from "../../components/NumberInput";
 
 const Stats = () => {
@@ -9,7 +8,7 @@ const Stats = () => {
   const onSetValue = (value: number) => {
     setData(value);
   };
-  
+
   return (
     <>
       <Card>

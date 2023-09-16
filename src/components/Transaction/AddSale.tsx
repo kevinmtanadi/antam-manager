@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   HStack,
   Input,
@@ -15,7 +16,7 @@ import {
 import { useContext, useEffect, useRef, useState } from "react";
 import { ApiContext } from "../../App";
 import { ProductStockData } from "../../services/dto";
-import NumberInput from "../NumberInput";
+import { ToMoney } from "../../services/helper";
 
 interface Props {
   isOpen: boolean;
@@ -101,7 +102,11 @@ const AddSale = ({ isOpen, onClose, onSubmit }: Props) => {
                     key={item.product_stock_id}
                     value={item.product_stock_id}
                   >
-                    {item.product_name}
+                    <HStack width={"100%"} justifyContent={"space-between"}>
+                      <Box>
+                        {item.product_name} - {ToMoney(item.buy_price)}
+                      </Box>
+                    </HStack>
                   </option>
                 ))}
               </Select>

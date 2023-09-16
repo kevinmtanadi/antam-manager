@@ -11,10 +11,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
-import TransactionDetail from "../../components/Transaction/TransactionDetail";
-import { ToMoney, convertDateFormat } from "../../services/helper";
-import { GetTransactionDataParams } from "../../services/dto";
 import { ApiContext } from "../../App";
+import TransactionDetail from "../../components/Transaction/TransactionDetail";
+import { GetTransactionDataParams } from "../../services/dto";
+import { ToMoney, convertDateFormat } from "../../services/helper";
 
 const transactions = [
   {
@@ -160,9 +160,8 @@ const TransactionHistory = () => {
               <Card
                 height={"270px"}
                 marginBottom={idx != transactions.length - 1 ? "10px" : "0px"}
-                width={"80%"}
+                width={"100%"}
                 minWidth={"300px"}
-                maxWidth={"1000px"}
               >
                 <CardBody>
                   <HStack justifyContent={"space-between"}>
@@ -208,11 +207,6 @@ const TransactionHistory = () => {
                   >
                     Lihat Detail
                   </Button>
-                </CardBody>
-              </Card>
-              <Card height={"270px"} width={"235px"}>
-                <CardBody>
-                  <Box>Catatan</Box>
                 </CardBody>
               </Card>
             </HStack>

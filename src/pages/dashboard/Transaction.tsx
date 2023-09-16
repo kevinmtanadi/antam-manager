@@ -162,7 +162,13 @@ const Transaction = () => {
     <>
       <SimpleGrid columns={2} spacing={5}>
         <Card>
-          <CardHeader>JUAL</CardHeader>
+          <CardHeader
+            textAlign={"center"}
+            fontWeight={"semibold"}
+            fontSize={"1.1rem"}
+          >
+            JUAL
+          </CardHeader>
           <CardBody>
             <TableContainer>
               <Table size={"sm"}>
@@ -192,7 +198,13 @@ const Transaction = () => {
           </CardBody>
         </Card>
         <Card>
-          <CardHeader>BELI</CardHeader>
+          <CardHeader
+            textAlign={"center"}
+            fontWeight={"semibold"}
+            fontSize={"1.1rem"}
+          >
+            BELI
+          </CardHeader>
           <CardBody>
             <TableContainer>
               <Table size={"sm"}>

@@ -76,3 +76,8 @@ export interface GetCartData {
     buy_price: number;
     sale_price: number;
 }
+
+export interface DateParams {
+    start_date: string;
+    end_date: string;
+}

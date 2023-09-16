@@ -15,6 +15,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import { CanceledError } from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { ApiContext } from "../../App";
@@ -27,7 +28,6 @@ import {
   ProductStockData,
 } from "../../services/dto";
 import { ToMoney } from "../../services/helper";
-import { CanceledError } from "axios";
 
 const Product = () => {
   const api = useContext(ApiContext);
