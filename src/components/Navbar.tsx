@@ -1,12 +1,22 @@
-import { Button } from "@chakra-ui/react";
-import { useSignOut } from "react-auth-kit";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import { Center, Show } from "@chakra-ui/react";
 
-const Navbar = () => {
-  const logout = useSignOut();
+interface Props {
+  onOpen: () => void;
+}
+
+const Navbar = ({ onOpen }: Props) => {
   return (
-    <div>
-      <Button onClick={() => logout()}>Keluar</Button>
-    </div>
+    <Show below="lg">
+      <Center height={"100%"} width={"60px"}>
+        <HamburgerIcon
+          onClick={onOpen}
+          w={9}
+          h={9}
+          className="cursor-pointer"
+        />
+      </Center>
+    </Show>
   );
 };
 

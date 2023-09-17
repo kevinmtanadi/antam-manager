@@ -104,7 +104,7 @@ const AddSale = ({ isOpen, onClose, onSubmit }: Props) => {
                   >
                     <HStack width={"100%"} justifyContent={"space-between"}>
                       <Box>
-                        {item.product_name} - {ToMoney(item.buy_price)}
+                        {item.product_stock_id} - {ToMoney(item.buy_price)}
                       </Box>
                     </HStack>
                   </option>

@@ -86,47 +86,42 @@ const ProductDetail = ({
               Detail Produk
             </Box>
             <TableContainer>
-              <Table size={"md"}>
+              <Table size={{ base: "sm", md: "md" }}>
                 <Thead>
                   <Tr>
-                    <Th>Nomor Serial</Th>
+                    <Th>No Serial</Th>
                     <Th>Harga Beli</Th>
                     <Th>Tanggal Pembelian</Th>
                     <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {product.items.map((item) =>
-                    item.status == "available" ? (
-                      <Tr key={item.product_stock_id}>
-                        <Td>{item.product_stock_id}</Td>
-                        <Td>{ToMoney(item.buy_price)}</Td>
-                        <Td>{convertDateFormat(item.buy_at)}</Td>
-                        <Td>
-                          <Icon
-                            color={"blue.300"}
-                            onClick={() => onAddCart(item)}
-                            className="cursor-pointer"
-                            as={BsCartPlus}
-                          />
-                        </Td>
-                      </Tr>
-                    ) : (
-                      <Tr color={"gray.300"} key={item.product_stock_id}>
-                        <Td>{ToMoney(item.buy_price)}</Td>
-                        <Td>{convertDateFormat(item.buy_at)}</Td>
-                        <Td>{item.note}</Td>
-                        <Td>
-                          <Icon
-                            color={"red.300"}
-                            onClick={() => onRemoveCart(item)}
-                            className="cursor-pointer"
-                            as={BsCartDash}
-                          />
-                        </Td>
-                      </Tr>
-                    )
-                  )}
+                  {product.items.map((item) => (
+                    <Tr
+                      color={item.status == "available" ? "" : "gray.300"}
+                      key={item.product_stock_id}
+                    >
+                      <Td>{item.product_stock_id}</Td>
+                      <Td>{ToMoney(item.buy_price)}</Td>
+                      <Td>{convertDateFormat(item.buy_at)}</Td>
+                      <Td>
+                        <Icon
+                          color={
+                            item.status == "available" ? "blue.300" : "red.300"
+                          }
+                          onClick={
+                            item.status == "available"
+                              ? () => onAddCart(item)
+                              : () => onRemoveCart(item)
+                          }
+                          className="cursor-pointer"
+                          as={
+                            item.status == "available" ? BsCartPlus : BsCartDash
+                          }
+                        />
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
             </TableContainer>

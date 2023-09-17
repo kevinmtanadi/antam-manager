@@ -9,7 +9,7 @@ interface Props {
   onClick?: () => void;
 }
 
-const SidebarItem = ({ onChangePage, icon, label, active }: Props) => {
+const SidebarItem = ({ onChangePage, icon, label, active, onClick }: Props) => {
   return (
     <Box
       width="100%"
@@ -20,7 +20,13 @@ const SidebarItem = ({ onChangePage, icon, label, active }: Props) => {
           : "cursor-pointer sidebar-item"
       }
       as="span"
-      onClick={onChangePage ? () => onChangePage() : () => {}}
+      onClick={
+        onChangePage
+          ? () => onChangePage()
+          : onClick
+          ? () => onClick()
+          : undefined
+      }
     >
       <HStack marginY={0} spacing={4}>
         {icon && <Icon fontSize={"1.1rem"} as={icon} />}

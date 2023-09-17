@@ -5,6 +5,10 @@ export interface GetTransactionDataParams {
     offset: number;
 }
 
+export interface SingleNumber {
+    count: number
+}
+
 export interface TransactionData {
     transaction_id: string;
     created_at: string;
@@ -78,6 +82,21 @@ export interface GetCartData {
 }
 
 export interface DateParams {
-    start_date: string;
-    end_date: string;
+    start_date: Date;
+    end_date: Date;
+}
+
+export interface GraphData {
+    date: string;
+    transaction_count: number;
+    total_purchase: number;
+    total_sale: number;
+}
+
+export interface DashboardData {
+    profit: number;
+    total_sale: number;
+    total_buy: number;
+    top_sold_product: string;
+    amount_sold: number;
 }

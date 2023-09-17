@@ -32,3 +32,25 @@ export const convertDateFormat = (inputDate: string): string => {
 
   return `${day} ${month} ${year} ${hours}:${minutes}`;
 }
+
+export const generateDefaultDate = () => {
+  const today = new Date();
+  
+  const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+  const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  
+  return ({ startDate, endDate })
+}
+
+export const ShortenDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const monthIndex = date.getMonth();
+  const monthNames = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ];
+  const month = monthNames[monthIndex];
+
+  return `${day} ${month}`;
+}

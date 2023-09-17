@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Show, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import {
   AiOutlineCreditCard,
@@ -16,6 +16,7 @@ import Stats from "./Stats";
 import Transaction from "./Transaction";
 import TransactionHistory from "./TransactionHistory";
 import CreateAccount from "../auth/CreateAccount";
+import SidebarDrawer from "../../components/SidebarDrawer";
 
 const sidebarItems: SidebarNav[] = [
   {
@@ -43,12 +44,6 @@ const sidebarItems: SidebarNav[] = [
     targetPage: <Transaction />,
   },
   {
-    pageName: "report",
-    icon: CgNotes,
-    label: "Laporan Keuangan",
-    targetPage: <Report />,
-  },
-  {
     pageName: "create_account",
     icon: AiOutlineUserAdd,
     label: "Buat Akun Baru",
@@ -61,27 +56,46 @@ const Dashboard = () => {
 
   const showPage = sidebarItems.find((item) => item.pageName === selectedPage);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <>
       <Grid
-        templateAreas={`"navbar navbar" "sidebar content"`}
+        templateAreas={{
+          base: `"navbar navbar" "content content"`,
+          lg: `"navbar navbar" "sidebar content"`,
+        }}
         templateColumns={"300px 1fr"}
         templateRows={"60px 1fr"}
       >
-        <GridItem area={"navbar"}>
-          <Navbar />
+        <GridItem
+          borderBottom={"1px solid"}
+          borderColor={"gray.200"}
+          bg={"#FAFAFA"}
+          area={"navbar"}
+        >
+          <Navbar onOpen={onOpen} />
         </GridItem>
-        <GridItem area={"sidebar"}>
-          <Sidebar
-            onChangePage={(page) => setSelectedPage(page)}
-            selectedPage={selectedPage}
-            sidebarItems={sidebarItems}
-          />
-        </GridItem>
+        <Show above="lg">
+          <GridItem area={"sidebar"}>
+            <Sidebar
+              onChangePage={(page) => setSelectedPage(page)}
+              selectedPage={selectedPage}
+              sidebarItems={sidebarItems}
+            />
+          </GridItem>
+        </Show>
         <GridItem area={"content"}>
           <Box margin={7}>{showPage?.targetPage}</Box>
         </GridItem>
       </Grid>
+      <SidebarDrawer
+        isOpen={isOpen}
+        onClose={onClose}
+        selectedPage={selectedPage}
+        sidebarItems={sidebarItems}
+        onChangePage={(page: string) => setSelectedPage(page)}
+      />
     </>
   );
 };

@@ -4,8 +4,6 @@ import {
   CardBody,
   CardHeader,
   Center,
-  Icon,
-  Input,
   SimpleGrid,
   Table,
   TableContainer,
@@ -17,18 +15,17 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
+import { CancelledError } from "react-query";
 import { ApiContext } from "../../App";
 import AddPurchase from "../../components/Transaction/AddPurchase";
 import AddSale from "../../components/Transaction/AddSale";
-import { ToMoney } from "../../services/helper";
+import PurchaseData from "../../components/Transaction/PurchaseData";
+import SaleData from "../../components/Transaction/SaleData";
 import {
   InsertTransactionData,
   TransactionPurchaseData,
   TransactionSaleData,
 } from "../../services/dto";
-import PurchaseData from "../../components/Transaction/PurchaseData";
-import SaleData from "../../components/Transaction/SaleData";
-import { CancelledError } from "react-query";
 
 export interface PurchaseItem {
   product_id: string;
@@ -160,7 +157,7 @@ const Transaction = () => {
 
   return (
     <>
-      <SimpleGrid columns={2} spacing={5}>
+      <SimpleGrid columns={{ base: 1, xl: 2 }} spacing={5}>
         <Card>
           <CardHeader
             textAlign={"center"}

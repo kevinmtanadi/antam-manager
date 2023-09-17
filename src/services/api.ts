@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig, CanceledError } from "axios";
 import { useEffect, useState } from "react";
-import { GetCartData, GetProductDataParams, GetTransactionDataParams, InsertProductData, InsertTransactionData, ProductData, ProductStockData, TransactionData } from "./dto";
-import Login from "../pages/auth/Login";
+import { DashboardData, DateParams, GetCartData, GetProductDataParams, GetTransactionDataParams, GraphData, InsertProductData, InsertTransactionData, ProductData, ProductStockData, SingleNumber, TransactionData } from "./dto";
 
 interface FetchResponse<T> {
     data: T[];
@@ -286,7 +285,92 @@ const create = (url: string) => {
         return { data, error, message, status, isLoading }
     }
         
+    const getTransactionGraph = (params: DateParams, deps?: any) => {
+        const [data, setData] = useState<GraphData[] | null>(null)
+        const [error, setError] = useState("");
+        const [message, setMessage] = useState("");
+        const [isLoading, setIsLoading] = useState(true);
+        const [status, setStatus] = useState(0)
+        
+        useEffect(() => {
+            Get<GraphData>("/dashboard/graph", true, {params})
+            .then(
+                (response) => {
+                    const data = response.data
+                    setData(data.data);
+                    setMessage(data.message);
+                    setStatus(data.status);
+                    setIsLoading(false);
+                }
+            )
+            .catch((err) => {
+                if (err instanceof CanceledError) return;
+                setError(err)
+                setIsLoading(false)
+                
+            })
+        }, deps? [...deps]: []);
+        
+        return { data, error, message, status, isLoading }
+    }
     
+    const getDashboardData = (params: DateParams, deps?: any) => {
+        const [data, setData] = useState<DashboardData[] | null>(null)
+        const [error, setError] = useState("");
+        const [message, setMessage] = useState("");
+        const [isLoading, setIsLoading] = useState(true);
+        const [status, setStatus] = useState(0)
+        
+        useEffect(() => {
+            Get<DashboardData>("/dashboard", true, {params})
+            .then(
+                (response) => {
+                    const data = response.data
+                    setData(data.data);
+                    setMessage(data.message);
+                    setStatus(data.status);
+                    setIsLoading(false);
+                }
+            )
+            .catch((err) => {
+                if (err instanceof CanceledError) return;
+                setError(err)
+                setIsLoading(false)
+                
+            })
+        }, deps? [...deps]: []);
+        
+        return { data, error, message, status, isLoading }
+    }
+    
+    const getStockValue = (deps?: any) => {
+        const [data, setData] = useState<SingleNumber[] | null>(null)
+        const [error, setError] = useState("");
+        const [message, setMessage] = useState("");
+        const [isLoading, setIsLoading] = useState(true);
+        const [status, setStatus] = useState(0)
+        
+        useEffect(() => {
+            Get<SingleNumber>("/dashboard/stock_value", true)
+            .then(
+                (response) => {
+                    const data = response.data
+                    setData(data.data);
+                    setMessage(data.message);
+                    setStatus(data.status);
+                    setIsLoading(false);
+                }
+            )
+            .catch((err) => {
+                if (err instanceof CanceledError) return;
+                setError(err)
+                setIsLoading(false)
+                
+            })
+        }, deps? [...deps]: []);
+        
+        return { data, error, message, status, isLoading }
+    }
 
     return {
         authenticateUser,
@@ -300,6 +384,9 @@ const create = (url: string) => {
         deleteCartData,
         searchProductStock,
         getProductOption,
+        getTransactionGraph,
+        getDashboardData,
+        getStockValue,
     }
 }
 

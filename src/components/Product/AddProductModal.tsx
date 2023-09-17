@@ -11,10 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import InputField from "../InputField";
-import { useContext } from "react";
-import { ApiContext } from "../../App";
 import { InsertProductData } from "../../services/dto";
+import InputField from "../InputField";
 
 interface Props {
   isOpen: boolean;

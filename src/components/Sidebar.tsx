@@ -1,6 +1,8 @@
-import { VStack, Box } from "@chakra-ui/react";
+import { VStack, Box, Divider } from "@chakra-ui/react";
 import SidebarItem from "./SidebarItem";
 import { IconType } from "react-icons";
+import { MdOutlineLogout } from "react-icons/md";
+import { useSignOut } from "react-auth-kit";
 
 interface Props {
   onChangePage: (page: string) => void;
@@ -16,6 +18,8 @@ export interface SidebarNav {
 }
 
 const Sidebar = ({ onChangePage, selectedPage, sidebarItems }: Props) => {
+  const logout = useSignOut();
+
   return (
     <>
       <VStack
@@ -44,6 +48,12 @@ const Sidebar = ({ onChangePage, selectedPage, sidebarItems }: Props) => {
             />
           ))}
         </VStack>
+        <Divider />
+        <SidebarItem
+          label="Keluar"
+          icon={MdOutlineLogout}
+          onClick={() => logout()}
+        />
       </VStack>
     </>
   );
