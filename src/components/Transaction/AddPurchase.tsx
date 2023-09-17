@@ -19,6 +19,7 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (
+    product_id: string,
     product_stock_id: string,
     product_name: string,
     buy_price: number
@@ -31,11 +32,13 @@ const AddPurchase = ({ isOpen, onClose, onSubmit }: Props) => {
   const { data, status, isLoading } = api.getProductOption();
 
   const chosen_product_ref = useRef<HTMLSelectElement>(null);
+  const no_serial_ref = useRef<HTMLInputElement>(null);
   const [price, setPrice] = useState(0);
 
   useEffect(() => {
     setPrice(0);
   }, [isOpen]);
+
   useEffect(() => {
     const handleEnterPress = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
@@ -56,13 +59,19 @@ const AddPurchase = ({ isOpen, onClose, onSubmit }: Props) => {
 
   const addToPurchaseList = () => {
     const chosen_product_id = chosen_product_ref.current?.value;
-    if (chosen_product_id && price) {
+    const no_serial = no_serial_ref.current?.value;
+    if (chosen_product_id && price && no_serial) {
       const chosen_product = data?.find(
         (item) => item.product_id === chosen_product_id
       );
-      console.log(chosen_product);
       if (!chosen_product) return;
-      onSubmit(chosen_product?.product_id, chosen_product?.product_name, price);
+      console.log(no_serial);
+      onSubmit(
+        chosen_product?.product_id,
+        no_serial,
+        chosen_product?.product_name,
+        price
+      );
       onClose();
     }
   };
@@ -82,6 +91,12 @@ const AddPurchase = ({ isOpen, onClose, onSubmit }: Props) => {
                 </option>
               ))}
             </Select>
+            <label htmlFor="no_serial">No. Serial</label>
+            <Input
+              ref={no_serial_ref}
+              id="no_serial"
+              placeholder="No. Serial"
+            />
             <label htmlFor="buy_price">Harga Beli</label>
             <NumberInput
               value={price}

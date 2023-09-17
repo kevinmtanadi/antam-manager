@@ -29,6 +29,7 @@ import {
 
 export interface PurchaseItem {
   product_id: string;
+  product_stock_id: string;
   product_name: string;
   buy_price: number;
   note?: string;
@@ -58,11 +59,13 @@ const Transaction = () => {
 
   const addPurchaseItem = (
     product_id: string,
+    product_stock_id: string,
     product_name: string,
     buy_price: number
   ) => {
     const item = {
       product_id: product_id,
+      product_stock_id,
       product_name,
       buy_price,
     };
@@ -88,6 +91,7 @@ const Transaction = () => {
           ...purchase,
           {
             product_id: item.product_id,
+            product_stock_id: item.product_stock_id,
             product_name: item.product_name,
             buy_price: item.buy_price,
             note: item.note,
@@ -209,6 +213,7 @@ const Transaction = () => {
                   <Tr>
                     <Th>Kode Produk</Th>
                     <Th>Nama Produk</Th>
+                    <Th>No. Serial</Th>
                     <Th>Harga Beli</Th>
                   </Tr>
                   {purchaseItems?.map((item, idx) => (
@@ -238,8 +243,8 @@ const Transaction = () => {
       <AddPurchase
         isOpen={isAddPurchaseOpen}
         onClose={onAddPurchaseClose}
-        onSubmit={(product_id, product_name, buy_price) =>
-          addPurchaseItem(product_id, product_name, buy_price)
+        onSubmit={(product_id, product_stock_id, product_name, buy_price) =>
+          addPurchaseItem(product_id, product_stock_id, product_name, buy_price)
         }
       />
       <AddSale

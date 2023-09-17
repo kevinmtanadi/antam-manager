@@ -33,11 +33,9 @@ export const convertDateFormat = (inputDate: string): string => {
   return `${day} ${month} ${year} ${hours}:${minutes}`;
 }
 
-export const generateDefaultDate = () => {
-  const today = new Date();
-  
-  const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-  const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+export const generateDefaultDate = (date: Date) => {
+  const startDate = new Date(date.getFullYear(), date.getMonth(), 1);
+  const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
   
   return ({ startDate, endDate })
 }

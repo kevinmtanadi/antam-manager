@@ -19,7 +19,11 @@ import { ToMoney, generateDefaultDate } from "../../services/helper";
 
 const Stats = () => {
   const api = useContext(ApiContext);
-  const { startDate, endDate } = generateDefaultDate();
+
+  const today = new Date();
+  const curMonth = new Date().getMonth();
+  const [selectedMonth, setSelectedMonth] = useState(curMonth);
+  const { startDate, endDate } = generateDefaultDate(today);
   const [dateParams, setDateParams] = useState<DateParams>({
     start_date: startDate,
     end_date: endDate,
@@ -32,9 +36,6 @@ const Stats = () => {
   useEffect(() => {
     console.log(dateParams);
   }, [dateParams]);
-
-  const curMonth = new Date().getMonth();
-  const [selectedMonth, setSelectedMonth] = useState(curMonth);
 
   const { data: graphData, isLoading: graphLoading } =
     api.getTransactionGraph(dateParams);

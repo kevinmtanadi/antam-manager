@@ -135,6 +135,9 @@ const TransactionDetail = ({
                       </Tbody>
                       <Tfoot>
                         <Tr>
+                          <Td></Td>
+                        </Tr>
+                        <Tr>
                           <Td fontWeight={"semibold"} colSpan={2}>
                             TOTAL PEMBELIAN
                           </Td>
@@ -181,11 +184,14 @@ const TransactionDetail = ({
                       </Tbody>
                       <Tfoot>
                         <Tr>
+                          <Td></Td>
+                        </Tr>
+                        <Tr>
                           <Td fontWeight={"semibold"} colSpan={3}>
                             TOTAL PENJUALAN
                           </Td>
                           <Td fontWeight={"semibold"}>
-                            {totalSales != 0 ? ToMoney(totalSales) : "-"}
+                            {ToMoney(totalSales)}
                           </Td>
                         </Tr>
                       </Tfoot>

@@ -21,6 +21,7 @@ const PurchaseData = ({ item }: Props) => {
     <Tr key={item.product_id}>
       <Td>{item.product_id}</Td>
       <Td>{item.product_name}</Td>
+      <Td>{item.product_stock_id}</Td>
       <Td>
         <NumberInput
           value={price}
