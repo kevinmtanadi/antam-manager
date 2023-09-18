@@ -198,9 +198,9 @@ const Transaction = () => {
                         height={"40px"}
                         className="cursor-pointer"
                         onClick={() => onAddSaleOpen()}
-                        colSpan={4}
+                        colSpan={5}
                       >
-                        <Center>+</Center>
+                        <Center fontSize="1.25rem">+</Center>
                       </Td>
                     </Tr>
                 </Tbody>
@@ -241,9 +241,9 @@ const Transaction = () => {
                       height={"40px"}
                       className="cursor-pointer"
                       onClick={() => onAddPurchaseOpen()}
-                      colSpan={3}
+                      colSpan={4}
                     >
-                      <Center>+</Center>
+                      <Center fontSize="1.25rem">+</Center>
                     </Td>
                   </Tr>
                 </Tbody>
@@ -271,6 +271,6 @@ const Transaction = () => {
       />
     </>
   );
-};
+}
 
 export default Transaction;
