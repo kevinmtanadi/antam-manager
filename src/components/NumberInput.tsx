@@ -40,7 +40,14 @@ const NumberInput = ({ value, onChangeValue }: Props) => {
     onChangeValue(numeric);
   };
 
-  return <Input onChange={updateValue} ref={ref} value={formattedValue} />;
+  return (
+    <Input
+      type="number"
+      onChange={updateValue}
+      ref={ref}
+      value={formattedValue}
+    />
+  );
 };
 
 export default NumberInput;
