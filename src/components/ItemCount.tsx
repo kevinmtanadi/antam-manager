@@ -1,5 +1,4 @@
 import { Select } from "@chakra-ui/react";
-import { BsChevronDown } from "react-icons/bs";
 
 interface Props {
   onSelectCount: (count: number) => void;

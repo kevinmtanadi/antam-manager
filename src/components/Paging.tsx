@@ -1,5 +1,5 @@
-import { HStack, Box, Icon, Input } from "@chakra-ui/react";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { Box, HStack, Icon, Input } from "@chakra-ui/react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
   MdOutlineArrowBackIosNew,
   MdOutlineArrowForwardIos,
@@ -27,7 +27,7 @@ const Paging = ({ onChangePage, limit, offset, totalItem }: Props) => {
 
   const pages = Array.from({ length: totalPage }, (_, index) => index + 1);
 
-  const [inputvalue, setInputValue] = useState("");
+  const [,setInputValue] = useState("");
   const handleLimit = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= Math.ceil(pages.length / 10)) {
       setInputValue(e.target.value);
