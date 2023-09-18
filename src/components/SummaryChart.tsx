@@ -19,10 +19,10 @@ interface Props {
 const SummaryChart = ({ data, month }: Props) => {
   const generateEmptyData = (year: number, month: number) => {
     const monthData = [];
-    const lastDayOfMonth = new Date(year, month, 0).getDate();
+    const lastDayOfMonth = new Date(year, month - 1, 0).getDate();
 
     for (let day = 1; day <= lastDayOfMonth; day++) {
-      const date = `${year}-${month.toString().padStart(2, "0")}-${day
+      const date = `${year}-${(month - 1).toString().padStart(2, "0")}-${day
         .toString()
         .padStart(2, "0")}`;
       const existingData = data?.find((item) => item.date.toString() === date);
@@ -50,7 +50,7 @@ const SummaryChart = ({ data, month }: Props) => {
   const year = new Date().getFullYear();
   const totalData = generateEmptyData(year, month + 1);
   return (
-    <Box maxW={{ base: "800px", lg: "650px", xl: "1000px" }}>
+    <Box marginLeft={-10} maxW={{ base: "800px", lg: "650px", xl: "1000px" }}>
       <ResponsiveContainer width={"100%"} height={250}>
         <LineChart data={totalData} height={250}>
           <CartesianGrid strokeDasharray="10 3" />
@@ -62,7 +62,7 @@ const SummaryChart = ({ data, month }: Props) => {
             type="monotone"
             name="Jumlah transaksi"
             dataKey="transaction_count"
-            stroke="#D4342A"
+            stroke="#0000FF"
             animationDuration={300}
           />
         </LineChart>

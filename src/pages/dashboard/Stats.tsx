@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardBody,
   Center,
@@ -16,22 +17,25 @@ import { ApiContext } from "../../App";
 import SummaryChart from "../../components/SummaryChart";
 import { DateParams } from "../../services/dto";
 import { ToMoney, generateDefaultDate } from "../../services/helper";
+import DateSetter from "../../components/DateSetter";
 
 const Stats = () => {
   const api = useContext(ApiContext);
 
   const today = new Date();
-  const curMonth = new Date().getMonth();
+  const curMonth = today.getMonth();
+  const curYear = today.getFullYear();
   const [selectedMonth, setSelectedMonth] = useState(curMonth);
-  const { startDate, endDate } = generateDefaultDate(today);
+  const { startDate, endDate } = generateDefaultDate(curYear, curMonth);
   const [dateParams, setDateParams] = useState<DateParams>({
     start_date: startDate,
     end_date: endDate,
   } as DateParams);
 
   useEffect(() => {
+    const { startDate, endDate } = generateDefaultDate(curYear, selectedMonth);
     setDateParams({ start_date: startDate, end_date: endDate } as DateParams);
-  }, []);
+  }, [selectedMonth]);
 
   useEffect(() => {
     console.log(dateParams);
@@ -57,6 +61,9 @@ const Stats = () => {
           gap={4}
         >
           <GridItem colSpan={{ base: 2, md: 3, lg: 3, xl: 4 }}>
+            <Box marginBottom={5}>
+              <DateSetter selectedMonth={selectedMonth} onSelectMonth={setSelectedMonth} />
+            </Box>
             <SummaryChart data={graphData} month={selectedMonth} />
           </GridItem>
           <GridItem>

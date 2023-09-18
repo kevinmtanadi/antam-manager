@@ -17,7 +17,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CancelledError } from "react-query";
 import { ApiContext } from "../../App";
 import AddPurchase from "../../components/Transaction/AddPurchase";
@@ -78,6 +78,7 @@ const Transaction = () => {
       setPurchaseItems([item]);
     }
   };
+
 
   const addSaleItem = (product_stock_id: string) => {
     api.insertCartData(product_stock_id)?.then((res) => {
@@ -164,7 +165,7 @@ const Transaction = () => {
 
   return (
     <>
-      <SimpleGrid columns={{ base: 1, xl: 2 }} spacing={5}>
+      <SimpleGrid columns={{ base: 1, xxl: 2 }} spacing={5}>
         <Card>
           <CardHeader
             textAlign={"center"}
@@ -177,8 +178,9 @@ const Transaction = () => {
             <TableContainer>
               <Table size={"sm"}>
                 <Tbody>
-                  <Show above="lg">
+                  <Show above="md">
                     <Tr>
+                      <Th>No. Serial</Th>
                       <Th>Kode Produk</Th>
                       <Th>Nama Produk</Th>
                       <Th>Harga Beli</Th>
@@ -188,7 +190,7 @@ const Transaction = () => {
                       <SaleData key={idx} item={item} showFull={true}/>
                     ))}
                   </Show>
-                  <Show below="lg">
+                  <Show below="md">
                     {salesItems?.map((item, idx) => (
                       <SaleData key={idx} item={item} showFull={false}/>
                     ))}
@@ -220,18 +222,18 @@ const Transaction = () => {
             <TableContainer>
               <Table size={"sm"}>
                 <Tbody>
-                  <Show above="lg">
+                  <Show above="md">
                     <Tr>
+                      <Th>No. Serial</Th>
                       <Th>Kode Produk</Th>
                       <Th>Nama Produk</Th>
-                      <Th>No. Serial</Th>
                       <Th>Harga Beli</Th>
                     </Tr>
                     {purchaseItems?.map((item, idx) => (
                       <PurchaseData item={item} key={idx} showFull={true} />
                     ))}
                   </Show>
-                  <Show below="lg">
+                  <Show below="md">
                     {purchaseItems?.map((item, idx) => (
                       <PurchaseData item={item} key={idx} showFull={false} />
                     ))}

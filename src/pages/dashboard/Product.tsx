@@ -183,8 +183,8 @@ const Product = () => {
             </InputGroup>
           </form>
         </Box>
-        <Button onClick={() => onCreateOpen()} colorScheme="whatsapp">
-          Tambahkan Produk Baru
+        <Button className="display-text-1" onClick={() => onCreateOpen()} colorScheme="whatsapp">
+          Tambah Produk
         </Button>
       </HStack>
 

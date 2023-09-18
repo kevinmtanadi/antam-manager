@@ -19,6 +19,7 @@ const SaleData = ({ item, showFull }: Props) => {
 
   if (showFull) return (
     <Tr>
+      <Td>{item.product_stock_id}</Td>
       <Td>{item.product_id}</Td>
       <Td>{item.product_name}</Td>
       <Td>{ToMoney(item.buy_price)}</Td>
@@ -32,7 +33,7 @@ const SaleData = ({ item, showFull }: Props) => {
     <Tr>
       <Td>
         <VStack>
-          <Box>{item.product_stock_id}</Box>
+          <Box fontWeight={'semibold'}>{item.product_stock_id}</Box>
           <Box>{item.product_name}</Box>
         </VStack>
       </Td>
