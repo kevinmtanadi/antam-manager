@@ -1,10 +1,10 @@
 import "./App.css";
 // import { useIsAuthenticated } from "react-auth-kit";
-import { createContext, useState } from "react";
-import Dashboard from "./pages/dashboard/Dashboard";
-import api from "./services/api";
+import { createContext } from "react";
 import { useIsAuthenticated } from "react-auth-kit";
 import Login from "./pages/auth/Login";
+import Dashboard from "./pages/dashboard/Dashboard";
+import api from "./services/api";
 
 export const ApiContext = createContext(api.create("http://localhost:8080"));
 
