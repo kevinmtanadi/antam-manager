@@ -1,3 +1,5 @@
+import { addHours } from "date-fns";
+
 export const ToMoney = (value: number): string => {
   if (value === undefined) return "";
     const moneyString = value.toLocaleString("id-ID", {
@@ -35,10 +37,8 @@ export const convertDateFormat = (inputDate: string): string => {
 
 export const generateDefaultDate = (year: number, month: number) => {
   const startDate = new Date(year, month - 1, 1);
-
-  // Calculate the last day of the next month and subtract one day to get the end of the current month
   const endDate = new Date(year, month, 0);
-
+ 
   return { startDate, endDate };
 }
 
@@ -53,4 +53,7 @@ export const ShortenDate = (dateString: string): string => {
   const month = monthNames[monthIndex];
 
   return `${day} ${month}`;
+}
+export const UtcToGmt = (date: Date) => {
+  return addHours(date, 7);
 }

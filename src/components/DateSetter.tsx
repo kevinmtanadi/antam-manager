@@ -8,18 +8,18 @@ interface Props {
 
 const DateSetter = ({ onSelectMonth, selectedMonth }: Props) => {
   const monthData = [
-    { value: 1, name: "Januari" },
-    { value: 2, name: "Februari" },
-    { value: 3, name: "Maret" },
-    { value: 4, name: "April" },
-    { value: 5, name: "Mei" },
-    { value: 6, name: "Juni" },
-    { value: 7, name: "Juli" },
-    { value: 8, name: "Agustus" },
-    { value: 9, name: "September" },
-    { value: 10, name: "Oktober" },
-    { value: 11, name: "November" },
-    { value: 12, name: "Desember" },
+    { value: 0, name: "Januari" },
+    { value: 1, name: "Februari" },
+    { value: 2, name: "Maret" },
+    { value: 3, name: "April" },
+    { value: 4, name: "Mei" },
+    { value: 5, name: "Juni" },
+    { value: 6, name: "Juli" },
+    { value: 7, name: "Agustus" },
+    { value: 8, name: "September" },
+    { value: 9, name: "Oktober" },
+    { value: 10, name: "November" },
+    { value: 11, name: "Desember" },
   ];
 
   const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -28,7 +28,7 @@ const DateSetter = ({ onSelectMonth, selectedMonth }: Props) => {
   };
 
   return (
-    <Select width={"150px"} defaultValue={selectedMonth} onChange={handleMonthChange}>
+    <Select defaultValue={selectedMonth} onChange={handleMonthChange}>
       {monthData.map((month) => (
         <option key={month.value} value={month.value}>
           {month.name}

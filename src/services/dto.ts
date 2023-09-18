@@ -1,3 +1,5 @@
+import { UtcToGmt } from "./helper";
+
 export interface GetTransactionDataParams {
     start_date: string;
     end_date: string;
@@ -85,6 +87,13 @@ export interface GetCartData {
 export interface DateParams {
     start_date: Date;
     end_date: Date;
+}
+
+export const ConvertTimezone = (dateParams: DateParams): DateParams => {
+    return {
+        start_date: UtcToGmt(dateParams.start_date),
+        end_date: UtcToGmt(dateParams.end_date),
+    }
 }
 
 export interface GraphData {

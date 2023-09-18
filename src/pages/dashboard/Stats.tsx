@@ -26,25 +26,25 @@ const Stats = () => {
   const curMonth = today.getMonth();
   const curYear = today.getFullYear();
   const [selectedMonth, setSelectedMonth] = useState(curMonth);
-  const { startDate, endDate } = generateDefaultDate(curYear, curMonth);
+  const { startDate, endDate } = generateDefaultDate(
+    curYear,
+    selectedMonth + 1
+  );
   const [dateParams, setDateParams] = useState<DateParams>({
     start_date: startDate,
     end_date: endDate,
   } as DateParams);
 
   useEffect(() => {
-    const { startDate, endDate } = generateDefaultDate(curYear, selectedMonth);
+    const { startDate, endDate } = generateDefaultDate(
+      curYear,
+      selectedMonth + 1
+    );
     setDateParams({ start_date: startDate, end_date: endDate } as DateParams);
   }, [selectedMonth]);
 
-  useEffect(() => {
-    console.log(dateParams);
-  }, [dateParams]);
-
-  const { data: graphData } =
-    api.getTransactionGraph(dateParams);
-  const { data: dashboardData } =
-    api.getDashboardData(dateParams);
+  const { data: graphData } = api.getTransactionGraph(dateParams);
+  const { data: dashboardData } = api.getDashboardData(dateParams);
   const { data: stockValue } = api.getStockValue();
 
   return (
@@ -62,7 +62,10 @@ const Stats = () => {
         >
           <GridItem colSpan={{ base: 2, md: 3, lg: 3, xl: 4 }}>
             <Box marginBottom={5}>
-              <DateSetter selectedMonth={selectedMonth} onSelectMonth={setSelectedMonth} />
+              <DateSetter
+                selectedMonth={selectedMonth}
+                onSelectMonth={setSelectedMonth}
+              />
             </Box>
             <SummaryChart data={graphData} month={selectedMonth} />
           </GridItem>
@@ -95,7 +98,7 @@ const Stats = () => {
                     Total Item Terjual
                   </StatLabel>
                   <StatNumber className="display-text-2">
-                    {dashboardData && dashboardData[0].amount_sold}
+                    {dashboardData ? dashboardData[0].amount_sold : 0}
                   </StatNumber>
                 </Stat>
               </CardBody>
@@ -138,10 +141,11 @@ const Stats = () => {
                   </StatLabel>
                   <HStack>
                     <StatNumber className="display-text-2" marginRight={1}>
-                      {dashboardData && dashboardData[0].top_sold_product}
+                      {dashboardData ? dashboardData[0].top_sold_product : "-"}
                     </StatNumber>
                     <StatHelpText className="display-text-1" marginBottom={0}>
-                      Terjual {dashboardData && dashboardData[0].amount_sold}
+                      {dashboardData &&
+                        "Terjual" + dashboardData[0].amount_sold}
                     </StatHelpText>
                   </HStack>
                 </Stat>

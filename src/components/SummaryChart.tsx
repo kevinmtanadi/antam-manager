@@ -6,7 +6,7 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis
+  YAxis,
 } from "recharts";
 import { GraphData } from "../services/dto";
 import { ShortenDate } from "../services/helper";
@@ -19,10 +19,10 @@ interface Props {
 const SummaryChart = ({ data, month }: Props) => {
   const generateEmptyData = (year: number, month: number) => {
     const monthData = [];
-    const lastDayOfMonth = new Date(year, month - 1, 0).getDate();
+    const lastDayOfMonth = new Date(year, month, 0).getDate();
 
     for (let day = 1; day <= lastDayOfMonth; day++) {
-      const date = `${year}-${(month - 1).toString().padStart(2, "0")}-${day
+      const date = `${year}-${month.toString().padStart(2, "0")}-${day
         .toString()
         .padStart(2, "0")}`;
       const existingData = data?.find((item) => item.date.toString() === date);

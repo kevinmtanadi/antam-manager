@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, CanceledError } from "axios";
 import { useEffect, useState } from "react";
-import { DashboardData, DateParams, GetCartData, GetProductDataParams, GetTransactionDataParams, GraphData, InsertProductData, InsertTransactionData, ProductData, ProductStockData, SingleNumber, TransactionData } from "./dto";
+import { ConvertTimezone, DashboardData, DateParams, GetCartData, GetProductDataParams, GetTransactionDataParams, GraphData, InsertProductData, InsertTransactionData, ProductData, ProductStockData, SingleNumber, TransactionData } from "./dto";
 
 interface FetchResponse<T> {
     data: T[];
@@ -326,6 +326,8 @@ const create = (url: string) => {
         const [isLoading, setIsLoading] = useState(true);
         const [status, setStatus] = useState(0)
         
+        params = ConvertTimezone(params)
+        
         useEffect(() => {
             Get<GraphData>("/dashboard/graph", true, {params})
             .then(
@@ -354,6 +356,8 @@ const create = (url: string) => {
         const [message, setMessage] = useState("");
         const [isLoading, setIsLoading] = useState(true);
         const [status, setStatus] = useState(0)
+        
+        params = ConvertTimezone(params)
         
         useEffect(() => {
             Get<DashboardData>("/dashboard", true, {params})
