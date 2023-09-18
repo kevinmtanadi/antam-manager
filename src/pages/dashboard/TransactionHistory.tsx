@@ -14,7 +14,7 @@ import { useContext, useState } from "react";
 import { ApiContext } from "../../App";
 import TransactionDetail from "../../components/Transaction/TransactionDetail";
 import { GetTransactionDataParams } from "../../services/dto";
-import { ToMoney, convertDateFormat } from "../../services/helper";
+import { ToMoney, convertDateFormat, generateDefaultDate } from "../../services/helper";
 
 const transactions = [
   {
@@ -125,18 +125,17 @@ const TransactionHistory = () => {
   const api = useContext(ApiContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [params, setParams] = useState<GetTransactionDataParams>({
+  const today = new Date();
+  const {startDate, endDate} = generateDefaultDate(today.getFullYear(), today.getMonth())
+
+  const [params,] = useState<GetTransactionDataParams>({
     limit: 10,
     offset: 0,
-    start_date: "2023-09-01",
-    end_date: "2023-09-30",
+    start_date: startDate.toISOString(),
+    end_date: endDate.toISOString(),
   });
   const {
     data: transactionList,
-    message,
-    error,
-    status,
-    isLoading,
   } = api.getTransactionData(params);
 
   const [chosenTransaction, setChosenTransaction] = useState<any>(null);

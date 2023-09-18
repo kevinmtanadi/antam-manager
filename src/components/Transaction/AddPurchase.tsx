@@ -29,7 +29,7 @@ interface Props {
 const AddPurchase = ({ isOpen, onClose, onSubmit }: Props) => {
   const api = useContext(ApiContext);
 
-  const { data, status, isLoading } = api.getProductOption();
+  const { data } = api.getProductOption();
 
   const chosen_product_ref = useRef<HTMLSelectElement>(null);
   const no_serial_ref = useRef<HTMLInputElement>(null);

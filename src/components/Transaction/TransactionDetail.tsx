@@ -1,8 +1,5 @@
 import {
-  Badge,
   Box,
-  Card,
-  CardBody,
   Divider,
   HStack,
   Icon,
@@ -17,10 +14,10 @@ import {
   Tfoot,
   Thead,
   Tr,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
-import { ToMoney, convertDateFormat } from "../../services/helper";
 import { RiCloseCircleLine } from "react-icons/ri";
+import { ToMoney, convertDateFormat } from "../../services/helper";
 
 interface Props {
   purchase?: TransactionPurchase[];

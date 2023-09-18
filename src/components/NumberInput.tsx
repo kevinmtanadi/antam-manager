@@ -7,7 +7,7 @@ interface Props {
 }
 
 const NumberInput = ({ value, onChangeValue }: Props) => {
-  const [numericValue, setNumericValue] = useState<number | undefined>(value);
+  const [, setNumericValue] = useState<number | undefined>(value);
   const [formattedValue, setFormattedValue] = useState(value.toLocaleString());
 
   const ref = useRef<HTMLInputElement>(null);

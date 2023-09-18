@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
-import { Box, Input, Td, Tr, VStack } from "@chakra-ui/react";
+import { Box, Td, Tr, VStack } from "@chakra-ui/react";
 import { GetCartData } from "../../services/dto";
 import { ToMoney } from "../../services/helper";
 import NumberInput from "../NumberInput";
@@ -12,10 +12,6 @@ interface Props {
 
 const SaleData = ({ item, showFull }: Props) => {
   const [price, setPrice] = useState(0);
-  const onPriceChange = (value: number) => {
-    setPrice(value);
-    item.buy_price = value;
-  };
 
   if (showFull) return (
     <Tr>

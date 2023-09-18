@@ -31,7 +31,7 @@ const AddSale = ({ isOpen, onClose, onSubmit }: Props) => {
     setHasFound(false);
   }, [isOpen]);
 
-  const [productId, setProductId] = useState("");
+  const [_, setProductId] = useState("");
   const [productStockList, setProductStockList] = useState<
     ProductStockData[] | null
   >(null);

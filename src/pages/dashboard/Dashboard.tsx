@@ -6,17 +6,15 @@ import {
   AiOutlineShoppingCart,
   AiOutlineUserAdd,
 } from "react-icons/ai";
-import { CgNotes } from "react-icons/cg";
 import { PiScroll } from "react-icons/pi";
 import Navbar from "../../components/Navbar";
 import Sidebar, { SidebarNav } from "../../components/Sidebar";
+import SidebarDrawer from "../../components/SidebarDrawer";
+import CreateAccount from "../auth/CreateAccount";
 import Product from "./Product";
-import Report from "./Report";
 import Stats from "./Stats";
 import Transaction from "./Transaction";
 import TransactionHistory from "./TransactionHistory";
-import CreateAccount from "../auth/CreateAccount";
-import SidebarDrawer from "../../components/SidebarDrawer";
 
 const sidebarItems: SidebarNav[] = [
   {

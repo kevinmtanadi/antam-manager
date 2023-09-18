@@ -32,7 +32,7 @@ import { ToMoney } from "../../services/helper";
 const Product = () => {
   const api = useContext(ApiContext);
 
-  const [params, setParams] = useState<GetProductDataParams>({
+  const [params,] = useState<GetProductDataParams>({
     limit: 10,
     offset: 0,
   });
@@ -43,10 +43,6 @@ const Product = () => {
 
   const {
     data: productList,
-    message,
-    error,
-    status,
-    isLoading,
   } = api.getProductData(params, [params, call]);
 
   useEffect(() => {
@@ -139,7 +135,7 @@ const Product = () => {
   const onCreateProduct = (product: InsertProductData) => {
     api
       .createNewProduct(product)
-      ?.then((res) => {
+      ?.then(() => {
         toast({
           title: "Berhasil menambahkan produk baru",
           status: "success",

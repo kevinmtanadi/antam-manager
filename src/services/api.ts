@@ -73,7 +73,7 @@ const create = (url: string) => {
         return response
     }
 
-    const Delete = <T>(endpoint: string, needAuthorization: boolean, requestConfig?: AxiosRequestConfig, body?: any) => {
+    const Delete = <T>(endpoint: string, needAuthorization: boolean, requestConfig?: AxiosRequestConfig) => {
         const controller = new AbortController();
         const headers = {
             'Content-Type': 'application/json'
@@ -373,6 +373,10 @@ const create = (url: string) => {
     }
 
     return {
+        Get,
+        Post,
+        Put,
+        Delete,
         authenticateUser,
         register,
         getTransactionData,

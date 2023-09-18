@@ -1,9 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
-import { Box, Icon, Input, Td, Tr, VStack } from "@chakra-ui/react";
-import { BsPencilSquare } from "react-icons/bs";
+import { Box, Td, Tr, VStack } from "@chakra-ui/react";
 import { PurchaseItem } from "../../pages/dashboard/Transaction";
-import { ToMoney } from "../../services/helper";
 import NumberInput from "../NumberInput";
 
 interface Props {

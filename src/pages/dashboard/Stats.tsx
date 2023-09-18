@@ -14,10 +14,10 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { ApiContext } from "../../App";
+import DateSetter from "../../components/DateSetter";
 import SummaryChart from "../../components/SummaryChart";
 import { DateParams } from "../../services/dto";
 import { ToMoney, generateDefaultDate } from "../../services/helper";
-import DateSetter from "../../components/DateSetter";
 
 const Stats = () => {
   const api = useContext(ApiContext);
@@ -41,11 +41,11 @@ const Stats = () => {
     console.log(dateParams);
   }, [dateParams]);
 
-  const { data: graphData, isLoading: graphLoading } =
+  const { data: graphData } =
     api.getTransactionGraph(dateParams);
-  const { data: dashboardData, isLoading: dashboardLoading } =
+  const { data: dashboardData } =
     api.getDashboardData(dateParams);
-  const { data: stockValue, isLoading: stockLoading } = api.getStockValue();
+  const { data: stockValue } = api.getStockValue();
 
   return (
     <>
