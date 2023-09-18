@@ -1,9 +1,11 @@
 import {
+  Box,
   Button,
   Card,
   CardBody,
   CardHeader,
   Center,
+  Show,
   SimpleGrid,
   Table,
   TableContainer,
@@ -11,6 +13,7 @@ import {
   Td,
   Th,
   Tr,
+  VStack,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -174,25 +177,32 @@ const Transaction = () => {
             <TableContainer>
               <Table size={"sm"}>
                 <Tbody>
-                  <Tr>
-                    <Th>Kode Produk</Th>
-                    <Th>Nama Produk</Th>
-                    <Th>Harga Beli</Th>
-                    <Th>Harga Jual</Th>
-                  </Tr>
-                  {salesItems?.map((item, idx) => (
-                    <SaleData key={idx} item={item} />
-                  ))}
-                  <Tr>
-                    <Td
-                      height={"40px"}
-                      className="cursor-pointer"
-                      onClick={() => onAddSaleOpen()}
-                      colSpan={4}
-                    >
-                      <Center>+</Center>
-                    </Td>
-                  </Tr>
+                  <Show above="lg">
+                    <Tr>
+                      <Th>Kode Produk</Th>
+                      <Th>Nama Produk</Th>
+                      <Th>Harga Beli</Th>
+                      <Th>Harga Jual</Th>
+                    </Tr>
+                    {salesItems?.map((item, idx) => (
+                      <SaleData key={idx} item={item} showFull={true}/>
+                    ))}
+                  </Show>
+                  <Show below="lg">
+                    {salesItems?.map((item, idx) => (
+                      <SaleData key={idx} item={item} showFull={false}/>
+                    ))}
+                  </Show>
+                    <Tr>
+                      <Td
+                        height={"40px"}
+                        className="cursor-pointer"
+                        onClick={() => onAddSaleOpen()}
+                        colSpan={4}
+                      >
+                        <Center>+</Center>
+                      </Td>
+                    </Tr>
                 </Tbody>
               </Table>
             </TableContainer>
@@ -210,15 +220,22 @@ const Transaction = () => {
             <TableContainer>
               <Table size={"sm"}>
                 <Tbody>
-                  <Tr>
-                    <Th>Kode Produk</Th>
-                    <Th>Nama Produk</Th>
-                    <Th>No. Serial</Th>
-                    <Th>Harga Beli</Th>
-                  </Tr>
-                  {purchaseItems?.map((item, idx) => (
-                    <PurchaseData item={item} key={idx} />
-                  ))}
+                  <Show above="lg">
+                    <Tr>
+                      <Th>Kode Produk</Th>
+                      <Th>Nama Produk</Th>
+                      <Th>No. Serial</Th>
+                      <Th>Harga Beli</Th>
+                    </Tr>
+                    {purchaseItems?.map((item, idx) => (
+                      <PurchaseData item={item} key={idx} showFull={true} />
+                    ))}
+                  </Show>
+                  <Show below="lg">
+                    {purchaseItems?.map((item, idx) => (
+                      <PurchaseData item={item} key={idx} showFull={false} />
+                    ))}
+                  </Show>
                   <Tr>
                     <Td
                       height={"40px"}

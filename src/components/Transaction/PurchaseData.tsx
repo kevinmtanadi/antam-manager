@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { Icon, Input, Td, Tr } from "@chakra-ui/react";
+import { Box, Icon, Input, Td, Tr, VStack } from "@chakra-ui/react";
 import { BsPencilSquare } from "react-icons/bs";
 import { PurchaseItem } from "../../pages/dashboard/Transaction";
 import { ToMoney } from "../../services/helper";
@@ -8,17 +8,18 @@ import NumberInput from "../NumberInput";
 
 interface Props {
   item: PurchaseItem;
+  showFull: boolean;
 }
 
-const PurchaseData = ({ item }: Props) => {
+const PurchaseData = ({ item, showFull }: Props) => {
   const [price, setPrice] = useState(item.buy_price);
   const onPriceChange = (value: number) => {
     setPrice(value);
     item.buy_price = value;
   };
 
-  return (
-    <Tr key={item.product_id}>
+  if (showFull) return (
+    <Tr>
       <Td>{item.product_id}</Td>
       <Td>{item.product_name}</Td>
       <Td>{item.product_stock_id}</Td>
@@ -30,6 +31,26 @@ const PurchaseData = ({ item }: Props) => {
       </Td>
     </Tr>
   );
+
+  return (
+    <Tr>
+      <Td>
+        <VStack>
+          <Box>{item.product_id}</Box>
+          <Box>{item.product_name}</Box>
+        </VStack>
+        <VStack>
+          <Box>{item.product_stock_id}</Box>
+          <Box>
+            <NumberInput
+              value={price}
+              onChangeValue={(value) => onPriceChange(value)}
+           />
+          </Box>
+        </VStack>
+      </Td>
+    </Tr>
+  )
 };
 
 export default PurchaseData;
