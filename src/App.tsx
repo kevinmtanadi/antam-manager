@@ -6,14 +6,14 @@ import Login from "./pages/auth/Login";
 import Dashboard from "./pages/dashboard/Dashboard";
 import api from "./services/api";
 
-export const ApiContext = createContext(api.create("http://localhost:8080"));
+export const ApiContext = createContext(api.create("https://go-antam-manager-production.up.railway.app"));
 
 function App() {
   const auth = useIsAuthenticated();
 
   return (
     <>
-      <ApiContext.Provider value={api.create("http://localhost:8080")}>
+      <ApiContext.Provider value={api.create("https://go-antam-manager-production.up.railway.app")}>
         {auth() ? <Dashboard /> : <Login />}
         {/* <Dashboard /> */}
       </ApiContext.Provider>
