@@ -14,8 +14,8 @@ function App() {
   return (
     <>
       <ApiContext.Provider value={api.create("http://localhost:8080")}>
-        {/* {auth() ? <Dashboard /> : <Login />} */}
-        <Dashboard />
+        {auth() ? <Dashboard /> : <Login />}
+        {/* <Dashboard /> */}
       </ApiContext.Provider>
       {/* {loggedIn ? <Dashboard /> : <Login onLogin={() => setLoggedIn(true)} />} */}
     </>
