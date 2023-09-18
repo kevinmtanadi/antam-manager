@@ -1,11 +1,21 @@
 import { UtcToGmt } from "./helper";
 
 export interface GetTransactionDataParams {
-    start_date: string;
-    end_date: string;
+    start_date: Date;
+    end_date: Date;
     limit: number;
     offset: number;
 }
+
+export const ConvertTimezoneTransaction = (params: GetTransactionDataParams): GetTransactionDataParams => {
+    return {
+        start_date: UtcToGmt(params.start_date),
+        end_date: UtcToGmt(params.end_date),
+        limit: params.limit,
+        offset: params.offset
+    }
+}
+
 
 export interface SingleNumber {
     count: number

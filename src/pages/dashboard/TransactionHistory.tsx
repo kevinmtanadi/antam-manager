@@ -14,7 +14,11 @@ import { useContext, useEffect, useState } from "react";
 import { ApiContext } from "../../App";
 import TransactionDetail from "../../components/Transaction/TransactionDetail";
 import { GetTransactionDataParams } from "../../services/dto";
-import { ToMoney, convertDateFormat, generateDefaultDate } from "../../services/helper";
+import {
+  ToMoney,
+  convertDateFormat,
+  generateDefaultDate,
+} from "../../services/helper";
 import Paging from "../../components/Paging";
 import ItemCount from "../../components/ItemCount";
 import DateSetter from "../../components/DateSetter";
@@ -132,29 +136,35 @@ const TransactionHistory = () => {
   const curMonth = today.getMonth();
   const curYear = today.getFullYear();
   const [selectedMonth, setSelectedMonth] = useState(curMonth);
-  const {startDate, endDate} = generateDefaultDate(today.getFullYear(), today.getMonth())
+  const { startDate, endDate } = generateDefaultDate(
+    today.getFullYear(),
+    today.getMonth() + 1
+  );
 
   const [params, setParams] = useState<GetTransactionDataParams>({
     limit: 10,
     offset: 0,
-    start_date: startDate.toISOString(),
-    end_date: endDate.toISOString(),
+    start_date: startDate,
+    end_date: endDate,
   });
 
   const [dataCount, setDataCount] = useState(10);
   useEffect(() => {
     const { startDate, endDate } = generateDefaultDate(curYear, selectedMonth);
-    setParams({start_date: startDate.toISOString(), end_date: endDate.toISOString(), limit: dataCount, offset: 0});
-  }, [selectedMonth, dataCount])
+    setParams({
+      start_date: startDate,
+      end_date: endDate,
+      limit: dataCount,
+      offset: 0,
+    });
+  }, [selectedMonth, dataCount]);
 
-  const {
-    data: transactionList,
-  } = api.getTransactionData(params, [params]);
+  const { data: transactionList } = api.getTransactionData(params, [params]);
 
-  const {
-    data: transactionCount
-  } = api.getTransactionCount(params, [params.start_date, params.end_date]);
-
+  const { data: transactionCount } = api.getTransactionCount(params, [
+    params.start_date,
+    params.end_date,
+  ]);
 
   const [chosenTransaction, setChosenTransaction] = useState<any>(null);
 
@@ -163,18 +173,20 @@ const TransactionHistory = () => {
     onOpen();
   };
 
-
   return (
     <>
       <VStack width={"100%"}>
-        <HStack width={"100%"} justifyContent={'space-around'}>
-          <VStack alignItems={'start'}>
+        <HStack width={"100%"} justifyContent={"space-around"}>
+          <VStack alignItems={"start"}>
             <Box>Data per halaman</Box>
-            <ItemCount width={"100px"} onSelectCount={setDataCount}/>
+            <ItemCount width={"100px"} onSelectCount={setDataCount} />
           </VStack>
-          <VStack alignItems={'start'}>
-          <Box>Periode</Box>
-          <DateSetter selectedMonth={selectedMonth} onSelectMonth={setSelectedMonth}/>
+          <VStack alignItems={"start"}>
+            <Box>Periode</Box>
+            <DateSetter
+              selectedMonth={selectedMonth}
+              onSelectMonth={setSelectedMonth}
+            />
           </VStack>
         </HStack>
         {transactionList &&
@@ -239,16 +251,20 @@ const TransactionHistory = () => {
               </Card>
             </HStack>
           ))}
-          <Paging onChangePage={(page) => setParams({ ...params, offset: (page - 1) * params.limit })}
+        <Paging
+          onChangePage={(page) =>
+            setParams({ ...params, offset: (page - 1) * params.limit })
+          }
           limit={params.limit}
           offset={params.offset}
-          totalItem={transactionCount !== null
-            ? (transactionCount[
-              "count" as keyof typeof transactionCount
-            ] as number)
-          : 0
-        }
-          />
+          totalItem={
+            transactionCount !== null
+              ? (transactionCount[
+                  "count" as keyof typeof transactionCount
+                ] as number)
+              : 0
+          }
+        />
       </VStack>
       <TransactionDetail
         onClose={onClose}

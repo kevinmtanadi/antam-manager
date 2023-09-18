@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, CanceledError } from "axios";
 import { useEffect, useState } from "react";
-import { ConvertTimezone, DashboardData, DateParams, GetCartData, GetProductDataParams, GetTransactionDataParams, GraphData, InsertProductData, InsertTransactionData, ProductData, ProductStockData, SingleNumber, TransactionData } from "./dto";
+import { ConvertTimezone, ConvertTimezoneTransaction, DashboardData, DateParams, GetCartData, GetProductDataParams, GetTransactionDataParams, GraphData, InsertProductData, InsertTransactionData, ProductData, ProductStockData, SingleNumber, TransactionData } from "./dto";
 
 interface FetchResponse<T> {
     data: T[];
@@ -123,6 +123,8 @@ const create = (url: string) => {
         const [isLoading, setIsLoading] = useState(true);
         const [status, setStatus] = useState(0)
         
+        params = ConvertTimezoneTransaction(params);
+        
         useEffect(() => {
             Get<TransactionData>("/transaction", true, {params})
             .then(
@@ -151,6 +153,8 @@ const create = (url: string) => {
         const [message, setMessage] = useState("");
         const [isLoading, setIsLoading] = useState(true);
         const [status, setStatus] = useState(0)
+        
+        params = ConvertTimezoneTransaction(params);
         
         useEffect(() => {
             Get<SingleNumber>("/transaction/count", true, {
