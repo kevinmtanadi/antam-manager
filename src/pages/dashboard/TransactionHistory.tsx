@@ -10,11 +10,14 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ApiContext } from "../../App";
 import TransactionDetail from "../../components/Transaction/TransactionDetail";
 import { GetTransactionDataParams } from "../../services/dto";
 import { ToMoney, convertDateFormat, generateDefaultDate } from "../../services/helper";
+import Paging from "../../components/Paging";
+import ItemCount from "../../components/ItemCount";
+import DateSetter from "../../components/DateSetter";
 
 const transactions = [
   {
@@ -126,17 +129,32 @@ const TransactionHistory = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const today = new Date();
+  const curMonth = today.getMonth();
+  const curYear = today.getFullYear();
+  const [selectedMonth, setSelectedMonth] = useState(curMonth);
   const {startDate, endDate} = generateDefaultDate(today.getFullYear(), today.getMonth())
 
-  const [params,] = useState<GetTransactionDataParams>({
+  const [params, setParams] = useState<GetTransactionDataParams>({
     limit: 10,
     offset: 0,
     start_date: startDate.toISOString(),
     end_date: endDate.toISOString(),
   });
+
+  const [dataCount, setDataCount] = useState(10);
+  useEffect(() => {
+    const { startDate, endDate } = generateDefaultDate(curYear, selectedMonth);
+    setParams({start_date: startDate.toISOString(), end_date: endDate.toISOString(), limit: dataCount, offset: 0});
+  }, [selectedMonth, dataCount])
+
   const {
     data: transactionList,
-  } = api.getTransactionData(params);
+  } = api.getTransactionData(params, [params]);
+
+  const {
+    data: transactionCount
+  } = api.getTransactionCount(params, [params.start_date, params.end_date]);
+
 
   const [chosenTransaction, setChosenTransaction] = useState<any>(null);
 
@@ -145,9 +163,20 @@ const TransactionHistory = () => {
     onOpen();
   };
 
+
   return (
     <>
-      <VStack>
+      <VStack width={"100%"}>
+        <HStack width={"100%"} justifyContent={'space-around'}>
+          <VStack alignItems={'start'}>
+            <Box>Data per halaman</Box>
+            <ItemCount width={"100px"} onSelectCount={setDataCount}/>
+          </VStack>
+          <VStack alignItems={'start'}>
+          <Box>Periode</Box>
+          <DateSetter selectedMonth={selectedMonth} onSelectMonth={setSelectedMonth}/>
+          </VStack>
+        </HStack>
         {transactionList &&
           transactionList.map((item, idx) => (
             <HStack
@@ -210,6 +239,16 @@ const TransactionHistory = () => {
               </Card>
             </HStack>
           ))}
+          <Paging onChangePage={(page) => setParams({ ...params, offset: (page - 1) * params.limit })}
+          limit={params.limit}
+          offset={params.offset}
+          totalItem={transactionCount !== null
+            ? (transactionCount[
+              "count" as keyof typeof transactionCount
+            ] as number)
+          : 0
+        }
+          />
       </VStack>
       <TransactionDetail
         onClose={onClose}

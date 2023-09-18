@@ -144,6 +144,40 @@ const create = (url: string) => {
         
         return { data, error, message, status, isLoading }
     }
+
+    const getTransactionCount = (params: GetTransactionDataParams, deps?: any[]) => {
+        const [data, setData] = useState<SingleNumber[] | null>(null)
+        const [error, setError] = useState("");
+        const [message, setMessage] = useState("");
+        const [isLoading, setIsLoading] = useState(true);
+        const [status, setStatus] = useState(0)
+        
+        useEffect(() => {
+            Get<SingleNumber>("/transaction/count", true, {
+                params: {
+                    start_date: params.start_date,
+                    end_date: params.end_date
+                }
+            })
+            .then(
+                (response) => {
+                    const data = response.data
+                    setData(data.data);
+                    setMessage(data.message);
+                    setStatus(data.status);
+                    setIsLoading(false);
+                }
+            )
+            .catch((err) => {
+                if (err instanceof CanceledError) return;
+                setError(err)
+                setIsLoading(false)
+                
+            })
+        }, deps? [...deps]: []);
+        
+        return { data, error, message, status, isLoading }
+    }
     
     const createNewTransaction = (data: InsertTransactionData) => {
         if (data === null || data === undefined) return;
@@ -380,6 +414,7 @@ const create = (url: string) => {
         authenticateUser,
         register,
         getTransactionData,
+        getTransactionCount,
         createNewTransaction,
         getProductData,
         createNewProduct,
