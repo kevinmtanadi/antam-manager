@@ -57,3 +57,16 @@ export const ShortenDate = (dateString: string): string => {
 export const UtcToGmt = (date: Date) => {
   return addHours(date, 7);
 }
+
+export const getCookieValue = (name: string): string | undefined => {
+  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return cookieValue ? cookieValue.pop() : undefined;
+}
+
+export const setCookie = (cookieName: string, cookieValue: string, expirationDays: number) => {
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + expirationDays);
+
+  const cookie = `${encodeURIComponent(cookieName)}=${encodeURIComponent(cookieValue)}; expires=${expirationDate.toUTCString()}; path=/`;
+  document.cookie = cookie;
+}

@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, CanceledError } from "axios";
 import { useEffect, useState } from "react";
 import { ConvertTimezone, ConvertTimezoneTransaction, DashboardData, DateParams, GetCartData, GetProductDataParams, GetTransactionDataParams, GraphData, InsertProductData, InsertTransactionData, ProductData, ProductStockData, SingleNumber, TransactionData } from "./dto";
+import { getCookieValue } from "./helper";
 
 interface FetchResponse<T> {
     data: T[];
@@ -17,7 +18,10 @@ const create = (url: string) => {
 
     const Get = <T>(endpoint: string, needAuthorization: boolean, requestConfig?: AxiosRequestConfig) => {
         const controller = new AbortController();
+        const auth = getCookieValue("_auth");
+        
         const headers = {
+            'Authorization': auth,
             'Content-Type': 'application/json',
         }
         const response = apiWrapper.get<FetchResponse<T>>(
@@ -37,7 +41,10 @@ const create = (url: string) => {
     const Post = <T>(endpoint: string, needAuthorization: boolean, requestConfig?: AxiosRequestConfig, body?: any) => {
 
         const controller = new AbortController();
+        const auth = getCookieValue("_auth");
+        
         const headers = {
+            'Authorization': auth,
             'Content-Type': 'application/json',
         }
         const response = apiWrapper.post<FetchResponse<T>>(
@@ -56,7 +63,10 @@ const create = (url: string) => {
 
     const Put = <T>(endpoint: string, needAuthorization: boolean, requestConfig?: AxiosRequestConfig, body?: any) => {
         const controller = new AbortController();
+        const auth = getCookieValue("_auth");
+        
         const headers = {
+            'Authorization': auth,
             'Content-Type': 'application/json',
         }
         const response = apiWrapper.put<FetchResponse<T>>(
@@ -75,7 +85,10 @@ const create = (url: string) => {
 
     const Delete = <T>(endpoint: string, needAuthorization: boolean, requestConfig?: AxiosRequestConfig) => {
         const controller = new AbortController();
+        const auth = getCookieValue("_auth");
+        
         const headers = {
+            'Authorization': auth,
             'Content-Type': 'application/json'
         }
         const response = apiWrapper.delete<FetchResponse<T>>(
