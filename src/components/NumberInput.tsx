@@ -7,7 +7,9 @@ interface Props {
 }
 
 const NumberInput = ({ value, onChangeValue }: Props) => {
-  const [inputValue, setInputValue] = useState<string>(value.toLocaleString());
+  const [inputValue, setInputValue] = useState<string>(
+    value.toLocaleString("en-US")
+  );
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const rawValue = event.target.value;
@@ -20,7 +22,7 @@ const NumberInput = ({ value, onChangeValue }: Props) => {
   const formatNumberWithCommas = (value: string) => {
     const number = parseInt(value);
     if (!isNaN(number)) {
-      return number.toLocaleString(); // Format with commas
+      return number.toLocaleString("en-US"); // Format with commas
     } else {
       return value; // If the input is not a valid number, return as is
     }
