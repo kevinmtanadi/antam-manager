@@ -1,12 +1,10 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 
-import { Box, Td, Tr, VStack, useToast } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
+import { Box, Td, Tr, VStack } from "@chakra-ui/react";
 import { GetCartData } from "../../services/dto";
 import { ToMoney } from "../../services/helper";
 import NumberInput from "../NumberInput";
-import { CloseIcon } from "@chakra-ui/icons";
-import { ApiContext } from "../../App";
-import { CanceledError } from "axios";
 
 interface Props {
   item: GetCartData;
