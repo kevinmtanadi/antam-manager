@@ -12,6 +12,9 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { ApiContext } from "../../App";
+import DateSetter from "../../components/DateSetter";
+import ItemCount from "../../components/ItemCount";
+import Paging from "../../components/Paging";
 import TransactionDetail from "../../components/Transaction/TransactionDetail";
 import { GetTransactionDataParams } from "../../services/dto";
 import {
@@ -19,114 +22,6 @@ import {
   convertDateFormat,
   generateDefaultDate,
 } from "../../services/helper";
-import Paging from "../../components/Paging";
-import ItemCount from "../../components/ItemCount";
-import DateSetter from "../../components/DateSetter";
-
-const transactions = [
-  {
-    transaction_id: "48",
-    created_at: "2023-09-01 18:21:24",
-    total_sale: null,
-    total_buy: 1000000,
-    purchase: [
-      {
-        transaction_purchase_id: "9",
-        product_id: "AT1",
-        product_name: "Antam 1gr",
-        buy_price: 1000000,
-      },
-      {
-        transaction_purchase_id: "9",
-        product_id: "AT1",
-        product_name: "Antam 1gr",
-        buy_price: 1000000,
-      },
-      {
-        transaction_purchase_id: "9",
-        product_id: "AT1",
-        product_name: "Antam 1gr",
-        buy_price: 1000000,
-      },
-    ],
-    sales: [],
-  },
-  {
-    transaction_id: "49",
-    created_at: "2023-09-01 18:21:28",
-    total_sale: null,
-    total_buy: 1000000,
-    purchase: [
-      {
-        transaction_purchase_id: "10",
-        product_id: "UBS1",
-        product_name: "UBS 1gr",
-        buy_price: 1000000,
-      },
-    ],
-    sales: [],
-  },
-  {
-    transaction_id: "50",
-    created_at: "2023-09-01 18:26:15",
-    total_sale: null,
-    total_buy: null,
-    purchase: [],
-    sales: [],
-  },
-  {
-    transaction_id: "51",
-    created_at: "2023-09-01 18:26:23",
-    total_sale: null,
-    total_buy: null,
-    purchase: [],
-    sales: [],
-  },
-  {
-    transaction_id: "52",
-    created_at: "2023-09-01 18:26:24",
-    total_sale: null,
-    total_buy: null,
-    purchase: [],
-    sales: [],
-  },
-  {
-    transaction_id: "57",
-    created_at: "2023-09-01 18:27:53",
-    total_sale: 1050000,
-    total_buy: 2000000,
-    purchase: [
-      {
-        transaction_purchase_id: "9",
-        product_id: "AT1",
-        product_name: "Antam 1gr",
-        buy_price: 1000000,
-      },
-      {
-        transaction_purchase_id: "9",
-        product_id: "AT1",
-        product_name: "Antam 1gr",
-        buy_price: 1000000,
-      },
-    ],
-    sales: [
-      {
-        transaction_sale_id: "3",
-        product_id: "UBS1",
-        product_name: "UBS 1gr",
-        buy_price: 1000000,
-        sale_price: 1050000,
-      },
-      {
-        transaction_sale_id: "4",
-        product_id: "AT1",
-        product_name: "Antam 1gr",
-        buy_price: 1000000,
-        sale_price: 1050000,
-      },
-    ],
-  },
-];
 
 const TransactionHistory = () => {
   const api = useContext(ApiContext);
@@ -150,7 +45,10 @@ const TransactionHistory = () => {
 
   const [dataCount, setDataCount] = useState(10);
   useEffect(() => {
-    const { startDate, endDate } = generateDefaultDate(curYear, selectedMonth);
+    const { startDate, endDate } = generateDefaultDate(
+      curYear,
+      selectedMonth + 1
+    );
     setParams({
       start_date: startDate,
       end_date: endDate,
@@ -176,7 +74,7 @@ const TransactionHistory = () => {
   return (
     <>
       <VStack width={"100%"}>
-        <HStack width={"100%"} justifyContent={"space-around"}>
+        <HStack marginBottom={5} width={"100%"} justifyContent={"space-around"}>
           <VStack alignItems={"start"}>
             <Box>Data per halaman</Box>
             <ItemCount width={"100px"} onSelectCount={setDataCount} />
@@ -199,7 +97,9 @@ const TransactionHistory = () => {
             >
               <Card
                 height={"270px"}
-                marginBottom={idx != transactions.length - 1 ? "10px" : "0px"}
+                marginBottom={
+                  idx != transactionList.length - 1 ? "10px" : "0px"
+                }
                 width={"100%"}
                 minWidth={"300px"}
               >
@@ -251,19 +151,14 @@ const TransactionHistory = () => {
               </Card>
             </HStack>
           ))}
+
         <Paging
           onChangePage={(page) =>
             setParams({ ...params, offset: (page - 1) * params.limit })
           }
           limit={params.limit}
           offset={params.offset}
-          totalItem={
-            transactionCount !== null
-              ? (transactionCount[
-                  "count" as keyof typeof transactionCount
-                ] as number)
-              : 0
-          }
+          totalItem={transactionCount !== null ? transactionCount[0].count : 0}
         />
       </VStack>
       <TransactionDetail

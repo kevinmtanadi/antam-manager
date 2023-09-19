@@ -32,8 +32,8 @@ import { ToMoney } from "../../services/helper";
 const Product = () => {
   const api = useContext(ApiContext);
 
-  const [params,] = useState<GetProductDataParams>({
-    limit: 10,
+  const [params] = useState<GetProductDataParams>({
+    limit: 999,
     offset: 0,
   });
 
@@ -41,9 +41,7 @@ const Product = () => {
 
   const toast = useToast();
 
-  const {
-    data: productList,
-  } = api.getProductData(params, [params, call]);
+  const { data: productList } = api.getProductData(params, [params, call]);
 
   useEffect(() => {
     setShownProduct(productList);
@@ -179,7 +177,11 @@ const Product = () => {
             </InputGroup>
           </form>
         </Box>
-        <Button className="display-text-1" onClick={() => onCreateOpen()} colorScheme="whatsapp">
+        <Button
+          className="display-text-1"
+          onClick={() => onCreateOpen()}
+          colorScheme="whatsapp"
+        >
           Tambah Produk
         </Button>
       </HStack>

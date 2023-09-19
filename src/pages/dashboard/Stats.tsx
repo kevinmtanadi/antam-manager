@@ -145,7 +145,7 @@ const Stats = () => {
                     </StatNumber>
                     <StatHelpText className="display-text-1" marginBottom={0}>
                       {dashboardData &&
-                        "Terjual" + dashboardData[0].amount_sold}
+                        "Terjual " + dashboardData[0].amount_sold}
                     </StatHelpText>
                   </HStack>
                 </Stat>

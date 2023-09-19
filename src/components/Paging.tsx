@@ -27,7 +27,7 @@ const Paging = ({ onChangePage, limit, offset, totalItem }: Props) => {
 
   const pages = Array.from({ length: totalPage }, (_, index) => index + 1);
 
-  const [,setInputValue] = useState("");
+  const [, setInputValue] = useState("");
   const handleLimit = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= Math.ceil(pages.length / 10)) {
       setInputValue(e.target.value);
@@ -42,7 +42,10 @@ const Paging = ({ onChangePage, limit, offset, totalItem }: Props) => {
     }
   };
 
-  if (totalItem === 0) return <></>;
+  console.log(limit);
+  console.log(totalItem);
+
+  if (totalItem === 0 || limit > totalItem) return <></>;
   return (
     <>
       <HStack

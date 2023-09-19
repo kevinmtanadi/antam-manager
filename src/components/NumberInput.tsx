@@ -1,5 +1,5 @@
 import { Input } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 
 interface Props {
   value: number;
@@ -7,45 +7,31 @@ interface Props {
 }
 
 const NumberInput = ({ value, onChangeValue }: Props) => {
-  const [, setNumericValue] = useState<number | undefined>(value);
-  const [formattedValue, setFormattedValue] = useState(value.toLocaleString());
+  const [inputValue, setInputValue] = useState<string>(value.toLocaleString());
 
-  const ref = useRef<HTMLInputElement>(null);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const rawValue = event.target.value;
+    // Remove commas from the input value
+    const sanitizedValue = rawValue.replace(/,/g, "");
+    setInputValue(formatNumberWithCommas(sanitizedValue));
+    onChangeValue(parseInt(sanitizedValue));
+  };
 
-  const updateValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-
-    // Check for empty input
-    if (value === "") {
-      setFormattedValue("");
-      setNumericValue(undefined);
-      return;
-    }
-
-    // Remove commas and convert to a numeric value
-    const numeric = parseFloat(value.replace(/,/g, ""));
-
-    // Check if the numeric value is valid
-    if (!isNaN(numeric)) {
-      // Format the value with commas
-      const formatted = numeric.toLocaleString();
-      setFormattedValue(formatted);
-      setNumericValue(numeric);
+  const formatNumberWithCommas = (value: string) => {
+    const number = parseInt(value);
+    if (!isNaN(number)) {
+      return number.toLocaleString(); // Format with commas
     } else {
-      // Handle invalid input (e.g., non-numeric)
-      setFormattedValue(value);
-      setNumericValue(undefined);
+      return value; // If the input is not a valid number, return as is
     }
-
-    onChangeValue(numeric);
   };
 
   return (
     <Input
-      type="number"
-      onChange={updateValue}
-      ref={ref}
-      value={formattedValue}
+      type="text"
+      value={inputValue}
+      onChange={handleInputChange}
+      placeholder="Enter a number"
     />
   );
 };

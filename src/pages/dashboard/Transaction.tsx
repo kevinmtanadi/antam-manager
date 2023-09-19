@@ -13,7 +13,7 @@ import {
   Th,
   Tr,
   useDisclosure,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { CancelledError } from "react-query";
@@ -27,6 +27,7 @@ import {
   TransactionPurchaseData,
   TransactionSaleData,
 } from "../../services/dto";
+import { CanceledError } from "axios";
 
 export interface PurchaseItem {
   product_id: string;
@@ -77,12 +78,38 @@ const Transaction = () => {
     }
   };
 
-
   const addSaleItem = (product_stock_id: string) => {
     api.insertCartData(product_stock_id)?.then((res) => {
       console.log(res);
       setCall(call + 1);
     });
+  };
+
+  const onRemoveCart = (product_stock_id: string) => {
+    api
+      .deleteCartData(product_stock_id)
+      ?.then(() => {
+        setCall(call + 1);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        toast({
+          title: "Gagal menghapus produk dari keranjang",
+          status: "error",
+          description: err,
+          duration: 5000,
+          isClosable: true,
+        });
+      });
+  };
+
+  const onRemovePurchase = (product_stock_id: string) => {
+    if (purchaseItems) {
+      const updatedItems = purchaseItems.filter(
+        (item) => item.product_stock_id !== product_stock_id
+      );
+      setPurchaseItems(updatedItems);
+    }
   };
 
   const finalizeTransaction = () => {
@@ -183,26 +210,37 @@ const Transaction = () => {
                       <Th>Nama Produk</Th>
                       <Th>Harga Beli</Th>
                       <Th>Harga Jual</Th>
+                      <Th></Th>
                     </Tr>
                     {salesItems?.map((item, idx) => (
-                      <SaleData key={idx} item={item} showFull={true}/>
+                      <SaleData
+                        key={idx}
+                        item={item}
+                        showFull={true}
+                        onRemoveCart={onRemoveCart}
+                      />
                     ))}
                   </Show>
                   <Show below="md">
                     {salesItems?.map((item, idx) => (
-                      <SaleData key={idx} item={item} showFull={false}/>
+                      <SaleData
+                        key={idx}
+                        item={item}
+                        showFull={false}
+                        onRemoveCart={onRemoveCart}
+                      />
                     ))}
                   </Show>
-                    <Tr>
-                      <Td
-                        height={"40px"}
-                        className="cursor-pointer"
-                        onClick={() => onAddSaleOpen()}
-                        colSpan={5}
-                      >
-                        <Center fontSize="1.25rem">+</Center>
-                      </Td>
-                    </Tr>
+                  <Tr>
+                    <Td
+                      height={"40px"}
+                      className="cursor-pointer"
+                      onClick={() => onAddSaleOpen()}
+                      colSpan={6}
+                    >
+                      <Center fontSize="1.25rem">+</Center>
+                    </Td>
+                  </Tr>
                 </Tbody>
               </Table>
             </TableContainer>
@@ -226,14 +264,25 @@ const Transaction = () => {
                       <Th>Kode Produk</Th>
                       <Th>Nama Produk</Th>
                       <Th>Harga Beli</Th>
+                      <Th></Th>
                     </Tr>
                     {purchaseItems?.map((item, idx) => (
-                      <PurchaseData item={item} key={idx} showFull={true} />
+                      <PurchaseData
+                        item={item}
+                        key={idx}
+                        showFull={true}
+                        onRemove={onRemovePurchase}
+                      />
                     ))}
                   </Show>
                   <Show below="md">
                     {purchaseItems?.map((item, idx) => (
-                      <PurchaseData item={item} key={idx} showFull={false} />
+                      <PurchaseData
+                        item={item}
+                        key={idx}
+                        showFull={false}
+                        onRemove={onRemovePurchase}
+                      />
                     ))}
                   </Show>
                   <Tr>
@@ -241,7 +290,7 @@ const Transaction = () => {
                       height={"40px"}
                       className="cursor-pointer"
                       onClick={() => onAddPurchaseOpen()}
-                      colSpan={4}
+                      colSpan={5}
                     >
                       <Center fontSize="1.25rem">+</Center>
                     </Td>
@@ -271,6 +320,6 @@ const Transaction = () => {
       />
     </>
   );
-}
+};
 
 export default Transaction;
