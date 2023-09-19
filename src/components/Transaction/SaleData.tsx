@@ -54,7 +54,7 @@ const SaleData = ({ item, showFull, onRemoveCart }: Props) => {
       </Td>
       <Td>
         <VStack>
-          <Box>{item.buy_price}</Box>
+          <Box>{ToMoney(item.buy_price)}</Box>
           <Box>
             <NumberInput
               value={price}

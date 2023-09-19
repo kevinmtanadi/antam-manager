@@ -46,9 +46,7 @@ const PurchaseData = ({ item, showFull, onRemove }: Props) => {
       <Td>
         <VStack>
           <Box fontWeight={"semibold"}>{item.product_stock_id}</Box>
-          <Box>
-            {item.product_id} - {item.product_name}
-          </Box>
+          <Box>{item.product_name}</Box>
         </VStack>
       </Td>
       <Td>
