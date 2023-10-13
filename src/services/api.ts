@@ -448,11 +448,32 @@ const create = (url: string) => {
         return response;
     }
     
-    const checkUserAuth = () => {
-        const response = Post("/auth", true, {});
-        
-        return response;
-    }
+    const checkUserAuth = async (tries: number): Promise<boolean> => {
+        const auth = getCookieValue("_auth");
+      
+        if (auth === "") {
+          await new Promise((resolve) => setTimeout(resolve, 500)); // Wait for 500ms
+      
+          if (tries < 5) {
+            return checkUserAuth(tries + 1); // Retry after 500ms delay
+          }
+      
+          return false;
+        }
+      
+        try {
+          await Post("/auth", true, {});
+          return true;
+        } catch (err) {
+          if (err instanceof CanceledError) {
+            return false;
+          }
+          if (tries < 5) {
+            return checkUserAuth(tries + 1); // Retry after 500ms delay
+          }
+          return false;
+        }
+    };
 
     return {
         Get,

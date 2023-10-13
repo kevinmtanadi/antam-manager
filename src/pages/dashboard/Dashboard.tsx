@@ -16,7 +16,6 @@ import Stats from "./Stats";
 import Transaction from "./Transaction";
 import TransactionHistory from "./TransactionHistory";
 import { ApiContext } from "../../App";
-import { CanceledError } from "axios";
 import { useSignOut } from "react-auth-kit";
 
 const sidebarItems: SidebarNav[] = [
@@ -63,11 +62,11 @@ const Dashboard = () => {
   const logout = useSignOut();
 
   useEffect(() => {
-    api.checkUserAuth().catch((err) => {
-      if (err instanceof CanceledError) return;
+    const isAuth = api.checkUserAuth(0);
+    if (!isAuth) {
       logout();
-    });
-  }, []);
+    }
+  });
 
   return (
     <>
