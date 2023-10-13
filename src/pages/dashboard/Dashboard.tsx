@@ -62,10 +62,11 @@ const Dashboard = () => {
   const logout = useSignOut();
 
   useEffect(() => {
-    const isAuth = api.checkUserAuth(0);
-    if (!isAuth) {
-      logout();
-    }
+    api.checkUserAuth(0).then((isAuth) => {
+      if (!isAuth) {
+        logout();
+      }
+    });
   });
 
   return (
