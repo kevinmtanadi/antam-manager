@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem, Show, useDisclosure } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   AiOutlineCreditCard,
   AiOutlineDashboard,
@@ -15,6 +15,9 @@ import Product from "./Product";
 import Stats from "./Stats";
 import Transaction from "./Transaction";
 import TransactionHistory from "./TransactionHistory";
+import { ApiContext } from "../../App";
+import { CanceledError } from "axios";
+import { useSignOut } from "react-auth-kit";
 
 const sidebarItems: SidebarNav[] = [
   {
@@ -55,6 +58,16 @@ const Dashboard = () => {
   const showPage = sidebarItems.find((item) => item.pageName === selectedPage);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const api = useContext(ApiContext);
+  const logout = useSignOut();
+
+  useEffect(() => {
+    api.checkUserAuth().catch((err) => {
+      if (err instanceof CanceledError) return;
+      logout();
+    });
+  }, []);
 
   return (
     <>

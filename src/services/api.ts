@@ -447,6 +447,12 @@ const create = (url: string) => {
         
         return response;
     }
+    
+    const checkUserAuth = () => {
+        const response = Post("/auth", true, {});
+        
+        return response;
+    }
 
     return {
         Get,
@@ -470,6 +476,7 @@ const create = (url: string) => {
         getStockValue,
         editProduct,
         deleteProduct,
+        checkUserAuth,
     }
 }
 
