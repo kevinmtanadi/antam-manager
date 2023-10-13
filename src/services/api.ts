@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, CanceledError } from "axios";
 import { useEffect, useState } from "react";
-import { ConvertTimezone, ConvertTimezoneTransaction, DashboardData, DateParams, GetCartData, GetProductDataParams, GetTransactionDataParams, GraphData, InsertProductData, InsertTransactionData, ProductData, ProductStockData, SingleNumber, TransactionData } from "./dto";
+import { ConvertTimezone, ConvertTimezoneTransaction, DashboardData, DateParams, EditProductData, GetCartData, GetProductDataParams, GetTransactionDataParams, GraphData, InsertProductData, InsertTransactionData, ProductData, ProductStockData, SingleNumber, TransactionData } from "./dto";
 import { getCookieValue } from "./helper";
 
 interface FetchResponse<T> {
@@ -62,6 +62,7 @@ const create = (url: string) => {
     }
 
     const Put = <T>(endpoint: string, needAuthorization: boolean, requestConfig?: AxiosRequestConfig, body?: any) => {
+
         const controller = new AbortController();
         const auth = getCookieValue("_auth");
         
@@ -426,6 +427,26 @@ const create = (url: string) => {
         
         return { data, error, message, status, isLoading }
     }
+    
+    const editProduct = (product: EditProductData) => {
+        if (product === null || product === undefined) return;
+        
+        const response = Put("/product", true, {}, product);
+        return response;
+    }
+    
+    const deleteProduct = (productId: string) => {
+        if (productId === "" || productId === null || productId === undefined) return;
+        
+        const response = Delete("/product", true, 
+        {
+            params: {
+                product_id: productId,
+            }
+        });
+        
+        return response;
+    }
 
     return {
         Get,
@@ -447,6 +468,8 @@ const create = (url: string) => {
         getTransactionGraph,
         getDashboardData,
         getStockValue,
+        editProduct,
+        deleteProduct,
     }
 }
 

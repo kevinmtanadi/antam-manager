@@ -43,8 +43,10 @@ const Stats = () => {
     setDateParams({ start_date: startDate, end_date: endDate } as DateParams);
   }, [selectedMonth]);
 
-  const { data: graphData } = api.getTransactionGraph(dateParams);
-  const { data: dashboardData } = api.getDashboardData(dateParams);
+  const { data: graphData } = api.getTransactionGraph(dateParams, [dateParams]);
+  const { data: dashboardData } = api.getDashboardData(dateParams, [
+    dateParams,
+  ]);
   const { data: stockValue } = api.getStockValue();
 
   return (
@@ -78,13 +80,17 @@ const Stats = () => {
                     <StatNumber className="display-text-2">
                       {dashboardData && ToMoney(dashboardData[0].profit)}
                     </StatNumber>
-                    <StatArrow
-                      type={
-                        dashboardData && dashboardData[0].profit > 0
-                          ? "increase"
-                          : "decrease"
-                      }
-                    />
+                    {dashboardData && dashboardData[0].profit != 0 ? (
+                      <StatArrow
+                        type={
+                          dashboardData && dashboardData[0].profit > 0
+                            ? "increase"
+                            : "decrease"
+                        }
+                      />
+                    ) : (
+                      ""
+                    )}
                   </HStack>
                 </Stat>
               </CardBody>
@@ -144,8 +150,9 @@ const Stats = () => {
                       {dashboardData ? dashboardData[0].top_sold_product : "-"}
                     </StatNumber>
                     <StatHelpText className="display-text-1" marginBottom={0}>
-                      {dashboardData &&
-                        "Terjual " + dashboardData[0].amount_sold}
+                      {dashboardData && dashboardData[0].amount_sold > 0
+                        ? "Terjual " + dashboardData[0].amount_sold
+                        : "-"}
                     </StatHelpText>
                   </HStack>
                 </Stat>

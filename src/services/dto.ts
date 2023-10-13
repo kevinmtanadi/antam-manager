@@ -66,6 +66,7 @@ export interface ProductData {
     weight: number;
     stock: number;
     avg_price: number;
+    total_stock: number;
     items: ProductStockData[]
 }
 
@@ -81,6 +82,13 @@ export interface ProductStockData {
 
 export interface InsertProductData {
     product_id: string;
+    product_name: string;
+    weight: number;
+}
+
+export interface EditProductData {
+    product_id: string;
+    new_product_id: string;
     product_name: string;
     weight: number;
 }

@@ -20,12 +20,11 @@ const CreateAccount = () => {
       
             switch (status) {
               case 200:
-                const token = message.split(":")[1];
-                signIn({
-                  token: token,
-                  expiresIn: 60 * 60 * 24 * 7,
-                  tokenType: "Bearer",
-                  authState: {username: username},
+                toast({
+                  title: "Berhasil membuat akun baru",
+                  status: "success",
+                  duration: 6000,
+                  isClosable: true,
                 })
                 break;
             case 500:

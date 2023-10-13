@@ -7,6 +7,7 @@ import {
   Grid,
   GridItem,
   HStack,
+  Icon,
   Input,
   InputGroup,
   InputLeftElement,
@@ -22,12 +23,17 @@ import { ApiContext } from "../../App";
 import AddProductModal from "../../components/Product/AddProductModal";
 import ProductDetail from "../../components/Product/ProductDetail";
 import {
+  EditProductData,
   GetProductDataParams,
   InsertProductData,
   ProductData,
   ProductStockData,
 } from "../../services/dto";
 import { ToMoney } from "../../services/helper";
+import { BiPencil } from "react-icons/bi"
+import { BsFillTrashFill } from "react-icons/bs"
+import EditProductModal from "../../components/Product/EditProductModal";
+import DeleteProductModal from "../../components/Product/DeleteProductModal";
 
 const Product = () => {
   const api = useContext(ApiContext);
@@ -79,6 +85,18 @@ const Product = () => {
     onOpen: onCreateOpen,
     onClose: onCreateClose,
   } = useDisclosure();
+  
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure();
+  
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
 
   const [chosenProduct, setChosenProduct] = useState<ProductData | null>(null);
   const resetProductDetail = () => {
@@ -93,6 +111,16 @@ const Product = () => {
     setChosenProduct(item);
     onOpen();
   };
+  
+  const openEditModal = (item:ProductData) => {
+    setChosenProduct(item);
+    onEditOpen();
+  }
+  
+  const openDeleteModal = (item:ProductData) => {
+    setChosenProduct(item);
+    onDeleteOpen();
+  }
 
   const onAddCart = (prod: ProductStockData) => {
     api
@@ -153,6 +181,52 @@ const Product = () => {
         });
       });
   };
+  
+  const onEditProduct = (product: EditProductData) => {
+    api
+      .editProduct(product)
+      ?.then(() => {
+        toast({
+          title: "Berhasil mengedit produk",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        setCall(call + 1);
+      }).catch((err) => {
+        if (err instanceof CanceledError) return;
+        toast({
+          title: "Gagal mengedit produk",
+          status: "error",
+          description: err,
+          duration: 5000,
+          isClosable: true,
+        });
+      })
+  }
+  
+  const onDeleteProduct = (productId: string) => {
+    api
+      .deleteProduct(productId)
+      ?.then(() => {
+        toast({
+          title: "Berhasil menghapus produk",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        setCall(call + 1);
+      }).catch((err) => {
+        if (err instanceof CanceledError) return;
+        toast({
+          title: "Gagal menghapus produk",
+          status: "error",
+          description: err,
+          duration: 5000,
+          isClosable: true,
+        });
+      })
+  }
 
   useEffect(() => {
     setRef();
@@ -199,15 +273,21 @@ const Product = () => {
             <GridItem key={item.product_id}>
               <Card>
                 <CardBody>
-                  <HStack>
-                    <Box
-                      color={"blue.500"}
-                      fontWeight={"semibold"}
-                      fontSize={"1rem"}
-                    >
-                      {item.product_id}
-                    </Box>
-                    <Box>{item.product_name}</Box>
+                  <HStack justifyContent={'space-between'}>
+                    <HStack>
+                      <Box
+                        color={"blue.500"}
+                        fontWeight={"semibold"}
+                        fontSize={"1rem"}
+                      >
+                        {item.product_id}
+                      </Box>
+                      <Box>{item.product_name}</Box>
+                    </HStack>
+                    <HStack spacing={4}>
+                      <Icon as={BiPencil} color={"blue.400"} onClick={() => openEditModal(item)} className="cursor-pointer"/>
+                      <Icon as={BsFillTrashFill} color={"red.400"} onClick={() => openDeleteModal(item)} className="cursor-pointer"/>
+                    </HStack>
                   </HStack>
                   <Divider marginY={3} />
                   <SimpleGrid columns={2}>
@@ -227,6 +307,12 @@ const Product = () => {
                       <Box>Berat</Box>
                       <Box fontWeight={"semibold"}>
                         {item.weight ? item.weight + " g" : "-"}
+                      </Box>
+                    </VStack>
+                    <VStack spacing={0} alignItems={"start"}>
+                      <Box>Total Stok</Box>
+                      <Box fontWeight={'semibold'}>
+                        {item.total_stock ? ToMoney(item.total_stock) : "-"}
                       </Box>
                     </VStack>
                   </SimpleGrid>
@@ -258,6 +344,18 @@ const Product = () => {
         isOpen={isCreateOpen}
         onClose={onCreateClose}
       />
+      <EditProductModal
+        product={chosenProduct}
+        isOpen={isEditOpen}
+        onSubmit={(product) => onEditProduct(product)}
+        onClose={onEditClose}
+      />
+      <DeleteProductModal
+        isOpen={isDeleteOpen}
+        onClose={onDeleteClose}
+        onSubmit={(productId) => onDeleteProduct(productId)}
+        productId={chosenProduct ? chosenProduct.product_id : ""}
+        />
     </>
   );
 };
