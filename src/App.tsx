@@ -15,7 +15,9 @@ function App() {
 
   return (
     <>
-      <ApiContext.Provider value={api.create("http://localhost:8080")}>
+      <ApiContext.Provider
+        value={api.create("https://go-antam-manager-production.up.railway.app")}
+      >
         {auth() ? <Dashboard /> : <Login />}
         {/* <Dashboard /> */}
       </ApiContext.Provider>
