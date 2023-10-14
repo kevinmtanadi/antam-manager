@@ -30,6 +30,7 @@ const PurchaseData = ({ item, showFull, onRemove }: Props) => {
             onChangeValue={(value) => onPriceChange(value)}
           />
         </Td>
+
         <Td>
           <CloseIcon
             fontSize={"0.8rem"}

@@ -1,6 +1,8 @@
 import {
+  Box,
   Button,
   HStack,
+  Icon,
   Input,
   Modal,
   ModalBody,
@@ -14,6 +16,11 @@ import {
 import { useContext, useEffect, useRef, useState } from "react";
 import { ApiContext } from "../../App";
 import NumberInput from "../NumberInput";
+import DatePicker from "react-datepicker";
+import { registerLocale } from "react-datepicker";
+import { AiOutlineCalendar } from "react-icons/ai";
+import id from "date-fns/locale/id";
+registerLocale("id", id);
 
 interface Props {
   isOpen: boolean;
@@ -24,9 +31,10 @@ interface Props {
     product_name: string,
     buy_price: number
   ) => void;
+  needDate?: boolean;
 }
 
-const AddPurchase = ({ isOpen, onClose, onSubmit }: Props) => {
+const AddPurchase = ({ isOpen, onClose, onSubmit, needDate }: Props) => {
   const api = useContext(ApiContext);
 
   const { data } = api.getProductOption();
@@ -34,6 +42,8 @@ const AddPurchase = ({ isOpen, onClose, onSubmit }: Props) => {
   const chosen_product_ref = useRef<HTMLSelectElement>(null);
   const no_serial_ref = useRef<HTMLInputElement>(null);
   const [price, setPrice] = useState(0);
+
+  const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
     setPrice(0);
@@ -87,7 +97,7 @@ const AddPurchase = ({ isOpen, onClose, onSubmit }: Props) => {
             <Select ref={chosen_product_ref}>
               {data?.map((item, idx) => (
                 <option value={item.product_id} key={idx}>
-                  {item.product_name}
+                  {item.product_id} - {item.product_name}
                 </option>
               ))}
             </Select>
@@ -102,6 +112,27 @@ const AddPurchase = ({ isOpen, onClose, onSubmit }: Props) => {
               value={price}
               onChangeValue={(value) => onPriceChange(value)}
             />
+            {needDate && (
+              <VStack alignItems={"start"} width={"100%"}>
+                <Box>Tanggal Pembelian</Box>
+                <HStack
+                  border={"1px solid"}
+                  borderColor={"gray.200"}
+                  borderRadius={"5px"}
+                  padding={"6px"}
+                  width={"100%"}
+                >
+                  <Icon fontSize={"1.25rem"} as={AiOutlineCalendar} />
+                  <DatePicker
+                    className="font-size-1"
+                    selected={startDate}
+                    onChange={(date: Date) => setStartDate(date)}
+                    locale={"id"}
+                    dateFormat={"dd/MM/yyyy"}
+                  />
+                </HStack>
+              </VStack>
+            )}
           </VStack>
 
           <HStack justifyContent={"end"} marginTop={5} marginBottom={4}>

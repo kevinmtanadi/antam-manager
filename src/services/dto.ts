@@ -53,6 +53,7 @@ export interface TransactionSaleData {
 export interface InsertTransactionData {
     purchase: TransactionPurchaseData[];
     sales: TransactionSaleData[];
+    transaction_date: Date;
 }
 
 export interface GetProductDataParams {

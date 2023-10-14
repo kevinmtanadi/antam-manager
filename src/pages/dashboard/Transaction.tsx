@@ -1,17 +1,22 @@
 import {
+  Box,
   Button,
   Card,
   CardBody,
   CardHeader,
   Center,
+  Grid,
+  GridItem,
+  HStack,
+  Icon,
   Show,
-  SimpleGrid,
   Table,
   TableContainer,
   Tbody,
   Td,
   Th,
   Tr,
+  VStack,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -28,6 +33,14 @@ import {
   TransactionSaleData,
 } from "../../services/dto";
 import { CanceledError } from "axios";
+import DatePicker from "react-datepicker";
+import { registerLocale } from "react-datepicker";
+import { AiOutlineCalendar } from "react-icons/ai";
+import id from "date-fns/locale/id";
+registerLocale("id", id);
+import { UtcToGmt } from "../../services/helper";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 export interface PurchaseItem {
   product_id: string;
@@ -43,6 +56,8 @@ const Transaction = () => {
 
   const { data: salesItems } = api.getCartData([call]);
   const toast = useToast();
+
+  const [transactionDate, setTransactionDate] = useState(new Date());
 
   const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[] | null>(
     null
@@ -147,6 +162,7 @@ const Transaction = () => {
     const transactionData: InsertTransactionData = {
       purchase: purchase,
       sales: sales,
+      transaction_date: UtcToGmt(transactionDate),
     };
 
     api
@@ -190,117 +206,146 @@ const Transaction = () => {
 
   return (
     <>
-      <SimpleGrid columns={{ base: 1, xxl: 2 }} spacing={5}>
-        <Card>
-          <CardHeader
-            textAlign={"center"}
-            fontWeight={"semibold"}
-            fontSize={"1.1rem"}
-          >
-            JUAL
-          </CardHeader>
-          <CardBody>
-            <TableContainer>
-              <Table size={"sm"}>
-                <Tbody>
-                  <Show above="md">
+      <Grid templateColumns={"repeat(2, 1fr)"} gap={5}>
+        <GridItem colSpan={2}>
+          <Card width={"300px"}>
+            <CardBody>
+              <VStack alignItems={"start"} width={"100%"}>
+                <Box>Tanggal Transaksi</Box>
+                <HStack
+                  border={"1px solid"}
+                  borderColor={"gray.200"}
+                  borderRadius={"5px"}
+                  padding={"6px"}
+                  width={"100%"}
+                >
+                  <Icon fontSize={"1.25rem"} as={AiOutlineCalendar} />
+                  <DatePicker
+                    className="font-size-1"
+                    selected={transactionDate}
+                    onChange={(date: Date) => setTransactionDate(date)}
+                    locale={"id"}
+                    dateFormat={"dd/MM/yyyy"}
+                  />
+                </HStack>
+              </VStack>
+            </CardBody>
+          </Card>
+        </GridItem>
+        <GridItem colSpan={{ base: 2, xxl: 1 }}>
+          <Card>
+            <CardHeader
+              textAlign={"center"}
+              fontWeight={"semibold"}
+              fontSize={"1.1rem"}
+            >
+              JUAL
+            </CardHeader>
+            <CardBody>
+              <TableContainer>
+                <Table size={"sm"}>
+                  <Tbody>
+                    <Show above="md">
+                      <Tr>
+                        <Th>No. Serial</Th>
+                        <Th>Kode Produk</Th>
+                        <Th>Nama Produk</Th>
+                        <Th>Harga Beli</Th>
+                        <Th>Harga Jual</Th>
+                        <Th></Th>
+                      </Tr>
+                      {salesItems?.map((item, idx) => (
+                        <SaleData
+                          key={idx}
+                          item={item}
+                          showFull={true}
+                          onRemoveCart={onRemoveCart}
+                        />
+                      ))}
+                    </Show>
+                    <Show below="md">
+                      {salesItems?.map((item, idx) => (
+                        <SaleData
+                          key={idx}
+                          item={item}
+                          showFull={false}
+                          onRemoveCart={onRemoveCart}
+                        />
+                      ))}
+                    </Show>
                     <Tr>
-                      <Th>No. Serial</Th>
-                      <Th>Kode Produk</Th>
-                      <Th>Nama Produk</Th>
-                      <Th>Harga Beli</Th>
-                      <Th>Harga Jual</Th>
-                      <Th></Th>
+                      <Td
+                        height={"40px"}
+                        className="cursor-pointer"
+                        onClick={() => onAddSaleOpen()}
+                        colSpan={6}
+                      >
+                        <Center fontSize="1.25rem">+</Center>
+                      </Td>
                     </Tr>
-                    {salesItems?.map((item, idx) => (
-                      <SaleData
-                        key={idx}
-                        item={item}
-                        showFull={true}
-                        onRemoveCart={onRemoveCart}
-                      />
-                    ))}
-                  </Show>
-                  <Show below="md">
-                    {salesItems?.map((item, idx) => (
-                      <SaleData
-                        key={idx}
-                        item={item}
-                        showFull={false}
-                        onRemoveCart={onRemoveCart}
-                      />
-                    ))}
-                  </Show>
-                  <Tr>
-                    <Td
-                      height={"40px"}
-                      className="cursor-pointer"
-                      onClick={() => onAddSaleOpen()}
-                      colSpan={6}
-                    >
-                      <Center fontSize="1.25rem">+</Center>
-                    </Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </CardBody>
-        </Card>
-        <Card>
-          <CardHeader
-            textAlign={"center"}
-            fontWeight={"semibold"}
-            fontSize={"1.1rem"}
-          >
-            BELI
-          </CardHeader>
-          <CardBody>
-            <TableContainer>
-              <Table size={"sm"}>
-                <Tbody>
-                  <Show above="md">
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            </CardBody>
+          </Card>
+        </GridItem>
+        <GridItem colSpan={{ base: 2, xxl: 1 }}>
+          <Card>
+            <CardHeader
+              textAlign={"center"}
+              fontWeight={"semibold"}
+              fontSize={"1.1rem"}
+            >
+              BELI
+            </CardHeader>
+            <CardBody>
+              <TableContainer>
+                <Table size={"sm"}>
+                  <Tbody>
+                    <Show above="md">
+                      <Tr>
+                        <Th>No. Serial</Th>
+                        <Th>Kode Produk</Th>
+                        <Th>Nama Produk</Th>
+                        <Th>Harga Beli</Th>
+                        <Th></Th>
+                      </Tr>
+                      {purchaseItems?.map((item, idx) => (
+                        <PurchaseData
+                          item={item}
+                          key={idx}
+                          showFull={true}
+                          onRemove={onRemovePurchase}
+                        />
+                      ))}
+                    </Show>
+                    <Show below="md">
+                      {purchaseItems?.map((item, idx) => (
+                        <PurchaseData
+                          item={item}
+                          key={idx}
+                          showFull={false}
+                          onRemove={onRemovePurchase}
+                        />
+                      ))}
+                    </Show>
                     <Tr>
-                      <Th>No. Serial</Th>
-                      <Th>Kode Produk</Th>
-                      <Th>Nama Produk</Th>
-                      <Th>Harga Beli</Th>
-                      <Th></Th>
+                      <Td
+                        height={"40px"}
+                        className="cursor-pointer"
+                        onClick={() => onAddPurchaseOpen()}
+                        colSpan={5}
+                      >
+                        <Center fontSize="1.25rem">+</Center>
+                      </Td>
                     </Tr>
-                    {purchaseItems?.map((item, idx) => (
-                      <PurchaseData
-                        item={item}
-                        key={idx}
-                        showFull={true}
-                        onRemove={onRemovePurchase}
-                      />
-                    ))}
-                  </Show>
-                  <Show below="md">
-                    {purchaseItems?.map((item, idx) => (
-                      <PurchaseData
-                        item={item}
-                        key={idx}
-                        showFull={false}
-                        onRemove={onRemovePurchase}
-                      />
-                    ))}
-                  </Show>
-                  <Tr>
-                    <Td
-                      height={"40px"}
-                      className="cursor-pointer"
-                      onClick={() => onAddPurchaseOpen()}
-                      colSpan={5}
-                    >
-                      <Center fontSize="1.25rem">+</Center>
-                    </Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </CardBody>
-        </Card>
-      </SimpleGrid>
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            </CardBody>
+          </Card>
+        </GridItem>
+      </Grid>
       <Center marginTop={5}>
         <Button onClick={() => finalizeTransaction()} colorScheme="whatsapp">
           Selesaikan Transaksi
