@@ -5,6 +5,10 @@ import {
   Container,
   VStack,
   useToast,
+  Image,
+  HStack,
+  Heading,
+  Box,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { useContext } from "react";
@@ -13,6 +17,7 @@ import * as Yup from "yup";
 import { ApiContext } from "../../App";
 import InputField from "../../components/InputField";
 import { CanceledError } from "axios";
+import Logo from "../../assets/logo.svg";
 
 const Login = () => {
   const api = useContext(ApiContext);
@@ -67,12 +72,13 @@ const Login = () => {
       });
   };
   return (
-    <Container
-      width={"100wh"}
+    <Box
+      width={"100% !important"}
       height={"100vh"}
       display={"flex"}
       justifyContent={"center"}
       alignItems={"center"}
+      bg={"#f6f7fb"}
     >
       <Card padding={"35px 50px"}>
         <CardBody>
@@ -90,6 +96,17 @@ const Login = () => {
             {(formik) => (
               <form onSubmit={formik.handleSubmit}>
                 <VStack>
+                  <HStack marginBottom={5}>
+                    <Image src={Logo} boxSize={"32px"} />
+                    <Heading
+                      marginLeft={3}
+                      fontFamily={"quicksand"}
+                      fontWeight={"bold"}
+                      fontSize={"1.5rem"}
+                    >
+                      Antam Manager
+                    </Heading>
+                  </HStack>
                   <InputField
                     type="text"
                     name="username"
@@ -109,7 +126,7 @@ const Login = () => {
           </Formik>
         </CardBody>
       </Card>
-    </Container>
+    </Box>
   );
 };
 

@@ -2,6 +2,7 @@ import {
   Box,
   Card,
   CardBody,
+  CardHeader,
   Center,
   Grid,
   GridItem,
@@ -18,6 +19,7 @@ import DateSetter from "../../components/DateSetter";
 import SummaryChart from "../../components/SummaryChart";
 import { DateParams } from "../../services/dto";
 import { ToMoney, generateDefaultDate } from "../../services/helper";
+import DashboardData from "../../components/DashboardData";
 
 const Stats = () => {
   const api = useContext(ApiContext);
@@ -91,55 +93,31 @@ const Stats = () => {
           <GridItem area={"box-1"}>
             <Card height={"100%"}>
               <CardBody>
-                <Stat>
-                  <StatLabel className="display-text-1 font-gray font-gray">
-                    Profit
-                  </StatLabel>
-                  <HStack>
-                    <StatNumber className="display-text-2">
-                      {dashboardData && ToMoney(dashboardData[0].profit)}
-                    </StatNumber>
-                    {dashboardData && dashboardData[0].profit != 0 ? (
-                      <StatArrow
-                        type={
-                          dashboardData && dashboardData[0].profit > 0
-                            ? "increase"
-                            : "decrease"
-                        }
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </HStack>
-                </Stat>
+                <DashboardData
+                  label="Profit"
+                  data={dashboardData ? dashboardData[0].profit : 0}
+                  showArrow={true}
+                />
               </CardBody>
             </Card>
           </GridItem>
           <GridItem area={"box-2"}>
             <Card height={"100%"}>
               <CardBody>
-                <Stat>
-                  <StatLabel className="display-text-1 font-gray">
-                    Total Item Terjual
-                  </StatLabel>
-                  <StatNumber className="display-text-2">
-                    {dashboardData ? dashboardData[0].amount_sold : 0}
-                  </StatNumber>
-                </Stat>
+                <DashboardData
+                  label="Total Item Terjual"
+                  data={dashboardData ? dashboardData[0].amount_sold : 0}
+                />
               </CardBody>
             </Card>
           </GridItem>
           <GridItem area={"box-3"}>
             <Card height={"100%"}>
               <CardBody>
-                <Stat>
-                  <StatLabel className="display-text-1 font-gray">
-                    Total Penjualan
-                  </StatLabel>
-                  <StatNumber className="display-text-2">
-                    {dashboardData && ToMoney(dashboardData[0].total_sale)}
-                  </StatNumber>
-                </Stat>
+                <DashboardData
+                  label="Total Penjualan"
+                  data={dashboardData ? dashboardData[0].total_sale : 0}
+                />
               </CardBody>
             </Card>
           </GridItem>
@@ -158,7 +136,8 @@ const Stats = () => {
             </Card>
           </GridItem>
           <GridItem area={"graph"}>
-            <Card>
+            <Card padding={3}>
+              <CardHeader fontSize={"1.25rem"}>Transaksi Bulan Ini</CardHeader>
               <CardBody>
                 <SummaryChart data={graphData} month={selectedMonth} />
               </CardBody>
@@ -173,17 +152,32 @@ const Stats = () => {
                     Barang Paling Laku
                   </StatLabel>
                   <HStack>
-                    <StatNumber className="display-text-2" marginRight={1}>
-                      {dashboardData ? dashboardData[0].top_sold_product : "-"}
-                    </StatNumber>
-                    <StatHelpText
-                      className="display-text-1 font-gray"
-                      marginBottom={0}
-                    >
-                      {dashboardData && dashboardData[0].amount_sold > 0
-                        ? "Terjual " + dashboardData[0].amount_sold
-                        : "-"}
-                    </StatHelpText>
+                    {dashboardData && dashboardData[0].amount_sold > 0 ? (
+                      <>
+                        <StatNumber className="display-text-2" marginRight={1}>
+                          {dashboardData
+                            ? dashboardData[0].top_sold_product
+                            : "-"}
+                        </StatNumber>
+                        <StatHelpText
+                          className="display-text-1"
+                          fontSize={"1.3rem"}
+                          fontWeight={"bold"}
+                          marginBottom={0}
+                        >
+                          {"Terjual " + dashboardData[0].amount_sold}
+                        </StatHelpText>
+                      </>
+                    ) : (
+                      <StatHelpText
+                        className="display-text-1"
+                        fontSize={"1.2rem"}
+                        fontWeight={"bold"}
+                        marginBottom={0}
+                      >
+                        Tidak ada penjualan
+                      </StatHelpText>
+                    )}
                   </HStack>
                 </Stat>
               </CardBody>
@@ -192,14 +186,10 @@ const Stats = () => {
           <GridItem area={"box-6"}>
             <Card height={"100%"}>
               <CardBody>
-                <Stat>
-                  <StatLabel className="display-text-1 font-gray">
-                    Nilai Stok
-                  </StatLabel>
-                  <StatNumber className="display-text-2">
-                    {stockValue && ToMoney(stockValue[0].count)}
-                  </StatNumber>
-                </Stat>
+                <DashboardData
+                  label="Nilai Stok"
+                  data={stockValue ? stockValue[0].count : 0}
+                />
               </CardBody>
             </Card>
           </GridItem>
