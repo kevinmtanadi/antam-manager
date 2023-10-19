@@ -8,7 +8,6 @@ import {
   GridItem,
   HStack,
   Stat,
-  StatArrow,
   StatHelpText,
   StatLabel,
   StatNumber,

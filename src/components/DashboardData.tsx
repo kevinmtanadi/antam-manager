@@ -1,6 +1,5 @@
 import { HStack } from "@chakra-ui/layout";
 import { Stat, StatLabel, StatNumber, StatArrow } from "@chakra-ui/stat";
-import React from "react";
 import { ToMoney } from "../services/helper";
 
 interface Props {
