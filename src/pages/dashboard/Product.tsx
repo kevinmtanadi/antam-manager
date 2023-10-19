@@ -30,8 +30,8 @@ import {
   ProductStockData,
 } from "../../services/dto";
 import { ToMoney } from "../../services/helper";
-import { BiPencil } from "react-icons/bi"
-import { BsFillTrashFill } from "react-icons/bs"
+import { BiPencil } from "react-icons/bi";
+import { BsFillTrashFill } from "react-icons/bs";
 import EditProductModal from "../../components/Product/EditProductModal";
 import DeleteProductModal from "../../components/Product/DeleteProductModal";
 
@@ -85,13 +85,13 @@ const Product = () => {
     onOpen: onCreateOpen,
     onClose: onCreateClose,
   } = useDisclosure();
-  
+
   const {
     isOpen: isEditOpen,
     onOpen: onEditOpen,
     onClose: onEditClose,
   } = useDisclosure();
-  
+
   const {
     isOpen: isDeleteOpen,
     onOpen: onDeleteOpen,
@@ -111,16 +111,16 @@ const Product = () => {
     setChosenProduct(item);
     onOpen();
   };
-  
-  const openEditModal = (item:ProductData) => {
+
+  const openEditModal = (item: ProductData) => {
     setChosenProduct(item);
     onEditOpen();
-  }
-  
-  const openDeleteModal = (item:ProductData) => {
+  };
+
+  const openDeleteModal = (item: ProductData) => {
     setChosenProduct(item);
     onDeleteOpen();
-  }
+  };
 
   const onAddCart = (prod: ProductStockData) => {
     api
@@ -181,7 +181,7 @@ const Product = () => {
         });
       });
   };
-  
+
   const onEditProduct = (product: EditProductData) => {
     api
       .editProduct(product)
@@ -193,7 +193,8 @@ const Product = () => {
           isClosable: true,
         });
         setCall(call + 1);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         if (err instanceof CanceledError) return;
         toast({
           title: "Gagal mengedit produk",
@@ -202,9 +203,9 @@ const Product = () => {
           duration: 5000,
           isClosable: true,
         });
-      })
-  }
-  
+      });
+  };
+
   const onDeleteProduct = (productId: string) => {
     api
       .deleteProduct(productId)
@@ -216,7 +217,8 @@ const Product = () => {
           isClosable: true,
         });
         setCall(call + 1);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         if (err instanceof CanceledError) return;
         toast({
           title: "Gagal menghapus produk",
@@ -225,8 +227,8 @@ const Product = () => {
           duration: 5000,
           isClosable: true,
         });
-      })
-  }
+      });
+  };
 
   useEffect(() => {
     setRef();
@@ -234,8 +236,13 @@ const Product = () => {
   }, [product]);
 
   return (
-    <>
-      <HStack marginBottom={5} width={"100%"} justifyContent={"space-between"}>
+    <VStack width={"100%"}>
+      <HStack
+        marginBottom={5}
+        width={"100%"}
+        maxW={"1000px"}
+        justifyContent={"space-between"}
+      >
         <Box>
           <form
             onChange={() => {
@@ -247,7 +254,7 @@ const Product = () => {
           >
             <InputGroup>
               <InputLeftElement children={<BsSearch />} />
-              <Input ref={searchRef} placeholder="Cari produk" />
+              <Input bg={"#FFFFFF"} ref={searchRef} placeholder="Cari produk" />
             </InputGroup>
           </form>
         </Box>
@@ -261,6 +268,8 @@ const Product = () => {
       </HStack>
 
       <Grid
+        width={"100%"}
+        maxW={"1000px"}
         gap={5}
         templateColumns={{
           base: "repeat(1, 1fr)",
@@ -273,7 +282,7 @@ const Product = () => {
             <GridItem key={item.product_id}>
               <Card>
                 <CardBody>
-                  <HStack justifyContent={'space-between'}>
+                  <HStack justifyContent={"space-between"}>
                     <HStack>
                       <Box
                         color={"blue.500"}
@@ -285,12 +294,22 @@ const Product = () => {
                       <Box>{item.product_name}</Box>
                     </HStack>
                     <HStack spacing={4}>
-                      <Icon as={BiPencil} color={"blue.400"} onClick={() => openEditModal(item)} className="cursor-pointer"/>
-                      <Icon as={BsFillTrashFill} color={"red.400"} onClick={() => openDeleteModal(item)} className="cursor-pointer"/>
+                      <Icon
+                        as={BiPencil}
+                        color={"blue.400"}
+                        onClick={() => openEditModal(item)}
+                        className="cursor-pointer"
+                      />
+                      <Icon
+                        as={BsFillTrashFill}
+                        color={"red.400"}
+                        onClick={() => openDeleteModal(item)}
+                        className="cursor-pointer"
+                      />
                     </HStack>
                   </HStack>
                   <Divider marginY={3} />
-                  <SimpleGrid columns={2}>
+                  <SimpleGrid columns={2} spacing={2} spacingY={5}>
                     <VStack spacing={0} alignItems={"start"}>
                       <Box>Jumlah Item</Box>
                       <Box fontWeight={"semibold"}>
@@ -311,7 +330,7 @@ const Product = () => {
                     </VStack>
                     <VStack spacing={0} alignItems={"start"}>
                       <Box>Total Stok</Box>
-                      <Box fontWeight={'semibold'}>
+                      <Box fontWeight={"semibold"}>
                         {item.total_stock ? ToMoney(item.total_stock) : "-"}
                       </Box>
                     </VStack>
@@ -355,8 +374,8 @@ const Product = () => {
         onClose={onDeleteClose}
         onSubmit={(productId) => onDeleteProduct(productId)}
         productId={chosenProduct ? chosenProduct.product_id : ""}
-        />
-    </>
+      />
+    </VStack>
   );
 };
 

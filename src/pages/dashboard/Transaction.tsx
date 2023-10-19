@@ -205,7 +205,7 @@ const Transaction = () => {
   };
 
   return (
-    <>
+    <VStack width={"100%"}>
       <Grid templateColumns={"repeat(2, 1fr)"} gap={5}>
         <GridItem colSpan={2}>
           <Card width={"300px"}>
@@ -363,7 +363,7 @@ const Transaction = () => {
         onClose={onAddSaleClose}
         onSubmit={(product_stock_id) => addSaleItem(product_stock_id)}
       />
-    </>
+    </VStack>
   );
 };
 

@@ -7,7 +7,8 @@ const { definePartsStyle, defineMultiStyleConfig } =
 
 const baseStyle = definePartsStyle({
     container: {
-        borderRadius: "3px",
+        borderRadius: "7px",
+        dropShadow: "none",
     }
 })
 export const cardTheme = defineMultiStyleConfig({ baseStyle })

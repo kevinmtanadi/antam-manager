@@ -28,7 +28,11 @@ const DateSetter = ({ onSelectMonth, selectedMonth }: Props) => {
   };
 
   return (
-    <Select defaultValue={selectedMonth} onChange={handleMonthChange}>
+    <Select
+      bg={"#ffffff"}
+      defaultValue={selectedMonth}
+      onChange={handleMonthChange}
+    >
       {monthData.map((month) => (
         <option key={month.value} value={month.value}>
           {month.name}

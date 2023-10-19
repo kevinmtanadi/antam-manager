@@ -5,6 +5,7 @@ import {
   Card,
   CardBody,
   Divider,
+  Grid,
   HStack,
   SimpleGrid,
   VStack,
@@ -74,7 +75,12 @@ const TransactionHistory = () => {
   return (
     <>
       <VStack width={"100%"}>
-        <HStack marginBottom={5} width={"100%"} justifyContent={"space-around"}>
+        <HStack
+          marginBottom={5}
+          width={"100%"}
+          maxW={"1000px"}
+          justifyContent={"space-between"}
+        >
           <VStack alignItems={"start"}>
             <Box>Data per halaman</Box>
             <ItemCount width={"100px"} onSelectCount={setDataCount} />
@@ -87,14 +93,17 @@ const TransactionHistory = () => {
             />
           </VStack>
         </HStack>
-        {transactionList &&
-          transactionList.map((item, idx) => (
-            <HStack
-              key={item.transaction_id}
-              width={"100%"}
-              alignItems={"start"}
-              spacing={5}
-            >
+        <Grid
+          width={"100%"}
+          maxW={"1000px"}
+          gap={5}
+          templateColumns={{
+            base: "repeat(1, 1fr)",
+            md: "repeat(2, 1fr)",
+          }}
+        >
+          {transactionList &&
+            transactionList.map((item, idx) => (
               <Card
                 height={"270px"}
                 marginBottom={
@@ -149,9 +158,8 @@ const TransactionHistory = () => {
                   </Button>
                 </CardBody>
               </Card>
-            </HStack>
-          ))}
-
+            ))}
+        </Grid>
         <Paging
           onChangePage={(page) =>
             setParams({ ...params, offset: (page - 1) * params.limit })

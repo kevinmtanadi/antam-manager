@@ -96,7 +96,7 @@ const Dashboard = () => {
             />
           </GridItem>
         </Show>
-        <GridItem area={"content"}>
+        <GridItem bg={"#f6f7fb"} area={"content"}>
           <Box margin={7}>{showPage?.targetPage}</Box>
         </GridItem>
       </Grid>

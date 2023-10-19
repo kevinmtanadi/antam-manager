@@ -1,8 +1,17 @@
-import { VStack, Box, Divider } from "@chakra-ui/react";
+import {
+  VStack,
+  Box,
+  Divider,
+  Show,
+  HStack,
+  Heading,
+  Image,
+} from "@chakra-ui/react";
 import SidebarItem from "./SidebarItem";
 import { IconType } from "react-icons";
 import { MdOutlineLogout } from "react-icons/md";
 import { useSignOut } from "react-auth-kit";
+import Logo from "../assets/logo.svg";
 
 interface Props {
   onChangePage: (page: string) => void;
@@ -35,6 +44,19 @@ const Sidebar = ({ onChangePage, selectedPage, sidebarItems }: Props) => {
         overflowX={"hidden"}
       >
         <VStack marginBottom={5} width={"100%"}>
+          <Show below="lg">
+            <HStack marginBottom={5}>
+              <Image src={Logo} boxSize={{ lg: "32px", base: "28px" }} />
+              <Heading
+                marginLeft={3}
+                fontFamily={"quicksand"}
+                fontWeight={"bold"}
+                fontSize={"1.5rem"}
+              >
+                Antam Manager
+              </Heading>
+            </HStack>
+          </Show>
           <Box as="span" width={"100%"} color={"gray.400"}>
             GENERAL
           </Box>

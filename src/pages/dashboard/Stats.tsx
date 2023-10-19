@@ -53,29 +53,48 @@ const Stats = () => {
     <>
       <Center>
         <Grid
+          width={"100%"}
           maxWidth={"1000px"}
-          templateColumns={{
-            base: "repeat(2, 1fr)",
-            md: "repeat(3, 1fr)",
-            lg: "repeat(3, 1fr)",
-            xl: "repeat(4, 1fr)",
+          templateColumns={{ xl: "1fr 1fr 1fr 1fr", base: "1fr 1fr" }}
+          templateAreas={{
+            xl: `
+        "title mt mt date"
+        "box-1 box-2 graph graph"
+        "box-3 box-4 graph graph"
+        "box-5 box-6 box-7 box-8"
+        `,
+            base: `
+        "title date"
+        "graph graph"
+        "box-1 box-2"
+        "box-3 box-4"
+        "box-5 box-6"
+        "box-7 box-8"
+          `,
           }}
           gap={4}
         >
-          <GridItem colSpan={{ base: 2, md: 3, lg: 3, xl: 4 }}>
+          <GridItem area={"title"}>
+            <Box fontSize={"1.3rem"} fontWeight={"semibold"}>
+              Dashboard
+            </Box>
+            <Box className="font-gray">Analytic details</Box>
+          </GridItem>
+          <GridItem area={"date"}>
             <Box marginBottom={5}>
               <DateSetter
                 selectedMonth={selectedMonth}
                 onSelectMonth={setSelectedMonth}
               />
             </Box>
-            <SummaryChart data={graphData} month={selectedMonth} />
           </GridItem>
-          <GridItem>
-            <Card>
+          <GridItem area={"box-1"}>
+            <Card height={"100%"}>
               <CardBody>
                 <Stat>
-                  <StatLabel className="display-text-1">Profit</StatLabel>
+                  <StatLabel className="display-text-1 font-gray font-gray">
+                    Profit
+                  </StatLabel>
                   <HStack>
                     <StatNumber className="display-text-2">
                       {dashboardData && ToMoney(dashboardData[0].profit)}
@@ -96,11 +115,11 @@ const Stats = () => {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem>
-            <Card>
+          <GridItem area={"box-2"}>
+            <Card height={"100%"}>
               <CardBody>
                 <Stat>
-                  <StatLabel className="display-text-1">
+                  <StatLabel className="display-text-1 font-gray">
                     Total Item Terjual
                   </StatLabel>
                   <StatNumber className="display-text-2">
@@ -110,11 +129,11 @@ const Stats = () => {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem>
-            <Card>
+          <GridItem area={"box-3"}>
+            <Card height={"100%"}>
               <CardBody>
                 <Stat>
-                  <StatLabel className="display-text-1">
+                  <StatLabel className="display-text-1 font-gray">
                     Total Penjualan
                   </StatLabel>
                   <StatNumber className="display-text-2">
@@ -124,11 +143,11 @@ const Stats = () => {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem>
-            <Card>
+          <GridItem area={"box-4"}>
+            <Card height={"100%"}>
               <CardBody>
                 <Stat>
-                  <StatLabel className="display-text-1">
+                  <StatLabel className="display-text-1 font-gray">
                     Total Pembelian
                   </StatLabel>
                   <StatNumber className="display-text-2">
@@ -138,18 +157,29 @@ const Stats = () => {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem>
+          <GridItem area={"graph"}>
             <Card>
               <CardBody>
+                <SummaryChart data={graphData} month={selectedMonth} />
+              </CardBody>
+            </Card>
+          </GridItem>
+
+          <GridItem area={"box-5"}>
+            <Card height={"100%"}>
+              <CardBody>
                 <Stat>
-                  <StatLabel className="display-text-1">
+                  <StatLabel className="display-text-1 font-gray">
                     Barang Paling Laku
                   </StatLabel>
                   <HStack>
                     <StatNumber className="display-text-2" marginRight={1}>
                       {dashboardData ? dashboardData[0].top_sold_product : "-"}
                     </StatNumber>
-                    <StatHelpText className="display-text-1" marginBottom={0}>
+                    <StatHelpText
+                      className="display-text-1 font-gray"
+                      marginBottom={0}
+                    >
                       {dashboardData && dashboardData[0].amount_sold > 0
                         ? "Terjual " + dashboardData[0].amount_sold
                         : "-"}
@@ -159,11 +189,13 @@ const Stats = () => {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem>
-            <Card>
+          <GridItem area={"box-6"}>
+            <Card height={"100%"}>
               <CardBody>
                 <Stat>
-                  <StatLabel className="display-text-1">Nilai Stok</StatLabel>
+                  <StatLabel className="display-text-1 font-gray">
+                    Nilai Stok
+                  </StatLabel>
                   <StatNumber className="display-text-2">
                     {stockValue && ToMoney(stockValue[0].count)}
                   </StatNumber>
