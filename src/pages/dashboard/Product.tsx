@@ -311,25 +311,25 @@ const Product = () => {
                   <Divider marginY={3} />
                   <SimpleGrid columns={2} spacing={2} spacingY={5}>
                     <VStack spacing={0} alignItems={"start"}>
-                      <Box>Jumlah Item</Box>
+                      <Box color={"blue.400"}>Jumlah Item</Box>
                       <Box fontWeight={"semibold"}>
                         {item.stock > 0 ? item.stock : "-"}
                       </Box>
                     </VStack>
                     <VStack spacing={0} alignItems={"start"}>
-                      <Box>Harga Avg</Box>
+                      <Box color={"blue.400"}>Harga Avg</Box>
                       <Box fontWeight={"semibold"}>
                         {item.avg_price ? ToMoney(item.avg_price) : "-"}
                       </Box>
                     </VStack>
                     <VStack spacing={0} alignItems={"start"}>
-                      <Box>Berat</Box>
+                      <Box color={"blue.400"}>Berat</Box>
                       <Box fontWeight={"semibold"}>
                         {item.weight ? item.weight + " g" : "-"}
                       </Box>
                     </VStack>
                     <VStack spacing={0} alignItems={"start"}>
-                      <Box>Total Stok</Box>
+                      <Box color={"blue.400"}>Total Stok</Box>
                       <Box fontWeight={"semibold"}>
                         {item.total_stock ? ToMoney(item.total_stock) : "-"}
                       </Box>

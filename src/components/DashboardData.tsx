@@ -6,9 +6,10 @@ interface Props {
   label?: string;
   data?: number | null;
   showArrow?: boolean;
+  isNotMoney?: boolean;
 }
 
-const DashboardData = ({ label, data, showArrow }: Props) => {
+const DashboardData = ({ label, data, showArrow, isNotMoney }: Props) => {
   return (
     <Stat>
       <StatLabel className="display-text-1 font-gray font-gray">
@@ -16,7 +17,7 @@ const DashboardData = ({ label, data, showArrow }: Props) => {
       </StatLabel>
       <HStack>
         <StatNumber className="display-text-2">
-          {data && ToMoney(data)}
+          {isNotMoney ? data : data && ToMoney(data)}
         </StatNumber>
         {showArrow && data && data != 0 ? (
           <StatArrow type={data && data > 0 ? "increase" : "decrease"} />

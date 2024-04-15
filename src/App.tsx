@@ -7,7 +7,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import api from "./services/api";
 
 export const ApiContext = createContext(
-  api.create("https://go-antam-manager.up.railway.app")
+  api.create("https://antam-manager-image-gviplwdfrq-as.a.run.app")
 );
 
 function App() {
@@ -16,7 +16,9 @@ function App() {
   return (
     <>
       <ApiContext.Provider
-        value={api.create("https://go-antam-manager.up.railway.app")}
+        value={api.create(
+          "https://antam-manager-image-gviplwdfrq-as.a.run.app"
+        )}
       >
         {auth() ? <Dashboard /> : <Login />}
         {/* <Dashboard /> */}

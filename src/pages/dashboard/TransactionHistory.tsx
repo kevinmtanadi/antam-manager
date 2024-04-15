@@ -122,25 +122,25 @@ const TransactionHistory = () => {
                   <Divider marginY={5} borderColor={"rgba(0,0,0,0.3)"} />
                   <SimpleGrid columns={2} spacingX={0} spacingY={5}>
                     <VStack spacing={0} alignItems={"start"}>
-                      <Box>Total Pembelian</Box>
+                      <Box color={"blue.400"}>Total Pembelian</Box>
                       <Box fontWeight={"bold"}>
                         {item.total_buy ? ToMoney(item.total_buy) : "-"}
                       </Box>
                     </VStack>
                     <VStack spacing={0} alignItems={"start"}>
-                      <Box>Total Penjualan</Box>
+                      <Box color={"blue.400"}>Total Penjualan</Box>
                       <Box fontWeight={"bold"}>
                         {item.total_sale ? ToMoney(item.total_sale) : "-"}
                       </Box>
                     </VStack>
                     <VStack spacing={0} alignItems={"start"}>
-                      <Box>Item Dibeli</Box>
+                      <Box color={"blue.400"}>Item Dibeli</Box>
                       <Box fontWeight={"bold"}>
                         {item.purchase.length != 0 ? item.purchase.length : "-"}
                       </Box>
                     </VStack>
                     <VStack spacing={0} alignItems={"start"}>
-                      <Box>Item Terjual</Box>
+                      <Box color={"blue.400"}>Item Terjual</Box>
                       <Box fontWeight={"bold"}>
                         {item.sales.length != 0 ? item.sales.length : "-"}
                       </Box>

@@ -106,6 +106,7 @@ const Stats = () => {
                 <DashboardData
                   label="Total Item Terjual"
                   data={dashboardData ? dashboardData[0].amount_sold : 0}
+                  isNotMoney={true}
                 />
               </CardBody>
             </Card>
@@ -114,7 +115,7 @@ const Stats = () => {
             <Card height={"100%"}>
               <CardBody>
                 <DashboardData
-                  label="Total Penjualan"
+                  label="Bruto (Bulan ini)"
                   data={dashboardData ? dashboardData[0].total_sale : 0}
                 />
               </CardBody>
@@ -123,17 +124,14 @@ const Stats = () => {
           <GridItem area={"box-4"}>
             <Card height={"100%"}>
               <CardBody>
-                <Stat>
-                  <StatLabel className="display-text-1 font-gray">
-                    Total Pembelian
-                  </StatLabel>
-                  <StatNumber className="display-text-2">
-                    {dashboardData && ToMoney(dashboardData[0].total_buy)}
-                  </StatNumber>
-                </Stat>
+                <DashboardData
+                  label="Bruto (Total)"
+                  data={dashboardData ? dashboardData[0].total_sale : 0}
+                />
               </CardBody>
             </Card>
           </GridItem>
+
           <GridItem area={"graph"}>
             <Card padding={3}>
               <CardHeader fontSize={"1.25rem"}>Transaksi Bulan Ini</CardHeader>
@@ -189,6 +187,20 @@ const Stats = () => {
                   label="Nilai Stok"
                   data={stockValue ? stockValue[0].count : 0}
                 />
+              </CardBody>
+            </Card>
+          </GridItem>
+          <GridItem area={"box-7"}>
+            <Card height={"100%"}>
+              <CardBody>
+                <Stat>
+                  <StatLabel className="display-text-1 font-gray">
+                    Total Pembelian
+                  </StatLabel>
+                  <StatNumber className="display-text-2">
+                    {dashboardData && ToMoney(dashboardData[0].total_buy)}
+                  </StatNumber>
+                </Stat>
               </CardBody>
             </Card>
           </GridItem>
