@@ -1,9 +1,9 @@
 import { db } from "@/lib/db"
 import { product } from "@/lib/db/schema"
 import { asc } from "drizzle-orm"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     const weights = await db.selectDistinctOn([product.weight], {
         weight: product.weight
     })

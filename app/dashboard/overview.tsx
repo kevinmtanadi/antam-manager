@@ -35,18 +35,25 @@ export const Overview = ({ className }: { className?: string }) => {
             <p className="text-muted-foreground text-sm">Total Nilai Stok</p>
           </div>
           <Separator />
-          {stock &&
-            stock.stocks.length > 0 &&
-            stock.stocks.map((stock: any) => (
-              <div className="flex justify-between" key={stock.id}>
-                <p className="text-muted-foreground text-sm text-start">
-                  {stock.name}
-                </p>
-                <p className="text-sm text-end">
-                  {formatRupiah(stock.total_price)}
-                </p>
-              </div>
-            ))}
+          {isLoading
+            ? [1, 2, 3, 4, 5].map((item) => (
+                <div key={item} className="flex justify-between">
+                  <Skeleton className="h-5 w-32 rounded-sm" />
+                  <Skeleton className="h-5 w-24 rounded-sm" />
+                </div>
+              ))
+            : stock &&
+              stock.stocks.length > 0 &&
+              stock.stocks.map((stock: any) => (
+                <div className="flex justify-between" key={stock.id}>
+                  <p className="text-muted-foreground text-sm text-start">
+                    {stock.name}
+                  </p>
+                  <p className="text-sm text-end">
+                    {formatRupiah(stock.total_price)}
+                  </p>
+                </div>
+              ))}
         </div>
       </CardContent>
     </Card>
@@ -94,39 +101,44 @@ export const TransactionOverview = ({ className }: { className?: string }) => {
           </div>
           <Separator />
           <h3 className="font-semibold">Transaksi Terbaru</h3>
-          {isRecentTransactionLoading
-            ? [1, 2, 3, 4, 5].map((item) => (
-                <div className="flex justify-between">
-                  <div className="flex flex-col">
-                    <Skeleton className="w-32 h-5 rounded-sm" />
-                    <Skeleton className="w-16 h-4 rounded-sm" />
-                  </div>
-                  <Skeleton className="w-28 h-9 rounded-sm" />
+          {isRecentTransactionLoading ? (
+            [1, 2, 3, 4, 5].map((item) => (
+              <div className="flex justify-between" key={item}>
+                <div className="flex flex-col">
+                  <Skeleton className="w-32 h-5 rounded-sm" />
+                  <Skeleton className="w-16 h-4 rounded-sm" />
                 </div>
-              ))
-            : recentTransactions &&
-              recentTransactions.transactions.length > 0 &&
-              recentTransactions.transactions.map((transaction: any) => (
-                <div className="flex justify-between" key={transaction.id}>
-                  <div className="flex flex-col">
-                    <p className="text-sm text-start">{transaction.id}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatDate(transaction.createdAt, "dd-mm-yyyy")}
-                    </p>
-                  </div>
-                  <p
-                    className={cn(
-                      "text-sm text-end font-semibold",
-                      transaction.status === "SALE"
-                        ? "text-green-600"
-                        : "text-red-600"
-                    )}
-                  >
-                    {transaction.status === "SALE" ? "+" : "-"}
-                    {formatRupiah(transaction.totalPrice)}
+                <Skeleton className="w-28 h-9 rounded-sm" />
+              </div>
+            ))
+          ) : !recentTransactions ||
+            recentTransactions.transactions.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center">
+              No transaction yet
+            </p>
+          ) : (
+            recentTransactions.transactions.map((transaction: any) => (
+              <div className="flex justify-between" key={transaction.id}>
+                <div className="flex flex-col">
+                  <p className="text-sm text-start">{transaction.id}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {formatDate(transaction.createdAt, "dd-mm-yyyy")}
                   </p>
                 </div>
-              ))}
+                <p
+                  className={cn(
+                    "text-sm text-end font-semibold",
+                    transaction.status === "SALE"
+                      ? "text-green-600"
+                      : "text-red-600"
+                  )}
+                >
+                  {transaction.status === "SALE" ? "+" : "-"}
+                  {formatRupiah(transaction.totalPrice)}
+                </p>
+              </div>
+            ))
+          )}
           <Button asChild className="w-full mt-4">
             <Link href={"/dashboard/transactions"}>Semua Transaksi</Link>
           </Button>
@@ -151,11 +163,16 @@ export const ProfitOverview = ({ className }: { className?: string }) => {
         <CardTitle>Profit</CardTitle>
       </CardHeader>
       <CardContent>
-        {isLoading ? (
-          <Skeleton className="h-8 w-full" />
-        ) : (
-          <p className="text-xl font-bold">{formatRupiah(profit.value)}</p>
-        )}
+        <div className="flex flex-col gap-3">
+          <div className="">
+            {isLoading ? (
+              <Skeleton className="h-8 w-full" />
+            ) : (
+              <p className="text-xl font-bold">{formatRupiah(profit.value)}</p>
+            )}
+          </div>
+          <p className="text-sm text-muted-foreground">Lifetime Profit</p>
+        </div>
       </CardContent>
     </Card>
   );

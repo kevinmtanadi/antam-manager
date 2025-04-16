@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
 import { log, product, stock } from "@/lib/db/schema"
-import { asc, count, eq, ilike, like, or } from "drizzle-orm"
+import { asc, count, eq, ilike } from "drizzle-orm"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest) {
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const weight = queryParams.get("weight")
     const productId = queryParams.get("productId")
     
-    let query = db.select({
+    const query = db.select({
         id: stock.id,
         productId: stock.productId,
         cost: stock.cost,
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     .leftJoin(product, eq(product.id, stock.productId))
     .orderBy(asc(product.weight))
     .limit(rowPerPage ? Number(rowPerPage) : 10)
-    .offset((Number(page) - 1) * Number(rowPerPage)) as any
+    .offset((Number(page) - 1) * Number(rowPerPage))
     
     const applyFilter = (query: any) => {
         if (search) {
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
         if (weight) {
             query = query.where(eq(product.weight, Number(weight)))
         }
-        if (productId && productId !== "") {
+        if (productId && productId !== "" && productId !== "all") {
             query = query.where(eq(stock.productId, productId))   
         }
         

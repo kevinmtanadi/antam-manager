@@ -1,7 +1,20 @@
-import React from "react";
+import { getTypes } from "@/lib/db/action";
+import { unstable_cache } from "next/cache";
+import Purchase from "./purchase";
 
-const Purchase = () => {
-  return <div>Purchase</div>;
-};
+const getCachedTypes = unstable_cache(
+  async () => {
+    return await getTypes();
+  },
+  ["types", "purchase"],
+  {
+    revalidate: 86400,
+    tags: ["types", "purchase"],
+  }
+);
 
-export default Purchase;
+export default async function PurchaseWrapper() {
+  const types = await getCachedTypes();
+
+  return <Purchase types={types} />;
+}

@@ -54,3 +54,38 @@ export const log = pgTable('logs', {
     action: varchar('action', { length: 31 }),
     createdAt: timestamp('created_at', {withTimezone: true}).defaultNow()
 })
+
+export const purchase = pgTable('purchase', {
+    id: varchar('id', { length: 31 }).primaryKey(),
+    createdAt: timestamp('created_at', {withTimezone: true}).defaultNow(),
+    updatedAt : timestamp('updated_at', {withTimezone: true}).defaultNow().$onUpdate(() => new Date()).notNull(),
+})
+
+export const purchaseItems = pgTable('purchase_items', {
+    id: serial('id').primaryKey(),
+    purchaseId: varchar('purchase_id', { length: 31}).notNull().references(() => purchase.id),
+    productId: varchar('product_id', { length: 31 }).notNull(),
+    stockId: varchar('stock_id', { length: 31 }).notNull(),
+    cost: integer('cost').notNull(),
+    createdAt: timestamp('created_at', {withTimezone: true}).defaultNow(),
+    updatedAt : timestamp('updated_at', {withTimezone: true}).defaultNow().$onUpdate(() => new Date()).notNull(),
+})
+
+export const sales = pgTable('sales', {
+    id: varchar('id', { length: 31 }).primaryKey(),
+    totalAmount: integer('total_amount').notNull(),
+    profit: integer('profit').notNull(),
+    createdAt: timestamp('created_at', {withTimezone: true}).defaultNow(),
+    updatedAt : timestamp('updated_at', {withTimezone: true}).defaultNow().$onUpdate(() => new Date()).notNull(),
+})
+
+export const salesItems = pgTable('sales_items', {
+    id: serial('id').primaryKey(),
+    salesId: varchar('sales_id', { length: 31}).notNull().references(() => sales.id),
+    productId: varchar('product_id', { length: 31 }).notNull(),
+    stockId: varchar('stock_id', { length: 31 }).notNull(),
+    cost: integer('cost').notNull(),
+    price: integer('price').notNull(),
+    createdAt: timestamp('created_at', {withTimezone: true}).defaultNow(),
+    updatedAt : timestamp('updated_at', {withTimezone: true}).defaultNow().$onUpdate(() => new Date()).notNull(),
+})

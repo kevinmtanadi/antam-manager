@@ -4,20 +4,10 @@ import * as React from "react";
 import {
   Archive,
   Banknote,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
   HandCoins,
   House,
   LayoutGrid,
-  LifeBuoy,
-  Map,
-  PieChart,
   ScrollText,
-  Send,
-  Settings2,
-  SquareTerminal,
 } from "lucide-react";
 
 import {
@@ -28,9 +18,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Navigation } from "./navigation";
 import Image from "next/image";
+import Link from "next/link";
+import { Separator } from "./ui/separator";
 
 const navigations = [
   {
@@ -75,7 +68,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link href="#">
                 <div className="flex size-8 items-center justify-center rounded-lg">
                   <Image
                     src="/logo.svg"
@@ -92,11 +85,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     Inventory Management System
                   </span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+      <Separator />
       <SidebarContent>
         <Navigation navigations={navigations} />
       </SidebarContent>

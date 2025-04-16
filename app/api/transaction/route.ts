@@ -1,6 +1,5 @@
 import { db } from "@/lib/db";
-import { log, stock, transaction, transactionItem, transactionStatus } from "@/lib/db/schema";
-import { create } from "domain";
+import { stock, transaction, transactionItem, transactionStatus } from "@/lib/db/schema";
 import { count, desc, eq, ilike, inArray } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -65,7 +64,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const items = body.items as any[]
     
-    let transactionItems = []
+    const transactionItems: any[] = []
     let totalPrice = 0
     let profit = 0
     

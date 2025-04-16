@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import z from "zod"
 import { db } from "@/lib/db";
 import { log, product, stock } from "@/lib/db/schema";
-import { asc, eq, ilike, like, or, sql } from "drizzle-orm";
+import { asc, eq, ilike, or, sql } from "drizzle-orm";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function GET(request: NextRequest) {
     const {searchParams: queryParams} = new URL(request.url)
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
     }).from(product)
       .leftJoin(stock, eq(product.id, stock.productId))
       .groupBy(product.id)
-      .orderBy(asc(product.weight)) as any;
+      .orderBy(asc(product.weight));
     
     if (params) {
         query = query.where(
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest) {
                 ilike(product.name, `%${params}%`),
                 ilike(product.id, `${params}%`)
             )
-        );
+        ) as typeof query;
     }
     
     const products = await query
@@ -62,6 +63,9 @@ export async function POST(request: NextRequest) {
             identifier: body.id
     })
     
+    revalidatePath("/dashboard/inventory")
+    revalidateTag("types");
+    
     return NextResponse.json({message: "success"}, {status: 200})
 }
 
@@ -79,6 +83,8 @@ export async function PUT(request: NextRequest) {
         detail: `Mengupdate produk ${body.id} : ${body.name}`,
         identifier: body.id
     })
+    
+    revalidateTag("types");
     
     return NextResponse.json({message: "success"}, {status: 200})
 }
@@ -99,6 +105,8 @@ export async function DELETE(request: NextRequest) {
         detail: `Menghapus produk ${productId}`,
         identifier: productId
     })
+    
+    revalidateTag("types");
     
     return NextResponse.json({message: "success"}, {status: 200})
 }

@@ -4,7 +4,7 @@ import { DataTable } from "@/components/data-table";
 import { searchParams } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import { transactionColumns } from "./columns";
+import { inventoryColumns } from "./columns";
 import DebounceInput from "@/components/debounce-input";
 import Paginator from "@/components/paginator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -16,50 +16,48 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-interface TransactionObj {
-  id: string;
-  createdAt: string;
-  status: string;
-  profit: number;
-  totalPrice: number;
-}
-
-interface FetchTransactionParams {
-  id: string;
-  date: string;
+export interface FetchStockParams {
+  search?: string;
+  weight?: number;
   page: number;
   rows_per_page: number;
-  status: string;
+  productId?: string;
 }
 
-interface FetchTransactionData {
-  transactions: TransactionObj[];
+export interface FetchStockData {
+  stocks: {
+    id: string;
+    productId: string;
+    cost: number;
+    createdAt: string;
+    transactionId: string;
+    product: {
+      name: string;
+      weight: number;
+    };
+  }[];
   totalItems: number;
   totalFiltered: number;
 }
-const TransactionHistory = ({
-  types,
-}: {
-  types: { id: string; name: string }[];
-}) => {
-  const [params, setParams] = useState<FetchTransactionParams>({
-    id: "",
-    date: "",
+
+const Inventory = ({ types }: { types: { id: string; name: string }[] }) => {
+  const [params, setParams] = useState<FetchStockParams>({
+    search: "",
     page: 1,
     rows_per_page: 10,
-    status: "",
+    productId: "",
   });
 
   const { data, isPending } = useQuery({
-    queryKey: ["transactions", params],
-    queryFn: async (): Promise<FetchTransactionData> => {
+    queryKey: ["stocks", params],
+    queryFn: async (): Promise<FetchStockData> => {
       const queryParams = searchParams(params);
-      const res = await fetch(`/api/transaction?${queryParams.toString()}`);
+      const res = await fetch(`/api/product/stock?${queryParams.toString()}`);
       if (!res.ok) {
         throw new Error("Gagal mengambil data");
       }
       const data = await res.json();
-      return data as FetchTransactionData;
+      return data as FetchStockData;
     },
   });
 
@@ -81,26 +79,29 @@ const TransactionHistory = ({
       <div className="flex justify-between gap-8">
         <DebounceInput
           className="w-1/2"
-          placeholder="Cari transaksi berdasarkan ID"
-          defaultValue={params.id}
-          onChange={(value) => setParams({ ...params, id: value })}
+          placeholder="Cari produk berdasarkan kode stok"
+          defaultValue={params.search}
+          onChange={(value) => setParams({ ...params, search: value })}
         />
         <Select
-          onValueChange={(value) => setParams({ ...params, status: value })}
+          defaultValue={"all"}
+          onValueChange={(value) => setParams({ ...params, productId: value })}
         >
-          <SelectTrigger className="w-1/2 md:w-[350px]">
-            <SelectValue placeholder="Cari berdasarkan tipe transaksi" />
+          <SelectTrigger className="w-[200px]">
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="PURCHASE">Beli</SelectItem>
-            <SelectItem value="SALE">Jual</SelectItem>
+            {types?.map((type: { id: string; name: string }) => (
+              <SelectItem key={type.id} value={type.id}>
+                {type.name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
       <DataTable
-        columns={transactionColumns}
-        data={data?.transactions || []}
+        columns={inventoryColumns}
+        data={data?.stocks || []}
         skeleton={<Skeleton className="w-full h-10" />}
         isLoading={isPending}
       />
@@ -130,4 +131,4 @@ const TransactionHistory = ({
   );
 };
 
-export default TransactionHistory;
+export default Inventory;
