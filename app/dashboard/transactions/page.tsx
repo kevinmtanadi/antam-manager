@@ -37,11 +37,7 @@ interface FetchTransactionData {
   totalItems: number;
   totalFiltered: number;
 }
-const TransactionHistory = ({
-  types,
-}: {
-  types: { id: string; name: string }[];
-}) => {
+const TransactionHistory = ({ types }: { types: Type[] }) => {
   const [params, setParams] = useState<FetchTransactionParams>({
     id: "",
     date: "",

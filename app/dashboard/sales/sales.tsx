@@ -4,33 +4,34 @@ import { DataTable } from "@/components/data-table";
 import { DatePicker } from "@/components/datepicker";
 import { formatDate, formatRupiah } from "@/lib/utils";
 import React, { useState } from "react";
-import AddPurchaseSheet from "./add-purchase-sheet";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash } from "lucide-react";
-import UpdatePurchaseSheet from "./update-purchase-sheet";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import ConfirmPurchaseDialog from "./confirm-purchase-dialog";
+import AddSalesSheet from "./add-sales-sheet";
+import ConfirmSalesDialog from "./confirm-sales-dialog";
 
-export interface PurchaseItem {
+export interface SalesItem {
   stockId: string;
   productId: string;
   price: number;
+  cost: number;
 }
 
-const Purchase = ({ types }: { types: Type[] }) => {
+const Sales = ({ types }: { types: Type[] }) => {
   const today = new Date();
   const [date, setDate] = useState<Date | undefined>(today);
-  const [items, setItems] = useState<PurchaseItem[]>([]);
+  const [items, setItems] = useState<SalesItem[]>([]);
 
-  const addItem = (item: PurchaseItem) => {
+  const addItem = (item: SalesItem) => {
     setItems([
       ...items,
       {
         stockId: item.stockId,
         productId: item.productId,
         price: item.price,
+        cost: item.cost,
       },
     ]);
   };
@@ -39,7 +40,7 @@ const Purchase = ({ types }: { types: Type[] }) => {
     setItems(items.filter((_, i) => i !== idx));
   };
 
-  const updateItem = (idx: number, item: PurchaseItem) => {
+  const updateItem = (idx: number, item: SalesItem) => {
     setItems(items.map((i, j) => (j === idx ? { ...i, ...item } : i)));
   };
 
@@ -51,7 +52,7 @@ const Purchase = ({ types }: { types: Type[] }) => {
       },
       cell: ({ row }) => {
         return (
-          <div className="ms-5">
+          <div className="w-24 ms-5">
             <p>{row.original.stockId}</p>
           </div>
         );
@@ -74,14 +75,31 @@ const Purchase = ({ types }: { types: Type[] }) => {
       },
     },
     {
-      accessorKey: "price",
+      accessorKey: "cost",
       header: () => {
-        return "Harga";
+        return "Modal";
       },
       cell: ({ row }) => {
         return (
           <div className="">
-            <div className="text-start">{formatRupiah(row.original.price)}</div>
+            <div className="text-start w-32">
+              {formatRupiah(row.original.cost)}
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "price",
+      header: () => {
+        return "Harga Jual";
+      },
+      cell: ({ row }) => {
+        return (
+          <div className="">
+            <div className="text-start w-32">
+              {formatRupiah(row.original.price)}
+            </div>
           </div>
         );
       },
@@ -91,12 +109,7 @@ const Purchase = ({ types }: { types: Type[] }) => {
       header: "",
       cell: ({ row }) => {
         return (
-          <div className="flex gap-1 justify-end">
-            <UpdatePurchaseSheet
-              item={row.original}
-              onSubmit={(item) => updateItem(row.index, item)}
-              types={types}
-            />
+          <div className="flex gap-1">
             <Button variant={"ghost"} onClick={() => removeItem(row.index)}>
               <Trash />
             </Button>
@@ -112,7 +125,7 @@ const Purchase = ({ types }: { types: Type[] }) => {
         method: "POST",
         body: JSON.stringify({
           createdAt: date,
-          status: "PURCHASE",
+          status: "SALE",
           items: items,
         }),
       });
@@ -139,12 +152,12 @@ const Purchase = ({ types }: { types: Type[] }) => {
         data={items}
         columns={purchaseColumns}
         footer={
-          <AddPurchaseSheet types={types} onSubmit={(item) => addItem(item)} />
+          <AddSalesSheet types={types} onSubmit={(item) => addItem(item)} />
         }
         emptyMessage="Belum ada item"
       />
       <div className="self-end">
-        <ConfirmPurchaseDialog
+        <ConfirmSalesDialog
           items={items}
           types={types}
           disabled={items.length === 0}
@@ -155,4 +168,4 @@ const Purchase = ({ types }: { types: Type[] }) => {
   );
 };
 
-export default Purchase;
+export default Sales;

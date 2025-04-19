@@ -1,7 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import { formatDate, formatRupiah } from "@/lib/utils";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import Link from "next/link";
+import DeleteTransactionDialog from "./delete-transacation-dialog";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
+import TransactionStatusBadge from "@/components/transaction-status-badge";
 
 export const transactionColumns: ColumnDef<any>[] = [
   {
@@ -42,22 +47,7 @@ export const transactionColumns: ColumnDef<any>[] = [
     },
     cell: ({ row }) => {
       const status = row.original.status;
-      switch (status) {
-        case "PURCHASE":
-          return (
-            <Badge className="px-4 bg-green-300 text-green-800 font-semibold text-md">
-              Beli
-            </Badge>
-          );
-        case "SALE":
-          return (
-            <Badge className="px-4 bg-red-300 text-red-800 font-semibold text-md">
-              Jual
-            </Badge>
-          );
-        default:
-          return status;
-      }
+      return <TransactionStatusBadge status={status} />;
     },
   },
   {
@@ -86,17 +76,33 @@ export const transactionColumns: ColumnDef<any>[] = [
       );
     },
   },
-  //   {
-  //     accessorKey: "action",
-  //     header: () => {
-  //       return "";
-  //     },
-  //     cell: ({ row }) => {
-  //       return (
-  //         <div className="text-start w-32">
-  //           {formatRupiah(row.original.total_price)}
-  //         </div>
-  //       );
-  //     },
-  //   },
+  {
+    accessorKey: "action",
+    header: "",
+    cell: ({ row }) => {
+      return (
+        <div className="flex gap-1">
+          <DeleteTransactionWrapper row={row} />
+        </div>
+      );
+    },
+  },
 ];
+
+const DeleteTransactionWrapper = ({ row }: { row: Row<any> }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <div className="flex gap-1">
+        <Button variant={"ghost"} onClick={() => setOpen(true)}>
+          <Trash />
+        </Button>
+      </div>
+      <DeleteTransactionDialog
+        id={row.original.id}
+        open={open}
+        onOpenChange={(open: boolean) => setOpen(open)}
+      />
+    </>
+  );
+};

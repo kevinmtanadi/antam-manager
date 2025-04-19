@@ -52,7 +52,7 @@ const navigations = [
     icon: Banknote,
   },
   {
-    name: "Histori Transaksi",
+    name: "Riwayat Transaksi",
     url: "/dashboard/transactions",
     icon: ScrollText,
   },

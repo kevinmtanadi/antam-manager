@@ -21,4 +21,5 @@ export async function GET(request: NextRequest) {
         transaction: transactionDetail[0],
         items: transactionItems.map((item) => item.transactionItem)
     }, {status: 200})
+
 }

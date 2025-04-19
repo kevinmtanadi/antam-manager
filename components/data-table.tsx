@@ -17,6 +17,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -31,6 +32,7 @@ interface DataTableProps<TData, TValue> {
   isLoading?: boolean;
   skeleton?: React.ReactNode;
   emptyMessage?: string;
+  tableFooter?: React.ReactNode;
   footer?: React.ReactNode;
 }
 
@@ -68,6 +70,7 @@ export function DataTable<TData, TValue>({
   isLoading,
   skeleton,
   emptyMessage,
+  tableFooter,
   footer: footerAction,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -160,6 +163,7 @@ export function DataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
+          {tableFooter && <TableFooter>{tableFooter}</TableFooter>}
         </Table>
       </div>
 

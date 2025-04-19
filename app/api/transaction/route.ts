@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
             )
         }
         
-        if (status) {
+        if (status && status !== "all") {
             query = query.where(
                 eq(transaction.status, queryStatus)
             )

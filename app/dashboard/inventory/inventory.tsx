@@ -40,7 +40,7 @@ export interface FetchStockData {
   totalFiltered: number;
 }
 
-const Inventory = ({ types }: { types: { id: string; name: string }[] }) => {
+const Inventory = ({ types }: { types: Type[] }) => {
   const [params, setParams] = useState<FetchStockParams>({
     search: "",
     page: 1,
@@ -91,7 +91,7 @@ const Inventory = ({ types }: { types: { id: string; name: string }[] }) => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {types?.map((type: { id: string; name: string }) => (
+            {types?.map((type: Type) => (
               <SelectItem key={type.id} value={type.id}>
                 {type.name}
               </SelectItem>

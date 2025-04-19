@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 import { useState } from "react";
 import { NumberInput } from "@/components/number-input";
 import {
@@ -32,40 +32,35 @@ import {
 } from "@/components/ui/select";
 import { PurchaseItem } from "./purchase";
 
-const AddPurchaseSheet = ({
+const UpdatePurchaseSheet = ({
+  item,
   types,
-  onSubmit: onAdd,
+  onSubmit: onSave,
 }: {
+  item: PurchaseItem;
   types: Type[];
   onSubmit: (item: PurchaseItem) => void;
 }) => {
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof addPurchaseItemSchema>>({
     resolver: zodResolver(addPurchaseItemSchema),
-    defaultValues: {
-      stockId: "",
-      productId: "",
-      price: undefined,
-    },
+    defaultValues: item,
   });
 
   function onSubmit(values: z.infer<typeof addPurchaseItemSchema>) {
-    onAdd(values);
+    onSave(values);
     form.reset();
     setOpen(false);
   }
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <div className="w-full flex h-12 items-center justify-center">
-        <Button onClick={() => setOpen(true)} className="w-48 h-8 rounded-md ">
-          <Plus className="mr-2 h-4 w-4" />
-          Tambah Item
-        </Button>
-      </div>
+      <Button variant={"ghost"} onClick={() => setOpen(true)}>
+        <Pencil />
+      </Button>
       <SheetContent side="right" className="flex flex-col">
         <SheetHeader className="gap-1">
-          <SheetTitle>Tambah Item</SheetTitle>
+          <SheetTitle>Update Item</SheetTitle>
         </SheetHeader>
         <Form {...form}>
           <form
@@ -90,7 +85,7 @@ const AddPurchaseSheet = ({
               name="productId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Kode Produk</FormLabel>
+                  <FormLabel>Kode Stok</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -101,7 +96,7 @@ const AddPurchaseSheet = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {types?.map((type: { id: string; name: string }) => (
+                      {types?.map((type: Type) => (
                         <SelectItem key={type.id} value={type.id}>
                           {type.name}
                         </SelectItem>
@@ -125,9 +120,9 @@ const AddPurchaseSheet = ({
                 </FormItem>
               )}
             />
-            <SheetFooter className="mt-auto flex gap-2 flex-col gap-y-4">
+            <SheetFooter className="mt-auto flex gap-2 sm:flex-col sm:space-x-0">
               <Button className="w-full" type="submit">
-                Tambah
+                Simpan
               </Button>
               <SheetClose asChild>
                 <Button className="w-full" variant={"outline"}>
@@ -142,4 +137,4 @@ const AddPurchaseSheet = ({
   );
 };
 
-export default AddPurchaseSheet;
+export default UpdatePurchaseSheet;
