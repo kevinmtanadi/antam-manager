@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createProductSchema } from "@/lib/zod"; // adjust path as needed
+import { upcreateProductSchema } from "@/lib/zod"; // adjust path as needed
 import { z } from "zod";
 import {
   Sheet,
@@ -29,8 +29,8 @@ import { NumberInput } from "@/components/number-input";
 const CreateProductSheet = () => {
   const [open, setOpen] = useState(false);
 
-  const form = useForm<z.infer<typeof createProductSchema>>({
-    resolver: zodResolver(createProductSchema),
+  const form = useForm<z.infer<typeof upcreateProductSchema>>({
+    resolver: zodResolver(upcreateProductSchema),
     defaultValues: {
       id: "",
       name: "",
@@ -40,7 +40,7 @@ const CreateProductSheet = () => {
 
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: z.infer<typeof createProductSchema>) => {
+    mutationFn: async (data: z.infer<typeof upcreateProductSchema>) => {
       const res = await fetch("/api/product", {
         method: "POST",
         body: JSON.stringify(data),
@@ -65,7 +65,7 @@ const CreateProductSheet = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof createProductSchema>) {
+  function onSubmit(values: z.infer<typeof upcreateProductSchema>) {
     mutate(values);
   }
 

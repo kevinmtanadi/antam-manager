@@ -11,6 +11,7 @@ import { MoreVerticalIcon } from "lucide-react";
 import Link from "next/link";
 import DeleteProductDialog from "./delete-product-dialog";
 import { useState } from "react";
+import EditProductSheet from "./edit-product-sheet";
 
 export const productColumns: ColumnDef<any>[] = [
   {
@@ -103,6 +104,8 @@ export const productColumns: ColumnDef<any>[] = [
 
 const ActionDropdown = ({ row }: { row: Row<any> }) => {
   const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+
   return (
     <>
       <DropdownMenu>
@@ -117,12 +120,19 @@ const ActionDropdown = ({ row }: { row: Row<any> }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setEditOpen(true)}>
+            Edit
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>
             Hapus
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <EditProductSheet
+        id={row.original.id}
+        open={editOpen}
+        setOpen={setEditOpen}
+      />
       <DeleteProductDialog
         open={open}
         onOpenChange={setOpen}

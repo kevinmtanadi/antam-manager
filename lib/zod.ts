@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createProductSchema = z.object({
+export const upcreateProductSchema = z.object({
   id: z
     .string()
     .min(1, "Kode produk harus diisi")

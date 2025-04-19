@@ -59,7 +59,7 @@ const DeleteTransactionDialog = ({
           <DialogTitle>Apakah anda yakin?</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4">
-          <div className="flex flex-col gap-4 items-center text-start">
+          <div className="flex flex-col gap-8 items-center text-start">
             <p className="text-muted-foreground">
               Anda akan menghapus transaksi <b className="text-black">{id}</b>.
               Data produk tidak akan ikut terhapus. Aksi ini{" "}

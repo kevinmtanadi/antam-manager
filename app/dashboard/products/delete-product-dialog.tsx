@@ -61,7 +61,7 @@ const DeleteProductDialog = ({
           <DialogTitle>Apakah anda yakin?</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4">
-          <div className="flex flex-col gap-4 items-center text-start">
+          <div className="flex flex-col gap-8 items-center text-start">
             <p className="text-muted-foreground">
               Anda akan menghapus produk <b className="text-black">{name}</b>.
               Data transaksi sebelumnya tidak akan ikut terhapus. Aksi ini{" "}
@@ -70,7 +70,8 @@ const DeleteProductDialog = ({
             </p>
             <div className="w-full flex flex-col gap-2">
               <p className="text-muted-foreground text-sm">
-                Mohon ketik hapus <span className="font-semibold">hapus</span> mengonfirmasi
+                Mohon ketik hapus <span className="font-semibold">hapus</span>{" "}
+                mengonfirmasi
               </p>
               <Input
                 value={confirmation}
