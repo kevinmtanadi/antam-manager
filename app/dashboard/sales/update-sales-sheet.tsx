@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addPurchaseItemSchema } from "@/lib/zod"; // adjust path as needed
+import { addSalesItemSchema } from "@/lib/zod"; // adjust path as needed
 import { z } from "zod";
 import {
   Sheet,
@@ -18,10 +18,9 @@ import {
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NumberInput } from "@/components/number-input";
 import {
   Select,
@@ -30,29 +29,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PurchaseItem } from "./purchase";
+import { SalesItem } from "./sales";
 import { Type } from "@/lib/intf";
+import { SelectStock } from "./add-sales-sheet";
 
-const UpdatePurchaseSheet = ({
+const UpdateSalesSheet = ({
   item,
   types,
   onSubmit: onSave,
 }: {
-  item: PurchaseItem;
+  item: SalesItem;
   types: Type[];
-  onSubmit: (item: PurchaseItem) => void;
+  onSubmit: (item: SalesItem) => void;
 }) => {
   const [open, setOpen] = useState(false);
-  const form = useForm<z.infer<typeof addPurchaseItemSchema>>({
-    resolver: zodResolver(addPurchaseItemSchema),
+  const form = useForm<z.infer<typeof addSalesItemSchema>>({
+    resolver: zodResolver(addSalesItemSchema),
     defaultValues: item,
   });
 
-  function onSubmit(values: z.infer<typeof addPurchaseItemSchema>) {
+  function onSubmit(values: z.infer<typeof addSalesItemSchema>) {
     onSave(values);
     form.reset();
     setOpen(false);
   }
+
+  const [selectedProduct, setSelectedProduct] = useState("");
+  useEffect(() => {
+    const productId = form.getValues("productId");
+    if (productId) {
+      setSelectedProduct(productId);
+    }
+  }, [form.watch("productId")]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -70,23 +78,10 @@ const UpdatePurchaseSheet = ({
           >
             <FormField
               control={form.control}
-              name="stockId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Kode Stok</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="productId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Kode Stok</FormLabel>
+                  <FormLabel>Kode Produk</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -97,7 +92,7 @@ const UpdatePurchaseSheet = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {types?.map((type: Type) => (
+                      {types?.map((type: { id: string; name: string }) => (
                         <SelectItem key={type.id} value={type.id}>
                           {type.name}
                         </SelectItem>
@@ -110,10 +105,27 @@ const UpdatePurchaseSheet = ({
             />
             <FormField
               control={form.control}
+              name="stockId"
+              render={({}) => (
+                <FormItem>
+                  <FormLabel>Kode Stok</FormLabel>
+                  <SelectStock
+                    productId={selectedProduct}
+                    defaultValue={item}
+                    onValueChange={(stockId, cost) => {
+                      form.setValue("stockId", stockId);
+                      form.setValue("cost", cost);
+                    }}
+                  />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Harga</FormLabel>
+                  <FormLabel>Harga Jual</FormLabel>
                   <FormControl>
                     <NumberInput {...field} />
                   </FormControl>
@@ -138,4 +150,4 @@ const UpdatePurchaseSheet = ({
   );
 };
 
-export default UpdatePurchaseSheet;
+export default UpdateSalesSheet;

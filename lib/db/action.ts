@@ -1,6 +1,7 @@
 import { asc } from "drizzle-orm";
 import { db } from ".";
 import { product } from "./schema";
+import { Type } from "../intf";
 
 export const getTypes = async (): Promise<Type[]> => {
   const types = await db

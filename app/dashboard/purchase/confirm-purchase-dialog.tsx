@@ -8,7 +8,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import React, { useState } from "react";
 import { PurchaseItem } from "./purchase";
@@ -22,6 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatRupiah } from "@/lib/utils";
+import { Type } from "@/lib/intf";
 
 interface Props {
   items: PurchaseItem[];
@@ -39,7 +39,7 @@ const ConfirmPurchaseDialog = ({
   const [open, setOpen] = useState(false);
 
   return (
-    <Dialog>
+    <Dialog open={open}>
       <Button
         disabled={disabled}
         onClick={() => setOpen(true)}

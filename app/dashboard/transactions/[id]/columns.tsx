@@ -36,7 +36,6 @@ export const transactionItemColumns: ColumnDef<any>[] = [
       return <div className="text-end me-5">Harga</div>;
     },
     cell: ({ row }) => {
-      const status = row.original.status;
       return (
         <div className="text-end me-5">{formatRupiah(row.original.price)}</div>
       );

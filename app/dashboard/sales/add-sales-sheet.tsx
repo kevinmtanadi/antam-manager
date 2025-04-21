@@ -48,6 +48,7 @@ import {
 import { FetchStockData } from "../inventory/inventory";
 import { cn, formatRupiah } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Type } from "@/lib/intf";
 
 const AddSalesSheet = ({
   types,
@@ -128,7 +129,7 @@ const AddSalesSheet = ({
             <FormField
               control={form.control}
               name="stockId"
-              render={({ field }) => (
+              render={({}) => (
                 <FormItem>
                   <FormLabel>Kode Stok</FormLabel>
                   <SelectStock
@@ -171,11 +172,13 @@ const AddSalesSheet = ({
   );
 };
 
-const SelectStock = ({
+export const SelectStock = ({
   productId,
+  defaultValue,
   onValueChange,
 }: {
   productId: string;
+  defaultValue?: SalesItem;
   onValueChange: (stockId: string, cost: number) => void;
 }) => {
   const { data: stocks, isPending } = useQuery<FetchStockData>({
@@ -191,8 +194,8 @@ const SelectStock = ({
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState({
-    id: "",
-    cost: 0,
+    id: defaultValue?.stockId || "",
+    cost: defaultValue?.cost || 0,
   });
 
   useEffect(() => {
@@ -204,7 +207,7 @@ const SelectStock = ({
   if (isPending && productId) return <Skeleton className="w-full h-9" />;
 
   if (!stocks || !stocks.stocks || stocks.stocks.length === 0)
-    return <Input placeholder="Pilih produk terlebih dahulu" disabled />;
+    return <Input placeholder="Produk ini tidak memiliki stok" disabled />;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

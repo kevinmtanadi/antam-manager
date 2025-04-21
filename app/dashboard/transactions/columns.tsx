@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { formatDate, formatRupiah } from "@/lib/utils";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import Link from "next/link";

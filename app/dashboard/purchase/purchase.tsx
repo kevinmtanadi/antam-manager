@@ -2,16 +2,17 @@
 
 import { DataTable } from "@/components/data-table";
 import { DatePicker } from "@/components/datepicker";
-import { formatDate, formatRupiah } from "@/lib/utils";
+import { formatRupiah } from "@/lib/utils";
 import React, { useState } from "react";
 import AddPurchaseSheet from "./add-purchase-sheet";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import UpdatePurchaseSheet from "./update-purchase-sheet";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import ConfirmPurchaseDialog from "./confirm-purchase-dialog";
+import { Type } from "@/lib/intf";
 
 export interface PurchaseItem {
   stockId: string;

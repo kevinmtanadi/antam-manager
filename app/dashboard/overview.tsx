@@ -120,7 +120,12 @@ export const TransactionOverview = ({ className }: { className?: string }) => {
             recentTransactions.transactions.map((transaction: any) => (
               <div className="flex justify-between" key={transaction.id}>
                 <div className="flex flex-col">
-                  <p className="text-sm text-start">{transaction.id}</p>
+                  <Link
+                    href={`/dashboard/transactions/${transaction.id}`}
+                    className="text-sm text-start font-semibold underline"
+                  >
+                    {transaction.id}
+                  </Link>
                   <p className="text-xs text-muted-foreground">
                     {formatDate(transaction.createdAt, "dd-mm-yyyy")}
                   </p>

@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PurchaseItem } from "./purchase";
+import { Type } from "@/lib/intf";
 
 const AddPurchaseSheet = ({
   types,

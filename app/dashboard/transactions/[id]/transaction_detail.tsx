@@ -1,12 +1,6 @@
 import { DataTable } from "@/components/data-table";
 import TransactionStatusBadge from "@/components/transaction-status-badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import React from "react";
 import { transactionItemColumns } from "./columns";
 import { formatDate, formatRupiah } from "@/lib/utils";

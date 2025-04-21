@@ -2,15 +2,17 @@
 
 import { DataTable } from "@/components/data-table";
 import { DatePicker } from "@/components/datepicker";
-import { formatDate, formatRupiah } from "@/lib/utils";
+import { formatRupiah } from "@/lib/utils";
 import React, { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import AddSalesSheet from "./add-sales-sheet";
 import ConfirmSalesDialog from "./confirm-sales-dialog";
+import { Type } from "@/lib/intf";
+import UpdateSalesSheet from "./update-sales-sheet";
 
 export interface SalesItem {
   stockId: string;
@@ -109,7 +111,12 @@ const Sales = ({ types }: { types: Type[] }) => {
       header: "",
       cell: ({ row }) => {
         return (
-          <div className="flex gap-1">
+          <div className="flex gap-1 justify-end">
+            <UpdateSalesSheet
+              item={row.original}
+              onSubmit={(item) => updateItem(row.index, item)}
+              types={types}
+            />
             <Button variant={"ghost"} onClick={() => removeItem(row.index)}>
               <Trash />
             </Button>

@@ -15,6 +15,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { Type } from "@/lib/intf";
 
 export interface FetchStockParams {
   search?: string;

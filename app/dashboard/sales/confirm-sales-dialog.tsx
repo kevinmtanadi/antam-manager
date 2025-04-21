@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import { formatRupiah } from "@/lib/utils";
 import { SalesItem } from "./sales";
+import { Type } from "@/lib/intf";
 
 interface Props {
   items: SalesItem[];
